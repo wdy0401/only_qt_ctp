@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     gpp_qt/wfunction/wfunction.cpp \
     gpp_qt/wtimer/wtimer.cpp \
     ctp_quote.cpp \
-    sender.cpp
+    sender.cpp \
+    ctp_trade.cpp
 
 HEADERS  += mainwindow.h \
     ctp/ThostFtdcMdApi.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwindow.h \
     gpp_qt/wfunction/wfunction.h \
     gpp_qt/wtimer/wtimer.h \
     ctp_quote.h \
-    sender.h
+    sender.h \
+    ctp_trade.h
 
 FORMS    += mainwindow.ui
 
