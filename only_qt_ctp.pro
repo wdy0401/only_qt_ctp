@@ -12,7 +12,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = only_qt_ctp
 TEMPLATE = app
 
-#CONFIG += console
 INSTALLS += target
 
 SOURCES += main.cpp\

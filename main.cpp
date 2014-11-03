@@ -35,9 +35,9 @@ void start_ctp();
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-//    MainWindow w;
     Sender sender;
     sd=&sender;
+//  MainWindow w;
 //   w.show();
 //   sender.show();
     start_ctp();
