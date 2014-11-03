@@ -1,0 +1,114 @@
+#include<map>
+#include<iostream>
+#include<fstream>
+#include<stdlib.h>
+
+#include"./option/vnoption.h"
+#include"./option/vnsnapshot.h"
+#include"./option/spread_error_check.h"
+
+#include"./bar/bar.h"
+#include"./wtimer/wtimer.h"
+#include"./datafeed/datafeed.h"
+#include"./wfunction/wfunction.h"
+
+#include"./log_info/log_info.h"
+#include"./fillpolicy/fillpolicy.h"
+
+#include"./future/futurerecord.h"
+#include"./future/futuresnapshot.h"
+
+#include"./match_engine/match_engine.h"
+#include"./match_engine/order.h"
+#include"./match_engine/orderlist.h"
+#include"./match_engine/orderbook.h"
+
+
+using namespace std;
+
+int main()
+{
+	Vnsnapshot op;
+	//会不会有换行符的问题
+
+	Vnoption vo;
+	vo.set_maxqueuelength(100);
+
+	Spread_error_check sec;
+	
+	
+	//定义option数据类型 注意与vnsnapshot中的一致
+	string InstrumentID;//eg IO1401
+	string callput;		//eg C
+	long tm;			//eg 
+	double StrikePrice;	//eg 2350
+	double BidPrice1;	//eg 20
+	double AskPrice1;	//eg 25
+	double BidSize1;	//eg 20
+	double AskSize1;	//eg 25
+	
+	
+	ifstream infile;
+	string filename="C:\\Users\\dell\\Desktop\\testlogic.txt";
+	infile.open(filename.c_str());
+	if(! infile.is_open()) //检测文件存在性
+	{
+		cerr << "Cannot openfile " << filename.c_str() << endl;
+		getchar();
+		return 1;
+	}
+	string tp;
+	while(getline(infile,tp))
+	{
+		int count=0;
+		while(tp.size())
+		{		
+			static int index=0;
+			count++;
+			index=tp.find_first_of("\t");
+
+			string tmpstring=tp.substr(0,index);
+			switch(count)
+			{
+				case 1:InstrumentID	=tmpstring;					break;
+				case 2:callput		=tmpstring;					break;
+				case 3:tm			=atol(tmpstring.c_str());	break;
+				case 4:StrikePrice	=atof(tmpstring.c_str());	break;
+				case 5:BidPrice1	=atof(tmpstring.c_str());	break;
+				case 6:AskPrice1	=atof(tmpstring.c_str());	break;
+				case 7:BidSize1		=atof(tmpstring.c_str());	break;
+				case 8:AskSize1		=atof(tp.c_str());			break;
+			}
+			if(index==-1)
+			{
+				break;
+			}
+			tp=tp.substr(index+1);
+
+		}
+		vo.updaterecord(InstrumentID, callput , tm, StrikePrice, BidPrice1 , AskPrice1, BidSize1 , AskSize1);
+		sec.eachfunction(vo);
+	//	cout<<" "<<tm<<" "<<StrikePrice<<" "<<BidPrice1<<" "<<AskPrice1<<endl;
+	}
+	//getchar();
+	return 0;
+}
+
+/*
+关于读数据的问题 
+1.		全load进来or边load边跑策略	倾向于边load边跑	与实际交易也较为一致
+1.1		load and run 如何做结构处理	每次load一条记录 都调用一次策略函数	
+1.1.1	如何写策略函数与读函数的接口 目前是每个IO1401C2500为key 下面是期权报价时间顺序的list
+
+2.		多数据源如何时间同步			读文件需要进行单独处理 开n个buffer n为文件数量 每次处理n个buffer 把最早的放入queue 将最早的至零 然后更新buffer（更新0值数据）
+2.1		如果实际交易 就把buffer的地方改掉 变成实时接收，实时输出。 两种模式 一种是file一种是callback
+
+*/
+
+/*
+关于既能模拟又可以ctp的问题
+1.		ctp相当于模拟中的datafeed fp 
+2.		模拟中是否需要实现中断的方式，如何实现or如何不实现仍能进行模拟 是不是涉及到主次问题， 先写个模拟程序 然后在ctp中相应函数里调用模拟程序？或反之  效率会不会出问题
+3.		
+*/
+

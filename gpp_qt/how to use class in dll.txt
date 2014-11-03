@@ -1,0 +1,154 @@
+DLL导出类：
+
+　　DLL中定义的类可以在应用工程中使用。
+
+　　下面的例子里，在DLL中定义了point和circle两个类，并在应用工程中引用了它们//文件名：point.h，point类的声明
+
+#ifndef POINT_H
+#define POINT_H
+
+#ifdef DLL_FILE
+class _declspec(dllexport) point //导出类point
+#else
+class _declspec(dllimport) point //导入类point
+#endif
+
+{
+public:
+	float y;
+	float x;
+	point();
+	point(float x_coordinate, float y_coordinate);
+};
+#endif
+
+
+//文件名：point.cpp，point类的实现
+#ifndef DLL_FILE
+#define DLL_FILE
+#endif
+#include "point.h"
+//类point的缺省构造函数
+point::point()
+{
+	x = 0.0;
+	y = 0.0;
+}
+//类point的构造函数
+point::point(float x_coordinate, float y_coordinate)
+{
+	x = x_coordinate;
+	y = y_coordinate;
+}
+
+//文件名：circle.h，circle类的声明
+#ifndef CIRCLE_H
+#define CIRCLE_H
+#include "point.h"
+
+#ifdef DLL_FILE
+class _declspec(dllexport)circle //导出类circle
+#else
+class _declspec(dllimport)circle //导入类circle
+#endif
+
+{
+public:
+	void SetCentre(const point ￠rePoint);
+	void SetRadius(float r);
+	float GetGirth();
+	float GetArea();
+	circle();
+private:
+	float radius;
+	point centre;
+};
+#endif
+
+
+//文件名：circle.cpp，circle类的实现
+#ifndef DLL_FILE
+#define DLL_FILE
+#endif
+#include "circle.h"
+#define PI 3.1415926
+//circle类的构造函数
+
+circle::circle()
+{
+	centre = point(0, 0);
+	radius = 0;
+}
+//得到圆的面积
+float circle::GetArea()
+{
+	return PI *radius * radius;
+}
+//得到圆的周长
+float circle::GetGirth()
+{
+	return 2 *PI * radius;
+}
+//设置圆心坐标
+void circle::SetCentre(const point ￠rePoint)
+{
+	centre = centrePoint;
+}
+//设置圆的半径
+void circle::SetRadius(float r)
+{
+	radius = r;
+}
+ 
+类的引用：
+#include "..\circle.h"　　//包含类声明头文件
+#pragma comment(lib,"dllTest.lib");
+int main(int argc, char *argv[])
+{
+	circle c;
+	point p(2.0, 2.0);
+	c.SetCentre(p);
+	c.SetRadius(1.0);
+	printf("area:%f girth:%f", c.GetArea(), c.GetGirth());
+	return 0;
+}
+
+从上述源代码可以看出，由于在DLL的类实现代码中定义了宏DLL_FILE，故在DLL的实现中所包含的类声明实际上为：
+class _declspec(dllexport) point //导出类point
+{
+…
+
+}
+和
+class _declspec(dllexport) circle //导出类circle
+{
+…
+}
+而在应用工程中没有定义DLL_FILE，故其包含point.h和circle.h后引入的类声明为：
+
+class _declspec(dllimport) point //导入类point
+{
+…
+}
+和
+class _declspec(dllimport) circle //导入类circle
+{
+…
+}
+不错，正是通过DLL中的
+class _declspec(dllexport) class_name //导出类circle　
+{
+…
+}
+与应用程序中的
+class _declspec(dllimport) class_name //导入类
+{
+…
+}
+
+匹对来完成类的导出和导入的！我们往往通过在类的声明头文件中用一个宏来决定使其编译为class _declspec(dllexport) class_name还是class _declspec(dllimport) class_name版本，这样就不再需要两个头文件。本程序中使用的是：
+#ifdef DLL_FILE
+class _declspec(dllexport) class_name //导出类
+#else
+class _declspec(dllimport) class_name //导入类
+#endif
