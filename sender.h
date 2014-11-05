@@ -3,9 +3,7 @@
 
 #include <QWidget>
 #include <string>
-QT_BEGIN_NAMESPACE
 class QUdpSocket;
-QT_END_NAMESPACE
 
 class Sender : public QWidget
 {
@@ -17,8 +15,6 @@ public:
 
 signals:
     void broadcastSignal(const std::string &);
-
-private slots:
 
 private:
     QUdpSocket *udpSocket;

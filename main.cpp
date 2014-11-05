@@ -10,11 +10,6 @@
 #include<QObject>
 #include<QThread>
 
-
-
-#include"ctp_quote.h"
-#include"ctp_quote_qthread.h"
-
 #include"ctp/ThostFtdcMdApi.h"
 #include"ctp/ThostFtdcTraderApi.h"
 
@@ -24,8 +19,10 @@
 #include"../gpp_qt/wtimer/wtimer.h"
 #include"../gpp_qt/bar/bars_manage.h"
 #include"../gpp_qt/wfunction/wfunction.h"
-#include<QTextBlock>
-#include<QTextCursor>
+
+#include"ctp_quote.h"
+#include"ctp_quote_qthread.h"
+
 using namespace std;
 
 cfg simu_cfg;
@@ -48,13 +45,6 @@ int main(int argc, char *argv[])
     mw=&w;
 
     w.show();
-//    sender.show();
-
-    qRegisterMetaType<string>("std::string");
-    QObject::connect(sd, &Sender::broadcastSignal, mw,&MainWindow::show_quote);
-
-    start_ctp();
-
 	return a.exec();
 }
 
@@ -64,6 +54,8 @@ void start_ctp()
     simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
 
+    qRegisterMetaType<string>("std::string");
+    QObject::connect(sd, &Sender::broadcastSignal, mw,&MainWindow::show_quote);
 
     ctp_quote_qthread * cqq=new ctp_quote_qthread;
     cqq->start();

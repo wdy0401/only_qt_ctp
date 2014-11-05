@@ -1,5 +1,5 @@
 #include"ctp_quote.h"
-#include"ctp/ThostFtdcMdApi.h"
+
 #include<iostream>
 #include<string>
 #include<list>
@@ -7,10 +7,12 @@
 #include "mainwindow.h"
 #include "sender.h"
 
-#include"../gpp_qt/wfunction/wfunction.h"
 #include"../gpp_qt/cfg/cfg.h"
-#include"../gpp_qt/bar/bars_manage.h"
 #include"../gpp_qt/wtimer/wtimer.h"
+#include"../gpp_qt/bar/bars_manage.h"
+#include"../gpp_qt/wfunction/wfunction.h"
+
+#include"ctp/ThostFtdcMdApi.h"
 
 extern cfg simu_cfg;
 extern bars_manage simu_bars_manage;

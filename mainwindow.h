@@ -24,6 +24,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    bool ctp_is_start;
 };
 
 #endif // MAINWINDOW_H
