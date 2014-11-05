@@ -18,12 +18,12 @@
 #include"ctp/ThostFtdcMdApi.h"
 #include"ctp/ThostFtdcTraderApi.h"
 
-#include"gpp_qt/cfg/cfg.h"
-#include"gpp_qt/bar/bar.h"
-#include"gpp_qt/bar/bars.h"
-#include"gpp_qt/wtimer/wtimer.h"
-#include"gpp_qt/bar/bars_manage.h"
-#include"gpp_qt/wfunction/wfunction.h"
+#include"../gpp_qt/cfg/cfg.h"
+#include"../gpp_qt/bar/bar.h"
+#include"../gpp_qt/bar/bars.h"
+#include"../gpp_qt/wtimer/wtimer.h"
+#include"../gpp_qt/bar/bars_manage.h"
+#include"../gpp_qt/wfunction/wfunction.h"
 #include<QTextBlock>
 #include<QTextCursor>
 using namespace std;

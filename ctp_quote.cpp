@@ -7,10 +7,10 @@
 #include "mainwindow.h"
 #include "sender.h"
 
-#include"gpp_qt/wfunction/wfunction.h"
-#include"gpp_qt/cfg/cfg.h"
-#include"gpp_qt/bar/bars_manage.h"
-#include"gpp_qt/wtimer/wtimer.h"
+#include"../gpp_qt/wfunction/wfunction.h"
+#include"../gpp_qt/cfg/cfg.h"
+#include"../gpp_qt/bar/bars_manage.h"
+#include"../gpp_qt/wtimer/wtimer.h"
 
 extern cfg simu_cfg;
 extern bars_manage simu_bars_manage;
@@ -139,7 +139,7 @@ void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarke
      ctpinfo+=pDepthMarketData->InstrumentID;
      ctpinfo+="\t";
      ctpinfo+=wfunction::ftos(pDepthMarketData->LastPrice);
-     sd->broadcastString(ctpinfo.c_str());
+     sd->broadcastString(wfunction::joinquote(ctpinfo));
 }
 bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
 {

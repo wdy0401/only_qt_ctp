@@ -21,7 +21,7 @@ MainWindow::~MainWindow()
 }
 void MainWindow::show_quote(const string &text)
 {
-    this->ui->textBrowser->append(QString::fromStdString(wfunction::joinquote(text)));
+    this->ui->textBrowser->append(QString::fromStdString(text));
     qa->processEvents();
 }
 
