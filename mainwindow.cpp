@@ -3,6 +3,8 @@
 #include<QString>
 #include<string>
 
+#include"../gpp_qt/wfunction/wfunction.h"
+
 using namespace std;
 
 extern QApplication * qa;
@@ -13,9 +15,17 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 }
-
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+void MainWindow::show_quote(const string &text)
+{
+    this->ui->textBrowser->append(QString::fromStdString(wfunction::joinquote(text)));
+    qa->processEvents();
+}
 
+void MainWindow::on_pushButton_clicked()
+{
+    this->show_quote("button pushed");
+}

@@ -1,14 +1,19 @@
 #include<stdio.h>
 #include<stdlib.h> 
 #include<iostream>
+#include<string>
 #include<Windows.h>
 
 #include "mainwindow.h"
 #include "sender.h"
 #include <QApplication>
+#include<QObject>
+#include<QThread>
+
 
 
 #include"ctp_quote.h"
+#include"ctp_quote_qthread.h"
 
 #include"ctp/ThostFtdcMdApi.h"
 #include"ctp/ThostFtdcTraderApi.h"
@@ -26,20 +31,28 @@ using namespace std;
 cfg simu_cfg;
 bars_manage simu_bars_manage;
 wtimer tm;
-CThostFtdcMdApi * pUserApi;
 
-
+MainWindow * mw;
+QApplication * qa;
 Sender * sd;
+
 void start_ctp();
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    qa=&a;
     Sender sender;
     sd=&sender;
-//  MainWindow w;
-//   w.show();
-//   sender.show();
+    MainWindow w;
+    mw=&w;
+
+    w.show();
+//    sender.show();
+
+    qRegisterMetaType<string>("std::string");
+    QObject::connect(sd, &Sender::broadcastSignal, mw,&MainWindow::show_quote);
+
     start_ctp();
 
 	return a.exec();
@@ -50,8 +63,9 @@ void start_ctp()
 {
     simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
-    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi();
-    ctp_quote simu_quote;
-    simu_quote.init();
-    simu_quote.login(pUserApi);
+
+
+    ctp_quote_qthread * cqq=new ctp_quote_qthread;
+    cqq->start();
+    //    ctp_quote simu_quote;
 }

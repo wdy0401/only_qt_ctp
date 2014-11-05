@@ -15,7 +15,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void show_quote(const std::string &);
+
+
 private slots:
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

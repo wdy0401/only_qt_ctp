@@ -2,13 +2,14 @@
 #define CTP_QUOTE
 
 #include"ctp/ThostFtdcMdApi.h"
-
+#include<QThread>
 #define MAX_CONTRACT_NUMBER 1024
 #define MAX_CONTRACT_NAME 1024
 
 class ctp_quote : public CThostFtdcMdSpi
 {
 public:
+    ctp_quote();
 	void init();
 	void login(CThostFtdcMdApi *);
 	void ReqUserLogin();
@@ -40,7 +41,7 @@ private:
 	int nRequestID;
 	char * * ppInstrumentID;
 	int nppInstrumentID;
-	CThostFtdcMdApi * pUserApi;
+    CThostFtdcMdApi * pUserApi;
 
 	int ctp_time_length;
 };

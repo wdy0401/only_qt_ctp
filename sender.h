@@ -15,6 +15,9 @@ public:
     Sender(QWidget *parent = 0);
     void broadcastString(const std::string &);
 
+signals:
+    void broadcastSignal(const std::string &);
+
 private slots:
 
 private:

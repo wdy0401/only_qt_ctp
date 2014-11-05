@@ -1,4 +1,5 @@
 #include"ctp_quote.h"
+#include"ctp/ThostFtdcMdApi.h"
 #include<iostream>
 #include<string>
 #include<list>
@@ -18,6 +19,12 @@ extern  Sender * sd;
 
 using namespace std;
 
+ctp_quote::ctp_quote()
+{
+    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi();
+    this->init();
+    this->login(pUserApi);
+}
 void ctp_quote::init()
 {
 	nRequestID=0;
@@ -128,9 +135,9 @@ void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarke
 	simu_bars_manage.updatebar(pDepthMarketData->InstrumentID,pDepthMarketData->LastPrice);
 
      string ctpinfo= pDepthMarketData->UpdateTime;
-     ctpinfo+=" ";
+     ctpinfo+="\t";
      ctpinfo+=pDepthMarketData->InstrumentID;
-     ctpinfo+=" ";
+     ctpinfo+="\t";
      ctpinfo+=wfunction::ftos(pDepthMarketData->LastPrice);
      sd->broadcastString(ctpinfo.c_str());
 }
