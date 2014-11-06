@@ -36,30 +36,39 @@
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{2891d066-4fca-46aa-bba9-747c66c8301a}</UniqueIdentifier>
+      <UniqueIdentifier>{cf12c77f-cd67-4a2a-bc41-fd3b3ddf8653}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{4a260039-6348-49e6-809f-b610e1ffd8e3}</UniqueIdentifier>
+      <UniqueIdentifier>{da42b3f0-b9e3-44de-a9ed-d9f7dd70e386}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="ctp">
+      <UniqueIdentifier>{22577fc4-caec-438d-ab32-e109cf7a39e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gpp_qt\bar\bar.cpp">
+    <ClCompile Include="..\gpp_qt\bar\bar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gpp_qt\bar\bars.cpp">
+    <ClCompile Include="..\gpp_qt\bar\bars.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gpp_qt\bar\bars_manage.cpp">
+    <ClCompile Include="..\gpp_qt\bar\bars_manage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gpp_qt\cfg\cfg.cpp">
+    <ClCompile Include="..\gpp_qt\cfg\cfg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ctp_quote.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp_quote_qthread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gpp_qt\log_info\log_info.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -68,16 +77,31 @@
     <ClCompile Include="mainwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gpp_qt\wfunction\wfunction.cpp">
+    <ClCompile Include="sender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gpp_qt\wtimer\wtimer.cpp">
+    <ClCompile Include="..\gpp_qt\wfunction\wfunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_mainwindow.cpp">
+    <ClCompile Include="..\gpp_qt\wtimer\wtimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_ctp_quote_qthread.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_mainwindow.cpp">
+    <ClCompile Include="Debug\moc_ctp_quote_qthread.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_mainwindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_mainwindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_sender.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_sender.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
   </ItemGroup>
@@ -88,28 +112,37 @@
     <ClInclude Include="ctp\ThostFtdcTraderApi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gpp_qt\bar\bar.h">
+    <ClInclude Include="..\gpp_qt\bar\bar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gpp_qt\bar\bars.h">
+    <ClInclude Include="..\gpp_qt\bar\bars.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gpp_qt\bar\bars_manage.h">
+    <ClInclude Include="..\gpp_qt\bar\bars_manage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gpp_qt\cfg\cfg.h">
+    <ClInclude Include="..\gpp_qt\cfg\cfg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ctp_quote.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <CustomBuild Include="ctp_quote_qthread.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="..\gpp_qt\log_info\log_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <CustomBuild Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="gpp_qt\wfunction\wfunction.h">
+    <CustomBuild Include="sender.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="..\gpp_qt\wfunction\wfunction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gpp_qt\wtimer\wtimer.h">
+    <ClInclude Include="..\gpp_qt\wtimer\wtimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h">
@@ -120,5 +153,13 @@
     <CustomBuild Include="mainwindow.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\ctp\thosttraderapi.lib">
+      <Filter>ctp</Filter>
+    </Library>
+    <Library Include="..\ctp\thostmduserapi.lib">
+      <Filter>ctp</Filter>
+    </Library>
   </ItemGroup>
 </Project>
