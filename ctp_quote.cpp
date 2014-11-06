@@ -1,13 +1,16 @@
 #include"ctp_quote.h"
 
 #include<iostream>
+#include<iomanip>
 #include<string>
+#include<sstream>
 #include<list>
 
 #include "mainwindow.h"
 #include "sender.h"
 
 #include"../gpp_qt/cfg/cfg.h"
+#include"../gpp_qt/log_info/log_info.h"
 #include"../gpp_qt/wtimer/wtimer.h"
 #include"../gpp_qt/bar/bars_manage.h"
 #include"../gpp_qt/wfunction/wfunction.h"
@@ -17,6 +20,7 @@
 extern cfg simu_cfg;
 extern bars_manage simu_bars_manage;
 extern wtimer tm;
+extern log_info simu_log;
 extern  Sender * sd;
 
 using namespace std;
@@ -119,7 +123,9 @@ void ctp_quote::OnRspUnSubMarketData(CThostFtdcSpecificInstrumentField *pSpecifi
 ///深度行情通知
 void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarketData)
 {
-	cout<< pDepthMarketData->TradingDay;
+    //need signal for quick return
+    //transfer pDepthMarketData and return
+    cout<< pDepthMarketData->TradingDay;
 	cout<< "," << pDepthMarketData->UpdateTime;
 	cout<< ":" << pDepthMarketData->UpdateMillisec;
 	cout<< "," << pDepthMarketData->InstrumentID;
@@ -132,6 +138,29 @@ void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarke
 	cout<< "," << pDepthMarketData->LowestPrice;
 	cout<< "," << pDepthMarketData->Volume;
 	cout<< endl;
+
+    ostringstream os;
+    os<< pDepthMarketData->TradingDay;
+    os<< "," << pDepthMarketData->UpdateTime;
+    os<< ":" << pDepthMarketData->UpdateMillisec;
+    os<< "," << pDepthMarketData->InstrumentID;
+    os<< "," << pDepthMarketData->BidPrice1;
+    os<< "," << pDepthMarketData->AskPrice1;
+    os<< "," << pDepthMarketData->BidVolume1;
+    os<< "," << pDepthMarketData->AskVolume1;
+    os<< "," << pDepthMarketData->LastPrice;
+    os<< "," << pDepthMarketData->HighestPrice;
+    os<< "," << pDepthMarketData->LowestPrice;
+    os<< "," << pDepthMarketData->Turnover;
+	os.setf(ios::fixed);
+	os<<setprecision(10);
+    os<< "," << pDepthMarketData->AveragePrice;
+	os.setf(ios::fixed);
+	os<<setprecision(2);
+    os<< "," << pDepthMarketData->PreSettlementPrice;
+    os<< "," << pDepthMarketData->SettlementPrice;
+    os<< endl;
+    simu_log.writeinfo(os.str());
 
 	tm.settic(atof(wfunction::ctp_time_char_convert(pDepthMarketData->UpdateTime,ctp_time_length)));
 	simu_bars_manage.updatebar(pDepthMarketData->InstrumentID,pDepthMarketData->LastPrice);

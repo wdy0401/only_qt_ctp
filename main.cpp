@@ -19,15 +19,17 @@
 #include"../gpp_qt/wtimer/wtimer.h"
 #include"../gpp_qt/bar/bars_manage.h"
 #include"../gpp_qt/wfunction/wfunction.h"
+#include"../gpp_qt/log_info/log_info.h"
 
 #include"ctp_quote.h"
 #include"ctp_quote_qthread.h"
 
 using namespace std;
 
-cfg simu_cfg;
-bars_manage simu_bars_manage;
 wtimer tm;
+cfg simu_cfg;
+log_info simu_log;
+bars_manage simu_bars_manage;
 
 MainWindow * mw;
 QApplication * qa;
@@ -53,7 +55,7 @@ void start_ctp()
 {
     simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
-
+    simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
     qRegisterMetaType<string>("std::string");
     QObject::connect(sd, &Sender::broadcastSignal, mw,&MainWindow::show_quote);
 
