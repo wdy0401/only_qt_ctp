@@ -56,6 +56,9 @@ void start_ctp()
     simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
     simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
+
+    mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
+
     qRegisterMetaType<string>("std::string");
     QObject::connect(sd, &Sender::broadcastSignal, mw,&MainWindow::show_quote);
 
