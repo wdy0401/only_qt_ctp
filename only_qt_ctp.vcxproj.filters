@@ -36,17 +36,14 @@
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{cf12c77f-cd67-4a2a-bc41-fd3b3ddf8653}</UniqueIdentifier>
+      <UniqueIdentifier>{19a6f5de-930f-452a-b130-1ae8ce2236ff}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{da42b3f0-b9e3-44de-a9ed-d9f7dd70e386}</UniqueIdentifier>
+      <UniqueIdentifier>{7993c568-0e17-4d49-8f54-1849fd2cd8a8}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
-    </Filter>
-    <Filter Include="ctp">
-      <UniqueIdentifier>{22577fc4-caec-438d-ab32-e109cf7a39e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +74,6 @@
     <ClCompile Include="mainwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sender.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\gpp_qt\wfunction\wfunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,12 +90,6 @@
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="Debug\moc_mainwindow.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_sender.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_sender.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
   </ItemGroup>
@@ -136,9 +124,6 @@
     <CustomBuild Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="sender.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <ClInclude Include="..\gpp_qt\wfunction\wfunction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -153,13 +138,5 @@
     <CustomBuild Include="mainwindow.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\ctp\thosttraderapi.lib">
-      <Filter>ctp</Filter>
-    </Library>
-    <Library Include="..\ctp\thostmduserapi.lib">
-      <Filter>ctp</Filter>
-    </Library>
   </ItemGroup>
 </Project>

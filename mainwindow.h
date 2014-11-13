@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include<string>
+#include"../ctp/ThostFtdcMdApi.h"
 namespace Ui {
 class MainWindow;
 }
@@ -17,9 +18,10 @@ public:
 
     void show_quote(const std::string &);
 
+public slots:
+    void show_quote_1(CThostFtdcDepthMarketDataField *pDepthMarketData);
 
 private slots:
-
     void on_pushButton_clicked();
 
 private:

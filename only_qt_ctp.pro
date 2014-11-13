@@ -18,7 +18,6 @@ INSTALLS += target
 SOURCES += main.cpp\
         mainwindow.cpp \
     ctp_quote.cpp \
-    sender.cpp \
     ctp_quote_qthread.cpp \
     ../gpp_qt/bar/bar.cpp \
     ../gpp_qt/bar/bars.cpp \
@@ -26,13 +25,13 @@ SOURCES += main.cpp\
     ../gpp_qt/cfg/cfg.cpp \
     ../gpp_qt/wfunction/wfunction.cpp \
     ../gpp_qt/wtimer/wtimer.cpp \
-    ../gpp_qt/log_info/log_info.cpp
+    ../gpp_qt/log_info/log_info.cpp \
+    ctp_trade.cpp
 
 HEADERS  += mainwindow.h \
     ctp/ThostFtdcMdApi.h \
     ctp/ThostFtdcTraderApi.h \
     ctp_quote.h \
-    sender.h \
     ctp_quote_qthread.h \
     ../gpp_qt/bar/bar.h \
     ../gpp_qt/bar/bars.h \
@@ -40,7 +39,8 @@ HEADERS  += mainwindow.h \
     ../gpp_qt/cfg/cfg.h \
     ../gpp_qt/wfunction/wfunction.h \
     ../gpp_qt/wtimer/wtimer.h \
-    ../gpp_qt/log_info/log_info.h
+    ../gpp_qt/log_info/log_info.h \
+    ctp_trade.h
 
 FORMS    += mainwindow.ui
 

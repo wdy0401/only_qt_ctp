@@ -33,7 +33,6 @@ bars_manage simu_bars_manage;
 
 MainWindow * mw;
 QApplication * qa;
-Sender * sd;
 
 void start_ctp();
 
@@ -41,8 +40,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     qa=&a;
-    Sender sender;
-    sd=&sender;
     MainWindow w;
     mw=&w;
 
@@ -60,9 +57,11 @@ void start_ctp()
     mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
 
     qRegisterMetaType<string>("std::string");
-    QObject::connect(sd, &Sender::broadcastSignal, mw,&MainWindow::show_quote);
+    //QObject::connect(sd, &Sender::broadcastSignal, mw,&MainWindow::show_quote);
 
-    ctp_quote_qthread * cqq=new ctp_quote_qthread;
+    ctp_quote_qthread  * cqq=new ctp_quote_qthread;
+    QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw,&MainWindow::show_quote_1);
+
     cqq->start();
     //    ctp_quote simu_quote;
 }
