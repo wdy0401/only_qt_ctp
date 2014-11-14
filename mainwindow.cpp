@@ -1,8 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include<QString>
+#include<QLabel>
+
+#include<map>
 #include<iostream>
 #include<string>
+#include<list>
 #include<iomanip>
 
 #include"../gpp_qt/cfg/cfg.h"
@@ -30,6 +34,37 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+void MainWindow::set_symbols_display(const std::string & symbols)
+{
+    list<string> symbol_list=wfunction::splitstring(symbols);
+    for(list<string>::iterator iter=symbol_list.begin();iter!=symbol_list.end();iter++)
+    {
+        QLabel * ql=new QLabel();
+        this->ui->horizontalLayout->addWidget(ql);
+        ql->setText(QString::fromStdString(*iter));
+        quote_labels[*iter]=ql;
+    }
+}
+void MainWindow::show_quote_label(CThostFtdcDepthMarketDataField *pDepthMarketData)
+{
+    symbol_price_display(pDepthMarketData->InstrumentID, pDepthMarketData->LastPrice);
+}
+void MainWindow::symbol_price_display(const string & symbol, double price)
+{
+    map<string,QLabel *>::iterator iter=quote_labels.find(symbol);
+    if(iter!=quote_labels.end())
+    {
+     //   iter->second()->setText( QString("'f' format, precision 2, gives %1" ).arg(price));
+        quote_labels[symbol]->setText(QString::fromStdString(symbol)+QString("\n%1" ).arg(price,0,'f',2));
+        qa->processEvents();
+    }
+    else
+    {
+        cout<<"Error: function MainWindow::symbol_display"<<endl;
+    }
+}
+
+
 void MainWindow::show_string(const string &text)
 {
     this->ui->textBrowser->append(QString::fromStdString(text));

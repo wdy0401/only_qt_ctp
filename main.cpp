@@ -43,16 +43,22 @@ int main(int argc, char *argv[])
     MainWindow w;
     mw=&w;
 
+    //load simu para
+    simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
+
+    //set para
+    simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
+    simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
+    w.set_symbols_display(simu_cfg.getparam("INSTRUMENT_ID"));
+
     w.show();
+
 	return a.exec();
 }
 
 
 void start_ctp()
 {
-    simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
-    simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
-    simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
 
     mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
 
@@ -60,6 +66,9 @@ void start_ctp()
 
     ctp_quote_qthread  * cqq=new ctp_quote_qthread;
     QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw,&MainWindow::show_quote_1);
+    QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw,&MainWindow::show_quote_label);
+
+
 
     cqq->start();
     //    ctp_quote simu_quote;
