@@ -57,7 +57,9 @@ void ctp_quote::init()
 		memset(ppInstrumentID[nppInstrumentID],'\0',MAX_CONTRACT_NAME);
 		strncpy(ppInstrumentID[nppInstrumentID],iter->c_str(),iter->size());
 		nppInstrumentID++;
-	}
+    }
+    cout << "INFO: BrokerID: "<<req->BrokerID<<endl;
+    cout << "INFO: UserID: "<<req->UserID<<endl;
 }
 
 void ctp_quote::login(CThostFtdcMdApi * p)
