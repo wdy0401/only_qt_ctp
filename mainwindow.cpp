@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include<QString>
 #include<QLabel>
+#include<Qfont>
+#include<QPalette>
 
 #include<map>
 #include<iostream>
@@ -39,9 +41,16 @@ void MainWindow::set_symbols_display(const std::string & symbols)
     list<string> symbol_list=wfunction::splitstring(symbols);
     for(list<string>::iterator iter=symbol_list.begin();iter!=symbol_list.end();iter++)
     {
+//if we want to use two color on symbol and price
+//two qlabel is needed
+//a new class is needed
         QLabel * ql=new QLabel();
         this->ui->horizontalLayout->addWidget(ql);
         ql->setText(QString::fromStdString(*iter));
+        QPalette * pe=new QPalette;
+        pe->setColor(QPalette::WindowText,Qt::red);
+        ql->setPalette(*pe);
+        ql->setFont(QFont("微软雅黑",14,-1,false));
         quote_labels[*iter]=ql;
     }
 }
