@@ -30,7 +30,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::show_quote(const string &text)
+void MainWindow::show_string(const string &text)
 {
     this->ui->textBrowser->append(QString::fromStdString(text));
     qa->processEvents();
@@ -89,15 +89,15 @@ void MainWindow::show_quote_1(CThostFtdcDepthMarketDataField *pDepthMarketData)
 
 void MainWindow::on_pushButton_clicked()
 {
-    this->show_quote("button pushed");
+    this->show_string("button pushed");
     if(!ctp_is_start)
     {
         start_ctp();
-        this->show_quote("Start quote");
+        this->show_string("Start quote");
         ctp_is_start=true;
     }
     else
     {
-        this->show_quote("Quote is running");
+        this->show_string("Quote is running");
     }
 }

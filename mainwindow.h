@@ -16,7 +16,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void show_quote(const std::string &);
+    void show_string(const std::string &);
 
 public slots:
     void show_quote_1(CThostFtdcDepthMarketDataField *pDepthMarketData);

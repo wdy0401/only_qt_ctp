@@ -57,7 +57,6 @@ void start_ctp()
     mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
 
     qRegisterMetaType<string>("std::string");
-    //QObject::connect(sd, &Sender::broadcastSignal, mw,&MainWindow::show_quote);
 
     ctp_quote_qthread  * cqq=new ctp_quote_qthread;
     QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw,&MainWindow::show_quote_1);

@@ -139,6 +139,7 @@
     <ClCompile Include="..\gpp_qt\cfg\cfg.cpp" />
     <ClCompile Include="ctp_quote.cpp" />
     <ClCompile Include="ctp_quote_qthread.cpp" />
+    <ClCompile Include="ctp_trade.cpp" />
     <ClCompile Include="..\gpp_qt\log_info\log_info.cpp" />
     <ClCompile Include="Debug\moc_ctp_quote_qthread.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -148,14 +149,11 @@
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
-    <ClCompile Include="Release\moc_ctp_quote_qthread.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\gpp_qt\wfunction\wfunction.cpp" />
+    <ClCompile Include="..\gpp_qt\wtimer\wtimer.cpp" />
     <ClCompile Include="Release\moc_mainwindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\gpp_qt\wfunction\wfunction.cpp" />
-    <ClCompile Include="..\gpp_qt\wtimer\wtimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ctp\ThostFtdcMdApi.h" />
@@ -176,6 +174,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ctp_quote_qthread.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="ctp_trade.h" />
     <ClInclude Include="..\gpp_qt\log_info\log_info.h" />
     <CustomBuild Include="mainwindow.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
@@ -189,6 +188,11 @@
     </CustomBuild>
     <ClInclude Include="..\gpp_qt\wfunction\wfunction.h" />
     <ClInclude Include="..\gpp_qt\wtimer\wtimer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Release\moc_ctp_quote_qthread.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.ui">
