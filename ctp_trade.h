@@ -1,10 +1,11 @@
-#ifndef CTP_TRADE_H
-#define CTP_TRADE_H
-
-#include<./ctp/ThostFtdcTraderApi.h>
-class ctp_trade:public
+#ifndef CTP_TRADE
+#define CTP_TRADE
+#include "./ctp/ThostFtdcTraderApi.h"
+#include<string>
+class ctp_trade : public CThostFtdcTraderSpi
 {
 public:
+    void init(const string & confile_dir);//set con file  dir
     virtual void OnFrontConnected();
     virtual void OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,	CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
     virtual void OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField *pSettlementInfoConfirm, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);

@@ -64,10 +64,9 @@ void ctp_quote::init()
 
 void ctp_quote::login(CThostFtdcMdApi * p)
 {
-	pUserApi=p;			// 创建UserApi
-//	CThostFtdcMdSpi* pUserSpi=this;
-	pUserApi->RegisterSpi(this);
-	pUserApi->RegisterFront("tcp://asp-sim2-md1.financial-trading-platform.com:26213");
+    pUserApi=p;			// 创建UserApi
+    pUserApi->RegisterSpi(this);
+    pUserApi->RegisterFront(const_cast<char*>(simu_cfg.getparam("QUOTE_FRONT_ADDR").c_str()));
 	pUserApi->Init();
 	pUserApi->Join();
 }
