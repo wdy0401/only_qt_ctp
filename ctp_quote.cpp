@@ -5,8 +5,10 @@
 #include<string>
 #include<sstream>
 #include<list>
+#include<windows.h>
 
 #include "mainwindow.h"
+#include<QApplication>
 
 #include"../gpp_qt/cfg/cfg.h"
 #include"../gpp_qt/log_info/log_info.h"
@@ -32,7 +34,7 @@ ctp_quote::ctp_quote(ctp_quote_qthread * father)
 }
 ctp_quote::ctp_quote()
 {
-    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi();
+    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi(mk_quote_con_dir());
     this->init();
     this->login(pUserApi);
 }
@@ -57,6 +59,7 @@ void ctp_quote::init()
 		memset(ppInstrumentID[nppInstrumentID],'\0',MAX_CONTRACT_NAME);
 		strncpy(ppInstrumentID[nppInstrumentID],iter->c_str(),iter->size());
 		nppInstrumentID++;
+        cout<<"INFO: quote contract   "<<iter->c_str()<<endl;
     }
     cout << "INFO: BrokerID: "<<req->BrokerID<<endl;
     cout << "INFO: UserID: "<<req->UserID<<endl;
@@ -137,4 +140,23 @@ bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
 	if (bResult)
 		cout << "--->>> ErrorID=" << pRspInfo->ErrorID << ", ErrorMsg=" << pRspInfo->ErrorMsg << endl;
 	return bResult;
+}
+char *ctp_quote::mk_quote_con_dir()
+{
+        string exedir=simu_cfg.getparam("QUOTE_CON_PATH");
+        if(exedir.size()>0)
+        {
+            wfunction::wmkdir(exedir);
+            return const_cast<char*>((exedir+"/").c_str());
+        }
+        else
+        {
+            exedir=QCoreApplication::applicationFilePath().toStdString();
+            cout<<exedir<<endl;
+            exedir=exedir.erase(exedir.find_last_of("/"),exedir.size());
+//            exedir=exedir.erase(exedir.find_last_of("\\"),exedir.size());
+            exedir=exedir+"/quote_con";
+            wfunction::wmkdir(exedir);
+        }
+        return const_cast<char*>((exedir+"/").c_str());
 }

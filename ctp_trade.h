@@ -5,7 +5,9 @@
 class ctp_trade : public CThostFtdcTraderSpi
 {
 public:
-    void init(const string & confile_dir);//set con file  dir
+    ctp_trade();
+    void init();//set con file  dir
+    /*
     virtual void OnFrontConnected();
     virtual void OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,	CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
     virtual void OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField *pSettlementInfoConfirm, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
@@ -43,7 +45,7 @@ private:
     void ReqQryInvestorPosition();
     void ReqOrderInsert();
     void ReqOrderAction(CThostFtdcOrderField *pOrder);
-
+*/
 };
 
 #endif // CTP_TRADE_H

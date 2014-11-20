@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
     w.show();
 
-	return a.exec();
+    return a.exec();
 }
 
 
@@ -61,7 +61,6 @@ void start_ctp()
 {
 
     mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
-
     qRegisterMetaType<string>("std::string");
 
     ctp_quote_qthread  * cqq=new ctp_quote_qthread;

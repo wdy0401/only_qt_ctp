@@ -14,6 +14,7 @@ public:
     ctp_quote();
     ctp_quote(ctp_quote_qthread *);
     void init();
+    char * mk_quote_con_dir();
     void login(CThostFtdcMdApi *);
 	void ReqUserLogin();
 
