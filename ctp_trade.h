@@ -2,12 +2,13 @@
 #define CTP_TRADE
 #include "./ctp/ThostFtdcTraderApi.h"
 #include<string>
+/*
 class ctp_trade : public CThostFtdcTraderSpi
 {
 public:
     ctp_trade();
     void init();//set con file  dir
-    /*
+
     virtual void OnFrontConnected();
     virtual void OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,	CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
     virtual void OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField *pSettlementInfoConfirm, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
@@ -45,7 +46,8 @@ private:
     void ReqQryInvestorPosition();
     void ReqOrderInsert();
     void ReqOrderAction(CThostFtdcOrderField *pOrder);
-*/
-};
+    CThostFtdcTraderApi * pUserApi;
 
+};
+*/
 #endif // CTP_TRADE_H
