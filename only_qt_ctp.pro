@@ -44,12 +44,13 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-win32: LIBS += -L$$PWD/ctp/ -lthostmduserapi
 
-INCLUDEPATH += $$PWD/ctp
-DEPENDPATH += $$PWD/ctp
+win32: LIBS += -L$$PWD/../libs/ctp/ -lthostmduserapi
 
-win32: LIBS += -L$$PWD/ctp/ -lthosttraderapi
+INCLUDEPATH += $$PWD/../libs/ctp
+DEPENDPATH += $$PWD/../libs/ctp
 
-INCLUDEPATH += $$PWD/ctp
-DEPENDPATH += $$PWD/ctp
+win32: LIBS += -L$$PWD/../libs/ctp/ -lthosttraderapi
+
+INCLUDEPATH += $$PWD/../libs/ctp
+DEPENDPATH += $$PWD/../libs/ctp
