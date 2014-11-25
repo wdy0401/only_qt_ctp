@@ -3,6 +3,7 @@
 #include "./ctp/ThostFtdcTraderApi.h"
 #include<string>
 /*
+//test source tree
 class ctp_trade : public CThostFtdcTraderSpi
 {
 public:
