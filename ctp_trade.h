@@ -2,7 +2,7 @@
 #define CTP_TRADE
 #include "./ctp/ThostFtdcTraderApi.h"
 #include<string>
-
+/*
 class ctp_trade : public CThostFtdcTraderSpi
 {
 public:
@@ -50,5 +50,5 @@ private:
     CThostFtdcTraderApi * pUserApi;
 
 };
-
+*/
 #endif // CTP_TRADE_H

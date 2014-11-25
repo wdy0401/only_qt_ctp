@@ -7,6 +7,7 @@
 
 extern cfg simu_cfg;
 using namespace std;
+/*
 ctp_trade::ctp_trade()
 {
     cout<<"init trade"<<endl;
@@ -83,3 +84,4 @@ char *ctp_trade::mk_trade_con_dir()
         }
         return const_cast<char*>((exedir+"/").c_str());
 }
+*/

@@ -15,7 +15,7 @@ public:
     ctp_quote(ctp_quote_qthread *);
     void init();
     char * mk_quote_con_dir();
-    void login(CThostFtdcMdApi *);
+    void login();
 	void ReqUserLogin();
 
     void OnRspError(CThostFtdcRspInfoField *pRspInfo,int nRequestID, bool bIsLast);

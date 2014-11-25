@@ -36,7 +36,7 @@ ctp_quote::ctp_quote()
 {
     pUserApi=CThostFtdcMdApi::CreateFtdcMdApi(mk_quote_con_dir());
     this->init();
-    this->login(pUserApi);
+    this->login();
 }
 void ctp_quote::init()
 {
@@ -65,9 +65,8 @@ void ctp_quote::init()
     cout << "INFO: UserID: "<<req->UserID<<endl;
 }
 
-void ctp_quote::login(CThostFtdcMdApi * p)
+void ctp_quote::login()
 {
-    pUserApi=p;			// ´´½¨UserApi
     pUserApi->RegisterSpi(this);
     pUserApi->RegisterFront(const_cast<char*>(simu_cfg.getparam("QUOTE_FRONT_ADDR").c_str()));
 	pUserApi->Init();
