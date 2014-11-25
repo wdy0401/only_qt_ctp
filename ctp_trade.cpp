@@ -7,7 +7,7 @@
 
 extern cfg simu_cfg;
 using namespace std;
-/*
+
 ctp_trade::ctp_trade()
 {
     cout<<"init trade"<<endl;
@@ -15,8 +15,7 @@ ctp_trade::ctp_trade()
 void ctp_trade::init()
 {
     pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi(this->mk_trade_con_dir());
-    CTraderSpi* pUserSpi = new CTraderSpi();
-    pUserApi->RegisterSpi((CThostFtdcTraderSpi*)pUserSpi);			// 注册事件类
+    pUserApi->RegisterSpi((CThostFtdcTraderSpi*)this);			// 注册事件类
     pUserApi->SubscribePublicTopic(THOST_TERT_QUICK);				// 注册公有流
     pUserApi->SubscribePrivateTopic(THOST_TERT_QUICK);				// 注册私有流
     pUserApi->RegisterFront(const_cast<char*>(simucfg->getparam("FRONT_ADDR").c_str()));// connect
@@ -84,4 +83,3 @@ char *ctp_trade::mk_trade_con_dir()
         }
         return const_cast<char*>((exedir+"/").c_str());
 }
-*/
