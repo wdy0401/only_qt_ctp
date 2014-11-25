@@ -23,12 +23,14 @@
 
 #include"ctp_quote.h"
 #include"ctp_quote_qthread.h"
+#include"ctp_log.h"
 
 using namespace std;
 
 wtimer tm;
 cfg simu_cfg;
 log_info simu_log;
+ctp_log ctp_quote_log;
 bars_manage simu_bars_manage;
 
 MainWindow * mw;
@@ -46,9 +48,11 @@ int main(int argc, char *argv[])
     //load simu para
     simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
 
+
     //set para
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
     simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
+    ctp_quote_log.setfile("d:/record/quote_"+wfunction::get_now_second()+".csv");
     w.set_symbols_display(simu_cfg.getparam("INSTRUMENT_ID"));
 
     w.show();
@@ -66,8 +70,7 @@ void start_ctp()
     ctp_quote_qthread  * cqq=new ctp_quote_qthread;
     QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw,&MainWindow::show_quote_1);
     QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw,&MainWindow::show_quote_label);
-
-
+    QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log,&ctp_log::writeinfo);
 
     cqq->start();
     //    ctp_quote simu_quote;

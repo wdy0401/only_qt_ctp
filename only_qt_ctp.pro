@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     ../gpp_qt/wfunction/wfunction.cpp \
     ../gpp_qt/wtimer/wtimer.cpp \
     ../gpp_qt/log_info/log_info.cpp \
-    ctp_trade.cpp
+    ctp_trade.cpp \
+    ctp_log.cpp
 
 HEADERS  += mainwindow.h \
     ctp/ThostFtdcMdApi.h \
@@ -40,7 +41,8 @@ HEADERS  += mainwindow.h \
     ../gpp_qt/wfunction/wfunction.h \
     ../gpp_qt/wtimer/wtimer.h \
     ../gpp_qt/log_info/log_info.h \
-    ctp_trade.h
+    ctp_trade.h \
+    ctp_log.h
 
 FORMS    += mainwindow.ui
 

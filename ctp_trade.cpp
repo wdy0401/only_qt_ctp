@@ -4,7 +4,7 @@
 
 #include"../gpp_qt/wfunction/wfunction.h"
 #include"../gpp_qt/cfg/cfg.h"
-/*
+
 extern cfg simu_cfg;
 using namespace std;
 ctp_trade::ctp_trade()
@@ -13,7 +13,14 @@ ctp_trade::ctp_trade()
 }
 void ctp_trade::init()
 {
-
+    pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi(this->mk_trade_con_dir());
+    CTraderSpi* pUserSpi = new CTraderSpi();
+    pUserApi->RegisterSpi((CThostFtdcTraderSpi*)pUserSpi);			// 注册事件类
+    pUserApi->SubscribePublicTopic(THOST_TERT_QUICK);				// 注册公有流
+    pUserApi->SubscribePrivateTopic(THOST_TERT_QUICK);				// 注册私有流
+    pUserApi->RegisterFront(const_cast<char*>(simucfg->getparam("FRONT_ADDR").c_str()));// connect
+    pUserApi->Init();
+    pUserApi->Join();
 }
 void ctp_trade::OnFrontConnected()
 {
@@ -57,4 +64,22 @@ void ctp_trade::ReqSettlementInfoConfirm()
     int iResult = pUserApi->ReqSettlementInfoConfirm(&req, ++iRequestID);
     cerr << "--->>> 投资者结算结果确认: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
 }
-*/
+char *ctp_trade::mk_trade_con_dir()
+{
+        string exedir=simu_cfg.getparam("TRADE_CON_PATH");
+        if(exedir.size()>0)
+        {
+            wfunction::wmkdir(exedir);
+            return const_cast<char*>((exedir+"/").c_str());
+        }
+        else
+        {
+            exedir=QCoreApplication::applicationFilePath().toStdString();
+            cout<<exedir<<endl;
+            exedir=exedir.erase(exedir.find_last_of("/"),exedir.size());
+//            exedir=exedir.erase(exedir.find_last_of("\\"),exedir.size());
+            exedir=exedir+"/trade_con";
+            wfunction::wmkdir(exedir);
+        }
+        return const_cast<char*>((exedir+"/").c_str());
+}

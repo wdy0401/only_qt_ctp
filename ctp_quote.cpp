@@ -132,6 +132,8 @@ void ctp_quote::OnRspUnSubMarketData(CThostFtdcSpecificInstrumentField *pSpecifi
 ///深度行情通知
 void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarketData)
 {
+    //tm must be set before any slots.
+    tm.settic(atof(wfunction::ctp_time_char_convert(pDepthMarketData->UpdateTime,sizeof(TThostFtdcTimeType))));
     pfather->broadcast_markerdata(pDepthMarketData);
 }
 bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
