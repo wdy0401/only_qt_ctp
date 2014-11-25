@@ -2,6 +2,7 @@
 #define CTP_TRADE
 #include "./ctp/ThostFtdcTraderApi.h"
 #include<string>
+#include<map>
 
 class ctp_trade : public CThostFtdcTraderSpi
 {
@@ -47,7 +48,14 @@ private:
     void ReqQryInvestorPosition();
     void ReqOrderInsert();
     void ReqOrderAction(CThostFtdcOrderField *pOrder);
-    CThostFtdcTraderApi * pUserApi;
+
+    CThostFtdcTraderApi                     * pUserApi;
+    CThostFtdcReqUserLoginField       * req;
+    TThostFtdcFrontIDType                FRONT_ID;	//«∞÷√±‡∫≈
+    TThostFtdcSessionIDType             SESSION_ID;	//ª·ª∞±‡∫≈
+
+    long iRequestID;
+    std::map<std::string,CThostFtdcOrderField*> ordermap;
 
 };
 #endif // CTP_TRADE_H
