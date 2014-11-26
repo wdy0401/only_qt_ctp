@@ -26,10 +26,6 @@ public:
     virtual void OnRtnOrder(CThostFtdcOrderField *pOrder);
     virtual void OnRtnTrade(CThostFtdcTradeField *pTrade);
 
-
-
-
-
 private:
     void ReqQryOrder();
     void QryOrder();
