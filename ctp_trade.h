@@ -26,21 +26,16 @@ public:
     virtual void OnRtnOrder(CThostFtdcOrderField *pOrder);
     virtual void OnRtnTrade(CThostFtdcTradeField *pTrade);
 
-    //
-    void cmd();
-    //报单查询请求
-    void ReqQryOrder();
-    //报单查询
-    void QryOrder();
-    // 是否收到成功的响应
-    bool IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo);
-    // 是否我的报单回报
-    bool IsMyOrder(CThostFtdcOrderField *pOrder);
-    // 是否正在交易的报单
-    bool IsTradingOrder(CThostFtdcOrderField *pOrder);
+
+
 
 
 private:
+    void ReqQryOrder();
+    void QryOrder();
+    bool IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo);
+    bool IsMyOrder(CThostFtdcOrderField *pOrder);
+    bool IsTradingOrder(CThostFtdcOrderField *pOrder);
     void ReqUserLogin();
     void ReqSettlementInfoConfirm();
     void ReqQryInstrument();
