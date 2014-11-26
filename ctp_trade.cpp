@@ -19,18 +19,12 @@ ctp_trade::ctp_trade()
 void ctp_trade::init()
 {
     pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi(this->mk_trade_con_dir());
-    pUserApi->RegisterSpi((CThostFtdcTraderSpi*)this);			// 注册事件类
-    pUserApi->SubscribePublicTopic(THOST_TERT_QUICK);				// 注册公有流
-    pUserApi->SubscribePrivateTopic(THOST_TERT_QUICK);				// 注册私有流
+    pUserApi->RegisterSpi((CThostFtdcTraderSpi*)this);
+    pUserApi->SubscribePublicTopic(THOST_TERT_QUICK);
+    pUserApi->SubscribePrivateTopic(THOST_TERT_QUICK);
     pUserApi->RegisterFront(const_cast<char*>(simu_cfg.getparam("TRADE_FRONT_ADDR").c_str()));// connect
     pUserApi->Init();
     pUserApi->Join();
-}
-void ctp_trade::OnFrontConnected()
-{
-    cerr << "--->>> " << "OnFrontConnected" << endl;
-    ///用户登录请求
-    ReqUserLogin();
 }
 void ctp_trade::ReqUserLogin()
 {
@@ -39,23 +33,9 @@ void ctp_trade::ReqUserLogin()
     strncpy(req->UserID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(req->UserID));
     strncpy(req->Password,const_cast<char*>(simu_cfg.getparam("PASSWORD").c_str()),sizeof(req->Password));
     int iResult = pUserApi->ReqUserLogin(req, ++iRequestID);
-    cerr << "--->>> 发送用户登录请求: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+    cerr << "--->>> Sending login request: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
-void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
-{
-    cerr << "--->>> " << "OnRspUserLogin" << endl;
-    if (bIsLast && !IsErrorRspInfo(pRspInfo))
-    {
-        // 保存会话参数
-        FRONT_ID = pRspUserLogin->FrontID;
-        SESSION_ID = pRspUserLogin->SessionID;
-        cout<<pRspUserLogin->MaxOrderRef<<endl;
-        ///获取当前交易日
-        cerr << "--->>> 获取当前交易日 = " << pUserApi->GetTradingDay() << endl;
-        ///投资者结算结果确认
-        ReqSettlementInfoConfirm();
-    }
-}
+
 void ctp_trade::ReqSettlementInfoConfirm()
 {
     CThostFtdcSettlementInfoConfirmField * screq=new CThostFtdcSettlementInfoConfirmField ;
@@ -63,7 +43,48 @@ void ctp_trade::ReqSettlementInfoConfirm()
     strncpy(screq->BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(screq->BrokerID));
     strncpy(screq->InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(screq->InvestorID));
     int iResult = pUserApi->ReqSettlementInfoConfirm(screq, ++iRequestID);
-    cerr << "--->>> 投资者结算结果确认: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+    cerr << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
+}
+
+void ctp_trade::ReqQryOrder()
+{
+
+}
+void ctp_trade::QryOrder()
+{
+
+}
+bool ctp_trade::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
+{
+    return true;
+}
+bool ctp_trade::IsMyOrder(CThostFtdcOrderField *pOrder)
+{
+    return true;
+}
+bool ctp_trade::IsTradingOrder(CThostFtdcOrderField *pOrder)
+{
+    return true;
+}
+void ctp_trade::ReqQryInstrument()
+{
+
+}
+void ctp_trade::ReqQryTradingAccount()
+{
+
+}
+void ctp_trade::ReqQryInvestorPosition()
+{
+
+}
+void ctp_trade::ReqOrderInsert()
+{
+
+}
+void ctp_trade::ReqOrderAction(CThostFtdcOrderField *pOrder)
+{
+
 }
 char *ctp_trade::mk_trade_con_dir()
 {
@@ -83,4 +104,77 @@ char *ctp_trade::mk_trade_con_dir()
             wfunction::wmkdir(exedir);
         }
         return const_cast<char*>((exedir+"/").c_str());
+}
+//////////////////////////////////////////////////////////////////////////////////////////////
+//
+//Functions below are called from exchange.
+//
+//////////////////////////////////////////////////////////////////////////////////////////////
+void ctp_trade::OnFrontConnected()
+{
+    cerr << "--->>> " << "OnFrontConnected" << endl;
+    ReqUserLogin();
+}
+void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{
+    cerr << "--->>> " << "OnRspUserLogin" << endl;
+    if (bIsLast && !IsErrorRspInfo(pRspInfo))
+    {
+        //save para
+        this->FRONT_ID = pRspUserLogin->FrontID;
+        this->SESSION_ID = pRspUserLogin->SessionID;
+        cout<<pRspUserLogin->MaxOrderRef<<endl;
+        //get exchange trading day
+        cerr << "--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
+        ///confirm settlement result
+        ReqSettlementInfoConfirm();
+    }
+}
+void ctp_trade::OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField *pSettlementInfoConfirm, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{
+
+}
+void ctp_trade::OnRspQryInstrument(CThostFtdcInstrumentField *pInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{
+
+}
+void ctp_trade::OnRspQryOrder(CThostFtdcOrderField *pOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{
+
+}
+void ctp_trade::OnRspQryTradingAccount(CThostFtdcTradingAccountField *pTradingAccount, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{
+
+}
+void ctp_trade::OnRspQryInvestorPosition(CThostFtdcInvestorPositionField *pInvestorPosition, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{
+
+}
+void ctp_trade::OnRspOrderInsert(CThostFtdcInputOrderField *pInputOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{
+
+}
+void ctp_trade::OnRspOrderAction(CThostFtdcInputOrderActionField *pInputOrderAction, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{
+
+}
+void ctp_trade::OnRspError(CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
+{
+
+}
+void ctp_trade::OnFrontDisconnected(int nReason)
+{
+
+}
+void ctp_trade::OnHeartBeatWarning(int nTimeLapse)
+{
+
+}
+void ctp_trade::OnRtnOrder(CThostFtdcOrderField *pOrder)
+{
+
+}
+void ctp_trade::OnRtnTrade(CThostFtdcTradeField *pTrade)
+{
+
 }
