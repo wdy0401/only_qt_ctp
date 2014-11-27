@@ -29,12 +29,14 @@ public:
 private:
     void ReqQryOrder();
     void QryOrder();
+    bool IsFlowControl(int );
     bool IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo);
     bool IsMyOrder(CThostFtdcOrderField *pOrder);
     bool IsTradingOrder(CThostFtdcOrderField *pOrder);
     void ReqUserLogin();
     void ReqSettlementInfoConfirm();
-    void ReqQryInstrument();
+    void ReqQryInstrument(bool ,const std::string & );
+    void ReqQryInstrument(const std::string & );
     void ReqQryTradingAccount();
     void ReqQryInvestorPosition();
     void ReqOrderInsert();
