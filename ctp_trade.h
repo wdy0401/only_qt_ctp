@@ -42,8 +42,8 @@ private:
 
     CThostFtdcTraderApi                     * pUserApi;
     CThostFtdcReqUserLoginField       * req;
-    TThostFtdcFrontIDType                FRONT_ID;	//«∞÷√±‡∫≈
-    TThostFtdcSessionIDType             SESSION_ID;	//ª·ª∞±‡∫≈
+    TThostFtdcFrontIDType                FRONT_ID;
+    TThostFtdcSessionIDType             SESSION_ID;
 
     long iRequestID;
     std::map<std::string,CThostFtdcOrderField*> ordermap;

@@ -38,11 +38,11 @@ void ctp_trade::ReqUserLogin()
 
 void ctp_trade::ReqSettlementInfoConfirm()
 {
-    CThostFtdcSettlementInfoConfirmField * screq=new CThostFtdcSettlementInfoConfirmField ;
-    memset(screq, 0, sizeof(&screq));
-    strncpy(screq->BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(screq->BrokerID));
-    strncpy(screq->InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(screq->InvestorID));
-    int iResult = pUserApi->ReqSettlementInfoConfirm(screq, ++iRequestID);
+    CThostFtdcSettlementInfoConfirmField screq;
+    memset(&screq, 0, sizeof(screq));
+    strncpy(screq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(screq.BrokerID));
+    strncpy(screq.InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(screq.InvestorID));
+    int iResult = pUserApi->ReqSettlementInfoConfirm(&screq, ++iRequestID);
     cerr << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
 
@@ -66,13 +66,77 @@ bool ctp_trade::IsTradingOrder(CThostFtdcOrderField *pOrder)
 {
     return true;
 }
-void ctp_trade::ReqQryInstrument()
+void ctp_trade::ReqQryInstrument(char * instrument_id)
 {
+    ReqQryInstrument(false,instrument_id);//defaule mode is "wait untill get result"
 
+}
+void ctp_trade::ReqQryInstrument(bool fast,const string & instrument_id)
+{
+    CThostFtdcQryInstrumentField req;
+    memset(&req, 0, sizeof(req));
+    strcpy(req.InstrumentID, ,const_cast<char*>(instrument_id.c_str()));
+    int maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY"));
+    int delaytime=0;
+    while (true)
+    {
+        //对任何Qry请求，程序有死锁在这的可能
+        //目前解决方式是在cfg最大查询时间里设置 并在大于最长时间时输出警告并返回
+        if(delaytime>maxdelaytime)
+        {
+            cerr<<"--->>> 请求查询合约时间超过最大限时\t"<<"请求合约:\t"<<instrument_id<<"\t最大限时:\t"<<maxdelaytime<<endl;
+            break;
+        }
+        int iResult = pUserApi->ReqQryInstrument(&req, ++iRequestID);
+        if (!IsFlowControl(iResult))
+        {
+            cerr << "--->>> 请求查询合约: "  << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+            break;
+        }
+        else
+        {
+            if(fast)
+            {
+                cerr << "--->>> 请求查询合约: "  << iResult << ", 受到流控\t fast 模式，结束查询" << endl;
+                break;
+            }
+            else
+            {
+                cerr << "--->>> 请求查询合约: "  << iResult << ", 受到流控\t 普通模式，等待一秒后继续查询" << endl;
+                Sleep(1000);
+                delaytime++;
+            }
+        }
+    }
 }
 void ctp_trade::ReqQryTradingAccount()
 {
-
+    CThostFtdcQryTradingAccountField tareq;
+    memset(&tareq, 0, sizeof(tareq));
+    strncpy(tareq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(tareq.BrokerID));
+    strncpy(tareq.InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(tareq.InvestorID));
+    int maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY"));
+    int delaytime=0;
+    while (true)//资金账户查询对响应时间较不敏感  故只设置死锁返回，未设置快速退出
+    {
+        int iResult = pUserApi->tareqQryTradingAccount(&tareq, ++iRequestID);
+        if(delaytime>maxdelaytime)
+        {
+            cerr<<"--->>> 请求查询资金账户时间超过最大限时\t"<<"经纪商:\t"<<tareq.BrokerID<<"\t请求资金账户:\t"<<tareq.InvestorID<<"\t最大限时:\t"<<maxdelaytime<<endl;
+            break;
+        }
+        if (!IsFlowControl(iResult))
+        {
+            cerr << "--->>> 请求查询资金账户: "  << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+            break;
+        }
+        else
+        {
+            cerr << "--->>> 请求查询资金账户: "  << iResult << ", 受到流控\t 普通模式，等待一秒后继续查询" << endl;
+            Sleep(1000);
+            delaytime++;
+        }
+    }
 }
 void ctp_trade::ReqQryInvestorPosition()
 {
@@ -132,7 +196,12 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
 }
 void ctp_trade::OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField *pSettlementInfoConfirm, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-
+    cout<<"BrokerID:\t"<<pSettlementInfoConfirm->BrokerID<<"\t"<<"nRequestID:\t"<<nRequestID<<endl;
+    cerr << "--->>> " << "OnRspSettlementInfoConfirm" << endl;
+    if (bIsLast)
+    {
+        IsErrorRspInfo(pRspInfo);
+    }
 }
 void ctp_trade::OnRspQryInstrument(CThostFtdcInstrumentField *pInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
