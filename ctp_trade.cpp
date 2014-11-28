@@ -36,7 +36,6 @@ void ctp_trade::ReqUserLogin()
     int iResult = pUserApi->ReqUserLogin(req, ++iRequestID);
     cerr << "--->>> Sending login request: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
-
 void ctp_trade::ReqSettlementInfoConfirm()
 {
     CThostFtdcSettlementInfoConfirmField screq;
@@ -132,7 +131,6 @@ void ctp_trade::ReqQryTradingAccount()
 {
     ReqQryTradingAccount(false);
 }
-
 void ctp_trade::ReqQryTradingAccount(bool fast)
 {
     CThostFtdcQryTradingAccountField tareq;
@@ -211,9 +209,11 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
         }
     }
 }
+//未完成
 void ctp_trade::ReqOrderInsert(const string & InstrumentID)
 {
-/*    CThostFtdcInputOrderField oireq;
+    /*
+    CThostFtdcInputOrderField oireq;
     memset(&oireq, 0, sizeof(oireq));
     strncpy(oireq.InstrumentID,const_cast<char*>(instrument_id.c_str()),sizeof(oireq.InstrumentID));
     strncpy(oireq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(oireq.BrokerID));
@@ -261,9 +261,56 @@ void ctp_trade::ReqOrderInsert(const string & InstrumentID)
     cerr << "--->>> 报单录入请求: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
     */
 }
+//未完成
 void ctp_trade::ReqOrderAction(CThostFtdcOrderField *pOrder)
 {
+    /*
+    if (pOrder->OrderStatus != THOST_FTDC_OST_Canceled)
+        {
+            CThostFtdcInputOrderActionField req;
+            memset(&req, 0, sizeof(req));
+            ///经纪公司代码
+            cout<<pOrder->BrokerID<<pOrder->InvestorID<<pOrder->ExchangeID<<pOrder->BrokerID<<pOrder->OrderSysID<<endl;
+            strcpy(req.BrokerID, pOrder->BrokerID);
+            ///投资者代码
+            strcpy(req.InvestorID, pOrder->InvestorID);
+            ///报单操作引用
+            TThostFtdcOrderActionRefType	OrderActionRef;
+            ///报单引用
+            strcpy(req.OrderRef, pOrder->OrderRef);
+            ///请求编号
 
+            TThostFtdcRequestIDType	RequestID;
+            ///前置编号
+
+            printf("%d",SESSION_ID);
+            req.FrontID = FRONT_ID;
+            ///会话编号
+            req.SessionID = SESSION_ID;
+            ///交易所代码
+            strcpy(req.ExchangeID,pOrder->ExchangeID);
+            ///报单编号
+             strcpy(req.OrderSysID, pOrder->OrderSysID);
+            ///操作标志
+            req.ActionFlag = THOST_FTDC_AF_Delete;
+            ///价格
+            //req.LimitPrice=LIMIT_PRICE;
+            ///数量变化
+            //TThostFtdcVolumeType	VolumeChange;
+            ///用户代码
+            //TThostFtdcUserIDType	UserID;
+            ///合约代码
+            //strcpy(req.InstrumentID, pOrder->InstrumentID);
+            judge=3;
+
+            int iResult = pUserApi->ReqOrderAction(&req, ++iRequestID);cerr << "--->>> 报单操作请求: "  << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+        }
+        else
+        {
+            cout<<"单子已经撤销过了"<<endl;
+            cmd();
+        }
+    */
 }
 char *ctp_trade::mk_trade_con_dir()
 {
@@ -302,6 +349,8 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         //save para
         this->FRONT_ID = pRspUserLogin->FrontID;
         this->SESSION_ID = pRspUserLogin->SessionID;
+        this->MaxOrderRef=pRspUserLogin->MaxOrderRef;
+//        this->OrderRef=pRspUserLogin->;
         cout<<pRspUserLogin->MaxOrderRef<<endl;
         //get exchange trading day
         cerr << "--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
@@ -320,7 +369,12 @@ void ctp_trade::OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField 
 }
 void ctp_trade::OnRspQryInstrument(CThostFtdcInstrumentField *pInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
+    cerr << "--->>> " << "OnRspQryInstrument" << endl;
 
+    if (bIsLast && !IsErrorRspInfo(pRspInfo))
+    {
+        //再此设置参数
+    }
 }
 void ctp_trade::OnRspQryOrder(CThostFtdcOrderField *pOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
