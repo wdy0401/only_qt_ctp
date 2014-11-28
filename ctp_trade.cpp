@@ -13,6 +13,7 @@ using namespace std;
 ctp_trade::ctp_trade()
 {
     cout<<"init trade"<<endl;
+    maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
     iRequestID=0;
     req=new CThostFtdcReqUserLoginField;
 }
@@ -25,10 +26,6 @@ void ctp_trade::init()
     pUserApi->RegisterFront(const_cast<char*>(simu_cfg.getparam("TRADE_FRONT_ADDR").c_str()));// connect
     pUserApi->Init();
     pUserApi->Join();
-}
-bool ctp_trade::IsFlowControl(int iResult)
-{
-    return ((iResult == -2) || (iResult == -3));
 }
 void ctp_trade::ReqUserLogin()
 {
@@ -49,38 +46,56 @@ void ctp_trade::ReqSettlementInfoConfirm()
     int iResult = pUserApi->ReqSettlementInfoConfirm(&screq, ++iRequestID);
     cerr << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
-
-void ctp_trade::ReqQryOrder()
+void ctp_trade::ReqQryOrder(const string &  instrument_id)
 {
-
+    ReqQryOrder(instrument_id,false);
 }
-void ctp_trade::QryOrder()
+void ctp_trade::ReqQryOrder(const string & instrument_id,bool fast)
 {
-
-}
-bool ctp_trade::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
-{
-    return true;
-}
-bool ctp_trade::IsMyOrder(CThostFtdcOrderField *pOrder)
-{
-    return true;
-}
-bool ctp_trade::IsTradingOrder(CThostFtdcOrderField *pOrder)
-{
-    return true;
+    CThostFtdcQryOrderField ofreq;
+    memset(&ofreq, 0, sizeof(ofreq));
+    strncpy(ofreq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(ofreq.BrokerID));
+    strncpy(ofreq.InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(ofreq.InvestorID));
+    strncpy(ofreq.InstrumentID,const_cast<char*>(instrument_id.c_str()),sizeof(ofreq.InstrumentID));
+    int delaytime=0;
+    while (true)
+    {
+        if(delaytime>maxdelaytime)
+        {
+            cerr<<"--->>> 请求查询报单时间超过最大限时\t"<<"请求合约:\t"<<instrument_id<<"\t最大限时(second):\t"<<maxdelaytime<<endl;
+            break;
+        }
+        int iResult = pUserApi->ReqQryOrder(&ofreq, ++iRequestID);
+        if (!IsFlowControl(iResult))
+        {
+            cerr << "--->>> 请求查询报单: "  << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+            break;
+        }
+        else
+        {
+            if(fast)
+            {
+                cerr << "--->>> 请求查询报单: "  << iResult << ", 受到流控\t fast 模式,结束查询" << endl;
+                break;
+            }
+            else
+            {
+                cerr << "--->>> 请求查询报单: "  << iResult << ", 受到流控\t 普通模式，等待一秒后继续查询" << endl;
+                Sleep(1000);
+                delaytime++;
+            }
+        }
+    }
 }
 void ctp_trade::ReqQryInstrument(const string & instrument_id)
 {
-    ReqQryInstrument(false,instrument_id);//defaule mode is "wait untill get result"
-
+    ReqQryInstrument(instrument_id,false);//defaule mode is "wait untill get result"
 }
-void ctp_trade::ReqQryInstrument(bool fast,const string & instrument_id)
+void ctp_trade::ReqQryInstrument(const string & instrument_id,bool fast)
 {
-    CThostFtdcQryInstrumentField req;
-    memset(&req, 0, sizeof(req));
-    strcpy(req.InstrumentID,const_cast<char*>(instrument_id.c_str()));
-    int maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
+    CThostFtdcQryInstrumentField qireq;
+    memset(&qireq, 0, sizeof(qireq));
+    strcpy(qireq.InstrumentID,const_cast<char*>(instrument_id.c_str()));
     int delaytime=0;
     while (true)
     {
@@ -91,7 +106,7 @@ void ctp_trade::ReqQryInstrument(bool fast,const string & instrument_id)
             cerr<<"--->>> 请求查询合约时间超过最大限时\t"<<"请求合约:\t"<<instrument_id<<"\t最大限时:\t"<<maxdelaytime<<endl;
             break;
         }
-        int iResult = pUserApi->ReqQryInstrument(&req, ++iRequestID);
+        int iResult = pUserApi->ReqQryInstrument(&qireq, ++iRequestID);
         if (!IsFlowControl(iResult))
         {
             cerr << "--->>> 请求查询合约: "  << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
@@ -115,13 +130,17 @@ void ctp_trade::ReqQryInstrument(bool fast,const string & instrument_id)
 }
 void ctp_trade::ReqQryTradingAccount()
 {
+    ReqQryTradingAccount(false);
+}
+
+void ctp_trade::ReqQryTradingAccount(bool fast)
+{
     CThostFtdcQryTradingAccountField tareq;
     memset(&tareq, 0, sizeof(tareq));
     strncpy(tareq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(tareq.BrokerID));
     strncpy(tareq.InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(tareq.InvestorID));
-    int maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
     int delaytime=0;
-    while (true)//资金账户查询对响应时间较不敏感  故只设置死锁返回，未设置快速退出
+    while (true)
     {
         int iResult = pUserApi->ReqQryTradingAccount(&tareq, ++iRequestID);
         if(delaytime>maxdelaytime)
@@ -136,19 +155,111 @@ void ctp_trade::ReqQryTradingAccount()
         }
         else
         {
-            cerr << "--->>> 请求查询资金账户: "  << iResult << ", 受到流控\t 普通模式，等待一秒后继续查询" << endl;
-            Sleep(1000);
-            delaytime++;
+            if(fast)
+            {
+                cerr << "--->>> 请求查询资金账户: "  << iResult << ", 受到流控\t fast 模式,结束查询" << endl;
+                break;
+            }
+            else
+            {
+                cerr << "--->>> 请求查询资金账户: "  << iResult << ", 受到流控\t 普通模式，等待一秒后继续查询" << endl;
+                Sleep(1000);
+                delaytime++;
+            }
         }
     }
 }
-void ctp_trade::ReqQryInvestorPosition()
+void ctp_trade::ReqQryInvestorPosition(const string & instrument_id)
 {
-
+    ctp_trade::ReqQryInvestorPosition(instrument_id,false);
 }
-void ctp_trade::ReqOrderInsert()
+void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
 {
+    CThostFtdcQryInvestorPositionField ipreq;
+    memset(&ipreq, 0, sizeof(ipreq));
 
+    strncpy(ipreq.InstrumentID,const_cast<char*>(instrument_id.c_str()),sizeof(ipreq.InstrumentID));
+    strncpy(ipreq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(ipreq.BrokerID));
+    strncpy(ipreq.InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(ipreq.InvestorID));
+    int delaytime=0;
+    while (true)
+    {
+        int iResult = pUserApi->ReqQryInvestorPosition(&ipreq, ++iRequestID);
+        if(delaytime>maxdelaytime)
+        {
+            cerr<<"--->>> 请求查询持仓时间超过最大限时\t"<<"合约:\t"<<ipreq.InvestorID<<"\t最大限时:\t"<<maxdelaytime<<endl;
+            break;
+        }
+        if (!IsFlowControl(iResult))
+        {
+            cerr << "--->>> 请求合约持仓: "  << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+            break;
+        }
+        else
+        {
+            if(fast)
+            {
+                cerr << "--->>> 请求合约持仓: "  << iResult << ", 受到流控\t fast 模式,结束查询" << endl;
+                break;
+            }
+            else
+            {
+                cerr << "--->>> 请求查询合约持仓: "  << iResult << ", 受到流控\t 普通模式，等待一秒后继续查询" << endl;
+                Sleep(1000);
+                delaytime++;
+            }
+        }
+    }
+}
+void ctp_trade::ReqOrderInsert(const string & InstrumentID)
+{
+/*    CThostFtdcInputOrderField oireq;
+    memset(&oireq, 0, sizeof(oireq));
+    strncpy(oireq.InstrumentID,const_cast<char*>(instrument_id.c_str()),sizeof(oireq.InstrumentID));
+    strncpy(oireq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(oireq.BrokerID));
+    strncpy(oireq.InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(oireq.InvestorID));
+    ///报单引用
+    strcpy(req.OrderRef, ORDER_REF);
+    ///用户代码
+//	TThostFtdcUserIDType	UserID;
+    ///报单价格条件: 限价
+    req.OrderPriceType = THOST_FTDC_OPT_LimitPrice;
+    ///买卖方向:
+    req.Direction = DIRECTION;
+    ///组合开平标志: 开仓
+    req.CombOffsetFlag[0] = THOST_FTDC_OF_Open;
+    ///组合投机套保标志
+    req.CombHedgeFlag[0] = THOST_FTDC_HF_Speculation;
+    ///价格
+    req.LimitPrice = LIMIT_PRICE;
+    ///数量: 1
+    req.VolumeTotalOriginal = 1;
+    ///有效期类型: 当日有效
+    req.TimeCondition = THOST_FTDC_TC_GFD;
+    ///GTD日期
+//	TThostFtdcDateType	GTDDate;
+    ///成交量类型: 任何数量
+    req.VolumeCondition = THOST_FTDC_VC_AV;
+    ///最小成交量: 1
+    req.MinVolume = 1;
+    ///触发条件: 立即
+    req.ContingentCondition = THOST_FTDC_CC_Immediately;
+    ///止损价
+//	TThostFtdcPriceType	StopPrice;
+    ///强平原因: 非强平
+    req.ForceCloseReason = THOST_FTDC_FCC_NotForceClose;
+    ///自动挂起标志: 否
+    req.IsAutoSuspend = 0;
+    ///业务单元
+//	TThostFtdcBusinessUnitType	BusinessUnit;
+    ///请求编号
+//	TThostFtdcRequestIDType	RequestID;
+    ///用户强评标志: 否
+    req.UserForceClose = 0;
+    judge=2;
+    int iResult = pUserApi->ReqOrderInsert(&req, ++iRequestID);
+    cerr << "--->>> 报单录入请求: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+    */
 }
 void ctp_trade::ReqOrderAction(CThostFtdcOrderField *pOrder)
 {
@@ -175,7 +286,7 @@ char *ctp_trade::mk_trade_con_dir()
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 //
-//Functions below are called from exchange.
+//Functions called from exchange.
 //
 //////////////////////////////////////////////////////////////////////////////////////////////
 void ctp_trade::OnFrontConnected()
@@ -250,4 +361,26 @@ void ctp_trade::OnRtnOrder(CThostFtdcOrderField *pOrder)
 void ctp_trade::OnRtnTrade(CThostFtdcTradeField *pTrade)
 {
 
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//
+//Bool Functions
+//
+//////////////////////////////////////////////////////////////////////////////////////////////
+bool ctp_trade::IsFlowControl(int iResult)
+{
+    return ((iResult == -2) || (iResult == -3));
+}
+bool ctp_trade::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
+{
+    return true;
+}
+bool ctp_trade::IsMyOrder(CThostFtdcOrderField *pOrder)
+{
+    return true;
+}
+bool ctp_trade::IsTradingOrder(CThostFtdcOrderField *pOrder)
+{
+    return true;
 }

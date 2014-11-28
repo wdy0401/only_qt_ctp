@@ -27,19 +27,23 @@ public:
     virtual void OnRtnTrade(CThostFtdcTradeField *pTrade);
 
 private:
-    void ReqQryOrder();
-    void QryOrder();
+    void ReqQryOrder(const std::string &);
+    void ReqQryOrder(const std::string &,bool);
+    void ReqQryInstrument(const std::string & );
+    void ReqQryInstrument(const std::string & ,bool);
+    void ReqQryInvestorPosition(const std::string &);
+    void ReqQryInvestorPosition(const std::string & ,bool);
+
+    void ReqOrderInsert(const std::string &);
+    void ReqQryTradingAccount(bool);
+    void ReqQryTradingAccount();
     bool IsFlowControl(int );
     bool IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo);
     bool IsMyOrder(CThostFtdcOrderField *pOrder);
     bool IsTradingOrder(CThostFtdcOrderField *pOrder);
     void ReqUserLogin();
     void ReqSettlementInfoConfirm();
-    void ReqQryInstrument(bool ,const std::string & );
-    void ReqQryInstrument(const std::string & );
-    void ReqQryTradingAccount();
     void ReqQryInvestorPosition();
-    void ReqOrderInsert();
     void ReqOrderAction(CThostFtdcOrderField *pOrder);
 
     CThostFtdcTraderApi                     * pUserApi;
@@ -48,6 +52,7 @@ private:
     TThostFtdcSessionIDType             SESSION_ID;
 
     long iRequestID;
+    int maxdelaytime;
     std::map<std::string,CThostFtdcOrderField*> ordermap;
 
 };
