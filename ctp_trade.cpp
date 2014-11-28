@@ -367,13 +367,13 @@ void ctp_trade::OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField 
         IsErrorRspInfo(pRspInfo);
     }
 }
+//未完成
 void ctp_trade::OnRspQryInstrument(CThostFtdcInstrumentField *pInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
     cerr << "--->>> " << "OnRspQryInstrument" << endl;
-
     if (bIsLast && !IsErrorRspInfo(pRspInfo))
     {
-        //再此设置参数
+        //在此设置合约参数
     }
 }
 void ctp_trade::OnRspQryOrder(CThostFtdcOrderField *pOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
