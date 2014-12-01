@@ -33,5 +33,5 @@ void ctp_log::writeinfo(CThostFtdcDepthMarketDataField *pDepthMarketData)
     os<< "," << pDepthMarketData->PreSettlementPrice;
     os<< "," << pDepthMarketData->SettlementPrice;
     os<< endl;
-    outlog<<os;
+    outlog<<os.str();
 }

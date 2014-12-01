@@ -349,7 +349,7 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         //save para
         this->FRONT_ID = pRspUserLogin->FrontID;
         this->SESSION_ID = pRspUserLogin->SessionID;
-        this->MaxOrderRef=pRspUserLogin->MaxOrderRef;
+        //this->MaxOrderRef=pRspUserLogin->MaxOrderRef;
 //        this->OrderRef=pRspUserLogin->;
         cout<<pRspUserLogin->MaxOrderRef<<endl;
         //get exchange trading day
