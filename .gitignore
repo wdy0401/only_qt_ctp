@@ -1,3 +1,7 @@
+#ctp file
+
+*.con
+
 # C++ objects and libs
 
 *.slo
