@@ -3,7 +3,7 @@
 #include<iostream>
 #include<iomanip>
 
-#include"../ctp/ThostFtdcMdApi.h"
+#include"../libs/ctp/ThostFtdcMdApi.h"
 
 using namespace std;
 ctp_log::ctp_log()
@@ -33,5 +33,6 @@ void ctp_log::writeinfo(CThostFtdcDepthMarketDataField *pDepthMarketData)
     os<< "," << pDepthMarketData->PreSettlementPrice;
     os<< "," << pDepthMarketData->SettlementPrice;
     os<< endl;
-    outlog<<os;
+    string out=os.str();
+    this->outlog<<out;
 }

@@ -16,7 +16,7 @@
 #include"../gpp_qt/bar/bars_manage.h"
 #include"../gpp_qt/wfunction/wfunction.h"
 
-#include"ctp/ThostFtdcMdApi.h"
+#include"../libs/ctp/ThostFtdcMdApi.h"
 
 #include"ctp_quote_qthread.h"
 extern cfg simu_cfg;

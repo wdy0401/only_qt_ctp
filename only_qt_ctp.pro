@@ -5,8 +5,6 @@
 #-------------------------------------------------
 
 QT       += core gui
-QT += network widgets
-
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,11 +25,9 @@ SOURCES += main.cpp\
     ../gpp_qt/wtimer/wtimer.cpp \
     ../gpp_qt/log_info/log_info.cpp \
     ctp_trade.cpp \
-    ctp_log.cpp
+    ctp_log.cpp \
 
 HEADERS  += mainwindow.h \
-    ctp/ThostFtdcMdApi.h \
-    ctp/ThostFtdcTraderApi.h \
     ctp_quote.h \
     ctp_quote_qthread.h \
     ../gpp_qt/bar/bar.h \
@@ -42,17 +38,10 @@ HEADERS  += mainwindow.h \
     ../gpp_qt/wtimer/wtimer.h \
     ../gpp_qt/log_info/log_info.h \
     ctp_trade.h \
-    ctp_log.h
+    ctp_log.h \
+    ../libs/ctp/ThostFtdcTraderApi.h \
+    ../libs/ctp/ThostFtdcMdApi.h
 
 FORMS    += mainwindow.ui
 
 
-win32: LIBS += -L$$PWD/../libs/ctp/ -lthostmduserapi
-
-INCLUDEPATH += $$PWD/../libs/ctp
-DEPENDPATH += $$PWD/../libs/ctp
-
-win32: LIBS += -L$$PWD/../libs/ctp/ -lthosttraderapi
-
-INCLUDEPATH += $$PWD/../libs/ctp
-DEPENDPATH += $$PWD/../libs/ctp
