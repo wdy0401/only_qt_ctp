@@ -137,10 +137,14 @@
     <ClCompile Include="..\gpp_qt\bar\bars.cpp" />
     <ClCompile Include="..\gpp_qt\bar\bars_manage.cpp" />
     <ClCompile Include="..\gpp_qt\cfg\cfg.cpp" />
+    <ClCompile Include="ctp_log.cpp" />
     <ClCompile Include="ctp_quote.cpp" />
     <ClCompile Include="ctp_quote_qthread.cpp" />
     <ClCompile Include="ctp_trade.cpp" />
     <ClCompile Include="..\gpp_qt\log_info\log_info.cpp" />
+    <ClCompile Include="Debug\moc_ctp_log.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Debug\moc_ctp_quote_qthread.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -151,6 +155,9 @@
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="..\gpp_qt\wfunction\wfunction.cpp" />
     <ClCompile Include="..\gpp_qt\wtimer\wtimer.cpp" />
+    <ClCompile Include="Release\moc_ctp_log.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Release\moc_mainwindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -162,6 +169,16 @@
     <ClInclude Include="..\gpp_qt\bar\bars.h" />
     <ClInclude Include="..\gpp_qt\bar\bars_manage.h" />
     <ClInclude Include="..\gpp_qt\cfg\cfg.h" />
+    <CustomBuild Include="ctp_log.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ctp_log.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I.\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtCore" "-I.\release" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\mkspecs\win32-msvc2010" "-I.\GeneratedFiles"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ctp_log.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB "-I.\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtCore" "-I.\debug" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\mkspecs\win32-msvc2010" "-I.\GeneratedFiles"</Command>
+    </CustomBuild>
     <ClInclude Include="ctp_quote.h" />
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h" />
     <CustomBuild Include="ctp_quote_qthread.h">
