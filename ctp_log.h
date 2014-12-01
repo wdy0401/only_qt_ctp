@@ -1,7 +1,7 @@
 #ifndef CTP_LOG_H
 #define CTP_LOG_H
 
-#include"../libs/ctp/ThostFtdcMdApi.h"
+#include"../ctp/ThostFtdcMdApi.h"
 #include"../gpp_qt/log_info/log_info.h"
 
 #include<QObject>

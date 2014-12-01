@@ -1,5 +1,4 @@
 #include "ctp_trade.h"
-#include "../libs/ctp/ThostFtdcMdApi.h"
 #include<Windows.h>
 #include<string>
 
@@ -11,15 +10,16 @@
 extern cfg simu_cfg;
 using namespace std;
 
-void ctp_trade::init()
+ctp_trade::ctp_trade()
 {
     cout<<"init trade"<<endl;
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
     iRequestID=0;
     req=new CThostFtdcReqUserLoginField;
-	
-    //pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi(mk_trade_con_dir());
-    pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi();
+}
+void ctp_trade::init()
+{
+    pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi(this->mk_trade_con_dir());
     pUserApi->RegisterSpi((CThostFtdcTraderSpi*)this);
     pUserApi->SubscribePublicTopic(THOST_TERT_QUICK);
     pUserApi->SubscribePrivateTopic(THOST_TERT_QUICK);
@@ -349,7 +349,8 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         //save para
         this->FRONT_ID = pRspUserLogin->FrontID;
         this->SESSION_ID = pRspUserLogin->SessionID;
-        strncpy(this->MaxOrderRef,pRspUserLogin->MaxOrderRef,sizeof(pRspUserLogin->MaxOrderRef));
+        this->MaxOrderRef=pRspUserLogin->MaxOrderRef;
+//        this->OrderRef=pRspUserLogin->;
         cout<<pRspUserLogin->MaxOrderRef<<endl;
         //get exchange trading day
         cerr << "--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;

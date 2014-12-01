@@ -1,12 +1,13 @@
 #ifndef CTP_TRADE
 #define CTP_TRADE
-#include "../libs/ctp/ThostFtdcTraderApi.h"
+#include "./ctp/ThostFtdcTraderApi.h"
 #include<string>
 #include<map>
 
 class ctp_trade : public CThostFtdcTraderSpi
 {
 public:
+    ctp_trade();
     void init();//set con file  dir
     char * mk_trade_con_dir();
 
@@ -49,9 +50,8 @@ private:
     CThostFtdcReqUserLoginField       * req;
     TThostFtdcFrontIDType                FRONT_ID;
     TThostFtdcSessionIDType             SESSION_ID;
-    //TThostFtdcOrderRefType is the type of the follow two var,
-    char *                                          OrderRef;
-    char *                                          MaxOrderRef;
+    TThostFtdcOrderRefType              OrderRef;
+    TThostFtdcOrderRefType              MaxOrderRef;
 
     long iRequestID;
     int maxdelaytime;

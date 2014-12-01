@@ -1,7 +1,7 @@
 #ifndef CTP_QUOTE_QTHREAD
 #define CTP_QUOTE_QTHREAD
 #include<QThread>
-#include"../libs/ctp/ThostFtdcMdApi.h"
+#include"../ctp/ThostFtdcMdApi.h"
 class ctp_quote_qthread:public QThread
 {
     Q_OBJECT

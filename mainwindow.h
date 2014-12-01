@@ -6,7 +6,7 @@
 
 #include<string>
 #include<map>
-#include"../libs/ctp/ThostFtdcMdApi.h"
+#include"../ctp/ThostFtdcMdApi.h"
 namespace Ui {
 class MainWindow;
 }

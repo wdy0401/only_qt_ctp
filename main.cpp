@@ -10,8 +10,8 @@
 #include<QObject>
 #include<QThread>
 
-#include"../libs/ctp/ThostFtdcMdApi.h"
-#include"../libs/ctp/ThostFtdcTraderApi.h"
+#include"ctp/ThostFtdcMdApi.h"
+#include"ctp/ThostFtdcTraderApi.h"
 
 #include"../gpp_qt/cfg/cfg.h"
 #include"../gpp_qt/bar/bar.h"

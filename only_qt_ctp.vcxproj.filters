@@ -36,12 +36,12 @@
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{2289a948-ff1f-46d3-ac8d-b7db9eb9517b}</UniqueIdentifier>
+      <UniqueIdentifier>{c3bec4e8-22e1-43c3-9e56-565d3d4a3fad}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{08fcb626-aefe-44df-b246-87cdd51e8e16}</UniqueIdentifier>
+      <UniqueIdentifier>{3094e23b-1fb4-4885-b6d5-7fee71363f70}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
@@ -57,9 +57,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\gpp_qt\cfg\cfg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ctp_log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ctp_quote.cpp">
@@ -86,12 +83,6 @@
     <ClCompile Include="..\gpp_qt\wtimer\wtimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Release\moc_ctp_log.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_ctp_log.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="Release\moc_ctp_quote_qthread.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
@@ -106,10 +97,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\libs\ctp\ThostFtdcMdApi.h">
+    <ClInclude Include="ctp\ThostFtdcMdApi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\libs\ctp\ThostFtdcTraderApi.h">
+    <ClInclude Include="ctp\ThostFtdcTraderApi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\gpp_qt\bar\bar.h">
@@ -124,9 +115,6 @@
     <ClInclude Include="..\gpp_qt\cfg\cfg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <CustomBuild Include="ctp_log.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <ClInclude Include="ctp_quote.h">
       <Filter>Header Files</Filter>
     </ClInclude>
