@@ -35,13 +35,13 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{c3bec4e8-22e1-43c3-9e56-565d3d4a3fad}</UniqueIdentifier>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{f0a8f53c-007a-457c-9531-9aefc6560466}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{3094e23b-1fb4-4885-b6d5-7fee71363f70}</UniqueIdentifier>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{ec27e6b0-512a-4199-9092-c5596d3d337f}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
@@ -57,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\gpp_qt\cfg\cfg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp_log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ctp_quote.cpp">
@@ -83,21 +86,33 @@
     <ClCompile Include="..\gpp_qt\wtimer\wtimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Release\moc_ctp_quote_qthread.cpp">
+    <ClCompile Include="Debug\moc_ctp_log.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_ctp_log.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="Debug\moc_ctp_quote_qthread.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Release\moc_mainwindow.cpp">
+    <ClCompile Include="Release\moc_ctp_quote_qthread.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="Debug\moc_mainwindow.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Release\moc_mainwindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\libs\ctp\ThostFtdcMdApi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ctp\ThostFtdcMdApi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libs\ctp\ThostFtdcTraderApi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ctp\ThostFtdcTraderApi.h">
@@ -115,6 +130,9 @@
     <ClInclude Include="..\gpp_qt\cfg\cfg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <CustomBuild Include="ctp_log.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <ClInclude Include="ctp_quote.h">
       <Filter>Header Files</Filter>
     </ClInclude>

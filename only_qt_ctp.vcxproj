@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
@@ -17,22 +17,22 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <PlatformToolSet>v120</PlatformToolSet>
     <OutputDirectory>release\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>Application</ConfigurationType>
     <IntermediateDirectory>release\</IntermediateDirectory>
     <PrimaryOutput>CTP_QUOTE_DISPLAY</PrimaryOutput>
-    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <PlatformToolSet>v120</PlatformToolSet>
     <OutputDirectory>debug\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>Application</ConfigurationType>
     <IntermediateDirectory>debug\</IntermediateDirectory>
     <PrimaryOutput>CTP_QUOTE_DISPLAY</PrimaryOutput>
-    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
@@ -56,25 +56,26 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>ctp;ctp;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtGui;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtCore;release;.;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\mkspecs\win32-msvc2010;.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libs\ctp;..\libs\ctp;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtWidgets;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtNetwork;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtGui;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtANGLE;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtCore;release;.;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\mkspecs\win32-msvc2013;.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_OPENGL_ES_2;QT_OPENGL_ES_2_ANGLE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
-      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glu32.lib;opengl32.lib;gdi32.lib;user32.lib;$(QTDIR)\lib\qtmain.lib;$(QTDIR)\lib\Qt5Core.lib;E:\ccc\Documents\GitHub\only_qt_ctp\ctp\\thostmduserapi.lib;E:\ccc\Documents\GitHub\only_qt_ctp\ctp\\thosttraderapi.lib;$(QTDIR)\lib\Qt5Widgets.lib;$(QTDIR)\lib\Qt5Network.lib;$(QTDIR)\lib\Qt5Gui.lib;$(QTDIR)\lib\Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTDIR)\lib;$(QTDIR)\lib;E:\ccc\Documents\GitHub\only_qt_ctp\ctp\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(QTDIR)\lib\qtmain.lib;$(QTDIR)\lib\Qt5Core.lib;E:\ccc\Documents\GitHub\only_qt_ctp\..\libs\ctp\\thostmduserapi.lib;E:\ccc\Documents\GitHub\only_qt_ctp\..\libs\ctp\\thosttraderapi.lib;$(QTDIR)\lib\Qt5Widgets.lib;$(QTDIR)\lib\Qt5Network.lib;$(QTDIR)\lib\Qt5Gui.lib;$(QTDIR)\lib\Qt5Core.lib;libEGL.lib;libGLESv2.lib;gdi32.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTDIR)\lib;$(QTDIR)\lib;E:\ccc\Documents\GitHub\only_qt_ctp\..\libs\ctp\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -91,12 +92,12 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_OPENGL_ES_2;QT_OPENGL_ES_2_ANGLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>ctp;ctp;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtGui;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtCore;debug;.;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\mkspecs\win32-msvc2010;.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libs\ctp;..\libs\ctp;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtWidgets;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtNetwork;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtGui;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtANGLE;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtCore;debug;.;..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\mkspecs\win32-msvc2013;.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -104,7 +105,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_WIDGETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_WIDGETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_OPENGL_ES_2;QT_OPENGL_ES_2_ANGLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -114,8 +115,8 @@
       <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glu32.lib;opengl32.lib;gdi32.lib;user32.lib;$(QTDIR)\lib\qtmaind.lib;$(QTDIR)\lib\Qt5Cored.lib;E:\ccc\Documents\GitHub\only_qt_ctp\ctp\\thostmduserapi.lib;E:\ccc\Documents\GitHub\only_qt_ctp\ctp\\thosttraderapi.lib;$(QTDIR)\lib\Qt5Widgetsd.lib;$(QTDIR)\lib\Qt5Networkd.lib;$(QTDIR)\lib\Qt5Guid.lib;$(QTDIR)\lib\Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTDIR)\lib;$(QTDIR)\lib;E:\ccc\Documents\GitHub\only_qt_ctp\ctp\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(QTDIR)\lib\qtmaind.lib;$(QTDIR)\lib\Qt5Cored.lib;E:\ccc\Documents\GitHub\only_qt_ctp\..\libs\ctp\\thostmduserapi.lib;E:\ccc\Documents\GitHub\only_qt_ctp\..\libs\ctp\\thosttraderapi.lib;$(QTDIR)\lib\Qt5Widgetsd.lib;$(QTDIR)\lib\Qt5Networkd.lib;$(QTDIR)\lib\Qt5Guid.lib;$(QTDIR)\lib\Qt5Cored.lib;libEGLd.lib;libGLESv2d.lib;gdi32.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTDIR)\lib;$(QTDIR)\lib;E:\ccc\Documents\GitHub\only_qt_ctp\..\libs\ctp\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -131,7 +132,7 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_WIDGETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_WIDGETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_OPENGL_ES_2;QT_OPENGL_ES_2_ANGLE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -139,10 +140,14 @@
     <ClCompile Include="..\gpp_qt\bar\bars.cpp" />
     <ClCompile Include="..\gpp_qt\bar\bars_manage.cpp" />
     <ClCompile Include="..\gpp_qt\cfg\cfg.cpp" />
+    <ClCompile Include="ctp_log.cpp" />
     <ClCompile Include="ctp_quote.cpp" />
     <ClCompile Include="ctp_quote_qthread.cpp" />
     <ClCompile Include="ctp_trade.cpp" />
     <ClCompile Include="..\gpp_qt\log_info\log_info.cpp" />
+    <ClCompile Include="Debug\moc_ctp_log.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Debug\moc_ctp_quote_qthread.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -158,40 +163,55 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\libs\ctp\ThostFtdcMdApi.h" />
     <ClInclude Include="ctp\ThostFtdcMdApi.h" />
+    <ClInclude Include="..\libs\ctp\ThostFtdcTraderApi.h" />
     <ClInclude Include="ctp\ThostFtdcTraderApi.h" />
     <ClInclude Include="..\gpp_qt\bar\bar.h" />
     <ClInclude Include="..\gpp_qt\bar\bars.h" />
     <ClInclude Include="..\gpp_qt\bar\bars_manage.h" />
     <ClInclude Include="..\gpp_qt\cfg\cfg.h" />
-    <ClInclude Include="ctp_quote.h" />
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h" />
+    <CustomBuild Include="ctp_log.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_OPENGL_ES_2 -DQT_OPENGL_ES_2_ANGLE -DNDEBUG "-I.\..\libs\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtANGLE" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtCore" "-I.\release" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\mkspecs\win32-msvc2013"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ctp_log.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_OPENGL_ES_2 -DQT_OPENGL_ES_2_ANGLE "-I.\..\libs\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtANGLE" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtCore" "-I.\debug" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\mkspecs\win32-msvc2013"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ctp_log.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
+    <ClInclude Include="ctp_quote.h" />
     <CustomBuild Include="ctp_quote_qthread.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I.\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtCore" "-I.\release" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\mkspecs\win32-msvc2010"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_OPENGL_ES_2 -DQT_OPENGL_ES_2_ANGLE -DNDEBUG "-I.\..\libs\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtANGLE" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtCore" "-I.\release" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\mkspecs\win32-msvc2013"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ctp_quote_qthread.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB "-I.\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtCore" "-I.\debug" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\mkspecs\win32-msvc2010"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_OPENGL_ES_2 -DQT_OPENGL_ES_2_ANGLE "-I.\..\libs\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtANGLE" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtCore" "-I.\debug" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\mkspecs\win32-msvc2013"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ctp_quote_qthread.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
     <ClInclude Include="ctp_trade.h" />
     <ClInclude Include="..\gpp_qt\log_info\log_info.h" />
     <CustomBuild Include="mainwindow.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I.\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtCore" "-I.\release" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\mkspecs\win32-msvc2010"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_OPENGL_ES_2 -DQT_OPENGL_ES_2_ANGLE -DNDEBUG "-I.\..\libs\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtANGLE" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtCore" "-I.\release" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\mkspecs\win32-msvc2013"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing mainwindow.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB "-I.\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\include\QtCore" "-I.\debug" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2010_opengl\mkspecs\win32-msvc2010"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_NETWORK_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_OPENGL_ES_2 -DQT_OPENGL_ES_2_ANGLE "-I.\..\libs\ctp" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtWidgets" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtNetwork" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtGui" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtANGLE" "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\include\QtCore" "-I.\debug" "-I." "-I.\..\..\..\..\vs_qt\qt5.3.1\5.3\msvc2013\mkspecs\win32-msvc2013"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing mainwindow.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
     <ClInclude Include="..\gpp_qt\wfunction\wfunction.h" />
     <ClInclude Include="..\gpp_qt\wtimer\wtimer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Release\moc_ctp_log.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Release\moc_ctp_quote_qthread.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -213,7 +233,7 @@
   <ImportGroup Label="ExtensionTargets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Qt5Version_x0020_Win32="5.3.1" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" />
+      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_Win32="5.3.1" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

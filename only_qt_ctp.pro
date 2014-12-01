@@ -42,7 +42,9 @@ HEADERS  += mainwindow.h \
     ../gpp_qt/wtimer/wtimer.h \
     ../gpp_qt/log_info/log_info.h \
     ctp_trade.h \
-    ctp_log.h
+    ctp_log.h \
+    ../libs/ctp/ThostFtdcTraderApi.h \
+    ../libs/ctp/ThostFtdcMdApi.h
 
 FORMS    += mainwindow.ui
 
