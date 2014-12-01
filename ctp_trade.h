@@ -1,6 +1,6 @@
 #ifndef CTP_TRADE
 #define CTP_TRADE
-#include "./ctp/ThostFtdcTraderApi.h"
+#include "../libs/ctp/ThostFtdcTraderApi.h"
 #include<string>
 #include<map>
 
