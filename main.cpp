@@ -4,9 +4,9 @@
 #include<string>
 #include<Windows.h>
 
-#include "mainwindow.h"
-#include "sender.h"
-#include <QApplication>
+#include"mainwindow.h"
+#include"sender.h"
+#include<QApplication>
 #include<QObject>
 #include<QThread>
 
