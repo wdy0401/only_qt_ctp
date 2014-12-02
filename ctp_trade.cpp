@@ -336,6 +336,12 @@ char *ctp_trade::mk_trade_con_dir()
 //Functions called from exchange.
 //
 //////////////////////////////////////////////////////////////////////////////////////////////
+//
+//需要一个框架，对order进行整体把握
+//就是下面很多函数需要继续添加功能
+//
+//////////////////////////////////////////////////////////////////////////////////////////////
+
 void ctp_trade::OnFrontConnected()
 {
     cerr << "--->>> " << "OnFrontConnected" << endl;
@@ -371,35 +377,64 @@ void ctp_trade::OnRspQryInstrument(CThostFtdcInstrumentField *pInstrument, CThos
     if (bIsLast && !IsErrorRspInfo(pRspInfo))
     {
         //在此设置合约参数
+		//需要测试每次返回的指针是否一致，也就是是否需要copy InstrumentField的问题
     }
 }
 void ctp_trade::OnRspQryOrder(CThostFtdcOrderField *pOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-
+	cout << pOrder->OrderStatus << pOrder->OrderRef << pOrder->OrderSysID << endl;
+	if (bIsLast)
+	{
+		IsErrorRspInfo(pRspInfo);
+	}
 }
 void ctp_trade::OnRspQryTradingAccount(CThostFtdcTradingAccountField *pTradingAccount, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-
+	cerr << "--->>> " << "OnRspQryTradingAccount" << endl;
+	if (bIsLast)
+	{
+		IsErrorRspInfo(pRspInfo);
+	}
 }
 void ctp_trade::OnRspQryInvestorPosition(CThostFtdcInvestorPositionField *pInvestorPosition, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-
+	cerr << "--->>> " << "OnRspQryInvestorPosition" << endl;
+	if (bIsLast)
+	{
+		IsErrorRspInfo(pRspInfo);
+	}
 }
 void ctp_trade::OnRspOrderInsert(CThostFtdcInputOrderField *pInputOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-
+	cerr << "--->>> " << "OnRspOrderInsert" << endl;
+	if (bIsLast)
+	{
+		IsErrorRspInfo(pRspInfo);
+	}
 }
 void ctp_trade::OnRspOrderAction(CThostFtdcInputOrderActionField *pInputOrderAction, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-
+	cerr << "--->>> " << "OnRspOrderAction" << endl;
+	if (bIsLast)
+	{
+		IsErrorRspInfo(pRspInfo);
+	}
 }
 void ctp_trade::OnRspError(CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-
+	cerr << "--->>> " << "OnRspError" << endl;
+	IsErrorRspInfo(pRspInfo);
 }
 void ctp_trade::OnFrontDisconnected(int nReason)
 {
-
+	cerr << "--->>> " << "OnFrontDisconnected" << endl;
+	cerr << "--->>> Reason = " << nReason << endl;
+	cerr << "连接断开原因" << endl;
+	cerr << "0x1001 网络读失败" << endl;
+	cerr << "0x1002 网络写失败" << endl;
+	cerr << "0x2001 接收心跳超时" << endl;
+	cerr << "0x2002 发送心跳失败" << endl;
+	cerr << "0x2003 收到错误报文" << endl;
 }
 void ctp_trade::OnHeartBeatWarning(int nTimeLapse)
 {

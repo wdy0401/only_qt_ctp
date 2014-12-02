@@ -46,12 +46,12 @@ private:
     void ReqQryInvestorPosition();
     void ReqOrderAction(CThostFtdcOrderField *pOrder);
 
-    CThostFtdcTraderApi                     * pUserApi;
-    CThostFtdcReqUserLoginField       * req;
-    TThostFtdcFrontIDType                FRONT_ID;
-    TThostFtdcSessionIDType             SESSION_ID;
-    TThostFtdcOrderRefType              OrderRef;
-    TThostFtdcOrderRefType              MaxOrderRef;
+    CThostFtdcTraderApi				* pUserApi;
+    CThostFtdcReqUserLoginField		* req;
+    TThostFtdcFrontIDType           FRONT_ID;
+    TThostFtdcSessionIDType         SESSION_ID;
+    TThostFtdcOrderRefType          OrderRef;
+    TThostFtdcOrderRefType          MaxOrderRef;
 
     long iRequestID;
     int maxdelaytime;
