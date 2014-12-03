@@ -48,6 +48,9 @@ private:
     void ReqQryInvestorPosition();
     void ReqOrderAction(CThostFtdcOrderField *pOrder);
 
+
+	void ctp_trade::add_order_ref(TThostFtdcOrderRefType);
+
     CThostFtdcTraderApi				* pUserApi;
     CThostFtdcReqUserLoginField		* req;
     TThostFtdcFrontIDType           FRONT_ID;

@@ -524,17 +524,24 @@ bool ctp_trade::IsTradingOrder(CThostFtdcOrderField *pOrder)
 }
 void ctp_trade::add_order_ref(TThostFtdcOrderRefType p)
 {
-    int size = sizeof(TThostFtdcOrderRefType);
+    int size = sizeof(p);
     cout<<"size"<<size<<endl;
 	bool addbit = false;
-    while (!(p[size - 2] >=48 && p[size - 2]<=57))
-    {
-        for (int j = 2; j <= size; j++)
-        {
-            p[size-j] = p[size-j-1];
-        }
-        p[0] = '0';
-    }
+	for (int i = 2; i < size; i++)
+	{
+		if (p[size - i] == '\0')
+		{
+			for (int j = 0; j < size - i; j++)
+			{
+				p[j + 1] = p[j];
+			}
+			p[0] = '0';
+		}
+		else
+		{
+			break;
+		}
+	}
 	for (int i = 2; i <= size; i++)
 	{
 		switch (p[size - i])
@@ -549,7 +556,7 @@ void ctp_trade::add_order_ref(TThostFtdcOrderRefType p)
 		case '7':p[size - i]++; addbit = false; break;
 		case '8':p[size - i]++; addbit = false; break;
 		case '9':p[size - i] = '0'; addbit = true; break;
-        default:cerr << "--->>> Cannot add 1 in add_order_ref" << endl; cerr << "--->>> ori char * is: ###" << p <<"###"<<" i ="<< i << endl;
+		default:cerr << "--->>> Cannot add 1 in add_order_ref" << endl; cerr << "--->>> ori char * is: " << p << endl;
 		}
 		if (!addbit)
 		{
