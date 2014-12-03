@@ -23,6 +23,8 @@
 
 #include"ctp_quote.h"
 #include"ctp_quote_qthread.h"
+#include"ctp_trade.h"
+#include"ctp_trade_qthread.h"
 #include"ctp_log.h"
 
 using namespace std;
@@ -36,7 +38,8 @@ bars_manage simu_bars_manage;
 MainWindow * mw;
 QApplication * qa;
 
-void start_ctp();
+void start_ctp_quote();
+void start_ctp_trade();
 
 int main(int argc, char *argv[])
 {
@@ -47,10 +50,12 @@ int main(int argc, char *argv[])
     MainWindow w;
     mw=&w;
 
-    //load simu para
+	//reg string
+	qRegisterMetaType<string>("std::string");
+
+	//load simu para
     simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
-
-
+	
     //set para
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
     simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
@@ -61,19 +66,25 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-
-
-void start_ctp()
+void start_ctp_quote()
 {
+	mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
+	
+	ctp_quote_qthread  * cqq = new ctp_quote_qthread;
+	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_1);
+	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
+	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
 
-    mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
-    qRegisterMetaType<string>("std::string");
+	cqq->start();
+}
+void start_ctp_trade()
+{
+	mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
+	
+	ctp_trade_qthread  * ctq = new ctp_trade_qthread;
+//	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_1);
+//	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
+//	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
 
-    ctp_quote_qthread  * cqq=new ctp_quote_qthread;
-    QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw,&MainWindow::show_quote_1);
-    QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw,&MainWindow::show_quote_label);
-    QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log,&ctp_log::writeinfo);
-
-    cqq->start();
-    //    ctp_quote simu_quote;
+	ctq->start();
 }

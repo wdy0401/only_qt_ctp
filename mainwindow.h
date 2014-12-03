@@ -29,10 +29,12 @@ public slots:
 
 private slots:
     void on_pushButton_clicked();
+	void on_pushButton_2_clicked();
 
 private:
-    Ui::MainWindow *ui;
-    bool ctp_is_start;
+	Ui::MainWindow *ui;
+	bool ctp_quote_running;
+	bool ctp_trade_running;
     std::map<std::string,QLabel *> quote_labels;
 };
 

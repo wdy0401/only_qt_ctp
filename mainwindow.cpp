@@ -21,7 +21,8 @@ using namespace std;
 
 extern QApplication * qa;
 extern wtimer tm;
-extern void start_ctp();
+extern void start_ctp_quote();
+extern void start_ctp_trade();
 extern log_info simu_log;
 extern bars_manage simu_bars_manage;
 
@@ -30,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ctp_is_start=false;
+    ctp_quote_running=false;
 }
 MainWindow::~MainWindow()
 {
@@ -108,15 +109,30 @@ void MainWindow::show_quote_1(CThostFtdcDepthMarketDataField *pDepthMarketData)
 
 void MainWindow::on_pushButton_clicked()
 {
-    this->show_string("button pushed");
-    if(!ctp_is_start)
+    this->show_string("quote button pushed");
+	if (!ctp_quote_running)
     {
-        start_ctp();
+		start_ctp_quote();
         this->show_string("Start quote");
-        ctp_is_start=true;
+		ctp_quote_running = true;
     }
     else
     {
         this->show_string("Quote is running");
+    }
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    this->show_string("trade button pushed");
+	if (!ctp_trade_running)
+    {
+        start_ctp_trade();
+        this->show_string("Start trade");
+		ctp_trade_running = true;
+    }
+    else
+    {
+        this->show_string("Trade is running");
     }
 }

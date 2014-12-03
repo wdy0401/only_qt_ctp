@@ -22,6 +22,7 @@ ctp_trade::ctp_trade()
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
     iRequestID=0;
     req=new CThostFtdcReqUserLoginField;
+    init();
 }
 void ctp_trade::init()
 {
@@ -363,8 +364,8 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
 		strncpy(this->MaxOrderRef, pRspUserLogin->MaxOrderRef, sizeof(pRspUserLogin->MaxOrderRef));
 		strncpy(this->MaxOrderRef, pRspUserLogin->MaxOrderRef, sizeof(pRspUserLogin->MaxOrderRef));
 		strncpy(this->NowOrderRef, this->MaxOrderRef, sizeof(this->MaxOrderRef));
-        cout<<pRspUserLogin->MaxOrderRef<<endl;
-        cerr << "--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
+        cout<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
+        cerr<<"--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
         ReqSettlementInfoConfirm();
     }
 }
