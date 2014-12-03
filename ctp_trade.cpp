@@ -438,14 +438,20 @@ void ctp_trade::OnFrontDisconnected(int nReason)
 }
 void ctp_trade::OnHeartBeatWarning(int nTimeLapse)
 {
-
+	cerr << "--->>> " << "OnHeartBeatWarning" << endl;
+	cerr << "--->>> nTimerLapse = " << nTimeLapse << endl;
 }
 void ctp_trade::OnRtnOrder(CThostFtdcOrderField *pOrder)
 {
-
+	//
+	//继续添加功能
+	//
 }
 void ctp_trade::OnRtnTrade(CThostFtdcTradeField *pTrade)
 {
+	//
+	//继续添加功能
+	//
 
 }
 
