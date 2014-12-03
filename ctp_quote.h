@@ -37,7 +37,7 @@ private:
     CThostFtdcMdApi * pUserApi;
 
 	int ctp_time_length;
-    ctp_quote_qthread * pfather;
+    ctp_quote_qthread * pqfather;
 };
 
 #endif

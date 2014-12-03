@@ -29,7 +29,7 @@ using namespace std;
 
 ctp_quote::ctp_quote(ctp_quote_qthread * father)
 {
-    pfather=father;
+    pqfather=father;
     ctp_quote();
 }
 ctp_quote::ctp_quote()
@@ -133,7 +133,7 @@ void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarke
 {
     //tm must be set before any slots.
     tm.settic(atof(wfunction::ctp_time_char_convert(pDepthMarketData->UpdateTime,sizeof(TThostFtdcTimeType))));
-    pfather->broadcast_markerdata(pDepthMarketData);
+    pqfather->broadcast_markerdata(pDepthMarketData);
 }
 bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
 {

@@ -4,10 +4,12 @@
 #include<string>
 #include<map>
 
+class ctp_trade_qthread;
 class ctp_trade : public CThostFtdcTraderSpi
 {
 public:
-    ctp_trade();
+	ctp_trade();
+	ctp_trade(ctp_trade_qthread *);
     void init();//set con file  dir
     char * mk_trade_con_dir();
 
@@ -34,7 +36,7 @@ private:
     void ReqQryInvestorPosition(const std::string &);
     void ReqQryInvestorPosition(const std::string & ,bool);
 
-    void ReqOrderInsert(const std::string &);
+	void ReqOrderInsert(const std::string & InstrumentID, const std::string & side, double price, long size);
     void ReqQryTradingAccount(bool);
     void ReqQryTradingAccount();
     bool IsFlowControl(int );
@@ -50,12 +52,15 @@ private:
     CThostFtdcReqUserLoginField		* req;
     TThostFtdcFrontIDType           FRONT_ID;
     TThostFtdcSessionIDType         SESSION_ID;
-    TThostFtdcOrderRefType          OrderRef;
+    TThostFtdcOrderRefType          NowOrderRef;
     TThostFtdcOrderRefType          MaxOrderRef;
 
     long iRequestID;
     int maxdelaytime;
     std::map<std::string,CThostFtdcOrderField*> ordermap;
+
+
+	ctp_trade_qthread * ptfather ;
 
 };
 #endif // CTP_TRADE_H

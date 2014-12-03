@@ -1,4 +1,5 @@
 #include "ctp_trade.h"
+#include"ctp_trade_qthread.h"
 #include<Windows.h>
 #include<string>
 
@@ -10,8 +11,13 @@
 extern cfg simu_cfg;
 using namespace std;
 
-ctp_trade::ctp_trade()
+ctp_trade::ctp_trade(ctp_trade_qthread * father)
 {
+	ptfather = father;
+	ctp_trade();
+}
+ctp_trade::ctp_trade()
+	{
     cout<<"init trade"<<endl;
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
     iRequestID=0;
@@ -98,7 +104,7 @@ void ctp_trade::ReqQryInstrument(const string & instrument_id,bool fast)
     int delaytime=0;
     while (true)
     {
-        //对任何Qry请求，程序有死锁在这的可能
+        //对任何Qry请求，程序有跳不出循环的可能
         //目前解决方式是在cfg最大查询时间里设置 并在大于最长时间时输出警告并返回
         if(delaytime>maxdelaytime)
         {
@@ -210,16 +216,15 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
     }
 }
 //未完成
-void ctp_trade::ReqOrderInsert(const string & InstrumentID)
+void ctp_trade::ReqOrderInsert(const string & InstrumentID,const string & side,double price,long size)
 {
-    /*
     CThostFtdcInputOrderField oireq;
     memset(&oireq, 0, sizeof(oireq));
-    strncpy(oireq.InstrumentID,const_cast<char*>(instrument_id.c_str()),sizeof(oireq.InstrumentID));
+	strncpy(oireq.InstrumentID, const_cast<char*>(InstrumentID.c_str()), sizeof(oireq.InstrumentID));
     strncpy(oireq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(oireq.BrokerID));
     strncpy(oireq.InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(oireq.InvestorID));
     ///报单引用
-    strcpy(req.OrderRef, ORDER_REF);
+/*    strcpy(oireq.OrderRef, ORDER_REF);
     ///用户代码
 //	TThostFtdcUserIDType	UserID;
     ///报单价格条件: 限价
@@ -266,50 +271,50 @@ void ctp_trade::ReqOrderAction(CThostFtdcOrderField *pOrder)
 {
     /*
     if (pOrder->OrderStatus != THOST_FTDC_OST_Canceled)
-        {
-            CThostFtdcInputOrderActionField req;
-            memset(&req, 0, sizeof(req));
-            ///经纪公司代码
-            cout<<pOrder->BrokerID<<pOrder->InvestorID<<pOrder->ExchangeID<<pOrder->BrokerID<<pOrder->OrderSysID<<endl;
-            strcpy(req.BrokerID, pOrder->BrokerID);
-            ///投资者代码
-            strcpy(req.InvestorID, pOrder->InvestorID);
-            ///报单操作引用
-            TThostFtdcOrderActionRefType	OrderActionRef;
-            ///报单引用
-            strcpy(req.OrderRef, pOrder->OrderRef);
-            ///请求编号
+    {
+        CThostFtdcInputOrderActionField req;
+        memset(&req, 0, sizeof(req));
+        ///经纪公司代码
+        cout<<pOrder->BrokerID<<pOrder->InvestorID<<pOrder->ExchangeID<<pOrder->BrokerID<<pOrder->OrderSysID<<endl;
+        strcpy(req.BrokerID, pOrder->BrokerID);
+        ///投资者代码
+        strcpy(req.InvestorID, pOrder->InvestorID);
+        ///报单操作引用
+        TThostFtdcOrderActionRefType	OrderActionRef;
+        ///报单引用
+        strcpy(req.OrderRef, pOrder->OrderRef);
+        ///请求编号
 
-            TThostFtdcRequestIDType	RequestID;
-            ///前置编号
+        TThostFtdcRequestIDType	RequestID;
+        ///前置编号
 
-            printf("%d",SESSION_ID);
-            req.FrontID = FRONT_ID;
-            ///会话编号
-            req.SessionID = SESSION_ID;
-            ///交易所代码
-            strcpy(req.ExchangeID,pOrder->ExchangeID);
-            ///报单编号
-             strcpy(req.OrderSysID, pOrder->OrderSysID);
-            ///操作标志
-            req.ActionFlag = THOST_FTDC_AF_Delete;
-            ///价格
-            //req.LimitPrice=LIMIT_PRICE;
-            ///数量变化
-            //TThostFtdcVolumeType	VolumeChange;
-            ///用户代码
-            //TThostFtdcUserIDType	UserID;
-            ///合约代码
-            //strcpy(req.InstrumentID, pOrder->InstrumentID);
-            judge=3;
+        printf("%d",SESSION_ID);
+        req.FrontID = FRONT_ID;
+        ///会话编号
+        req.SessionID = SESSION_ID;
+        ///交易所代码
+        strcpy(req.ExchangeID,pOrder->ExchangeID);
+        ///报单编号
+            strcpy(req.OrderSysID, pOrder->OrderSysID);
+        ///操作标志
+        req.ActionFlag = THOST_FTDC_AF_Delete;
+        ///价格
+        //req.LimitPrice=LIMIT_PRICE;
+        ///数量变化
+        //TThostFtdcVolumeType	VolumeChange;
+        ///用户代码
+        //TThostFtdcUserIDType	UserID;
+        ///合约代码
+        //strcpy(req.InstrumentID, pOrder->InstrumentID);
+        judge=3;
 
-            int iResult = pUserApi->ReqOrderAction(&req, ++iRequestID);cerr << "--->>> 报单操作请求: "  << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
-        }
-        else
-        {
-            cout<<"单子已经撤销过了"<<endl;
-            cmd();
-        }
+        int iResult = pUserApi->ReqOrderAction(&req, ++iRequestID);cerr << "--->>> 报单操作请求: "  << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+    }
+    else
+    {
+        cout<<"单子已经撤销过了"<<endl;
+        cmd();
+    }
     */
 }
 char *ctp_trade::mk_trade_con_dir()
@@ -355,7 +360,9 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         //save para
         this->FRONT_ID = pRspUserLogin->FrontID;
         this->SESSION_ID = pRspUserLogin->SessionID;
-        strncpy(this->MaxOrderRef,pRspUserLogin->MaxOrderRef,sizeof(pRspUserLogin->MaxOrderRef));
+		strncpy(this->MaxOrderRef, pRspUserLogin->MaxOrderRef, sizeof(pRspUserLogin->MaxOrderRef));
+		strncpy(this->MaxOrderRef, pRspUserLogin->MaxOrderRef, sizeof(pRspUserLogin->MaxOrderRef));
+		strncpy(this->NowOrderRef, this->MaxOrderRef, sizeof(this->MaxOrderRef));
         cout<<pRspUserLogin->MaxOrderRef<<endl;
         cerr << "--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
         ReqSettlementInfoConfirm();
@@ -370,10 +377,10 @@ void ctp_trade::OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField 
         IsErrorRspInfo(pRspInfo);
     }
 }
-//未完成
 void ctp_trade::OnRspQryInstrument(CThostFtdcInstrumentField *pInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-    cerr << "--->>> " << "OnRspQryInstrument" << endl;
+	//尚无此需求
+	cerr << "--->>> " << "OnRspQryInstrument" << endl;
     if (bIsLast && !IsErrorRspInfo(pRspInfo))
     {
         //在此设置合约参数
@@ -382,6 +389,7 @@ void ctp_trade::OnRspQryInstrument(CThostFtdcInstrumentField *pInstrument, CThos
 }
 void ctp_trade::OnRspQryOrder(CThostFtdcOrderField *pOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
+	//尚无此需求
 	cout << pOrder->OrderStatus << pOrder->OrderRef << pOrder->OrderSysID << endl;
 	if (bIsLast)
 	{
@@ -390,6 +398,7 @@ void ctp_trade::OnRspQryOrder(CThostFtdcOrderField *pOrder, CThostFtdcRspInfoFie
 }
 void ctp_trade::OnRspQryTradingAccount(CThostFtdcTradingAccountField *pTradingAccount, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
+	//尚无此需求
 	cerr << "--->>> " << "OnRspQryTradingAccount" << endl;
 	if (bIsLast)
 	{
@@ -398,6 +407,7 @@ void ctp_trade::OnRspQryTradingAccount(CThostFtdcTradingAccountField *pTradingAc
 }
 void ctp_trade::OnRspQryInvestorPosition(CThostFtdcInvestorPositionField *pInvestorPosition, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
+	//尚无此需求
 	cerr << "--->>> " << "OnRspQryInvestorPosition" << endl;
 	if (bIsLast)
 	{
@@ -406,6 +416,7 @@ void ctp_trade::OnRspQryInvestorPosition(CThostFtdcInvestorPositionField *pInves
 }
 void ctp_trade::OnRspOrderInsert(CThostFtdcInputOrderField *pInputOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
+	//尚无此需求
 	cerr << "--->>> " << "OnRspOrderInsert" << endl;
 	if (bIsLast)
 	{
@@ -414,6 +425,7 @@ void ctp_trade::OnRspOrderInsert(CThostFtdcInputOrderField *pInputOrder, CThostF
 }
 void ctp_trade::OnRspOrderAction(CThostFtdcInputOrderActionField *pInputOrderAction, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
+	//尚无此需求
 	cerr << "--->>> " << "OnRspOrderAction" << endl;
 	if (bIsLast)
 	{
@@ -452,7 +464,6 @@ void ctp_trade::OnRtnTrade(CThostFtdcTradeField *pTrade)
 	//
 	//继续添加功能
 	//
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -466,13 +477,30 @@ bool ctp_trade::IsFlowControl(int iResult)
 }
 bool ctp_trade::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
 {
-    return true;
+	bool bResult = ((pRspInfo) && (pRspInfo->ErrorID != 0));
+	if (bResult)
+	{
+		cerr << "--->>> ErrorID=" << pRspInfo->ErrorID << ", ErrorMsg=" << pRspInfo->ErrorMsg << endl;
+	}
+	return bResult;
 }
 bool ctp_trade::IsMyOrder(CThostFtdcOrderField *pOrder)
 {
-    return true;
+	//	return (
+	//		(pOrder->FrontID == FRONT_ID) &&
+	//		(pOrder->SessionID == SESSION_ID) &&
+	//		(strcmp(pOrder->OrderRef, ORDER_REF) == 0));
+
+	//目前尚未使用
+	return true;
 }
 bool ctp_trade::IsTradingOrder(CThostFtdcOrderField *pOrder)
 {
-    return true;
+	//	return (
+	//		(pOrder->OrderStatus != THOST_FTDC_OST_PartTradedNotQueueing) &&
+	//		(pOrder->OrderStatus != THOST_FTDC_OST_Canceled) &&
+	//		(pOrder->OrderStatus != THOST_FTDC_OST_AllTraded));
+	
+	//目前尚未使用
+	return true;
 }
