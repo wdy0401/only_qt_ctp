@@ -430,11 +430,11 @@ void ctp_trade::OnFrontDisconnected(int nReason)
 	cerr << "--->>> " << "OnFrontDisconnected" << endl;
 	cerr << "--->>> Reason = " << nReason << endl;
 	cerr << "连接断开原因" << endl;
-	cerr << "0x1001 网络读失败" << endl;
-	cerr << "0x1002 网络写失败" << endl;
-	cerr << "0x2001 接收心跳超时" << endl;
-	cerr << "0x2002 发送心跳失败" << endl;
-	cerr << "0x2003 收到错误报文" << endl;
+	cerr << "0x1001 网络 读 失败" << endl;
+	cerr << "0x1002 网络 写 失败" << endl;
+	cerr << "0x2001 接收 心跳 超时" << endl;
+	cerr << "0x2002 发送 心跳 失败" << endl;
+	cerr << "0x2003 收到 错误 报文" << endl;
 }
 void ctp_trade::OnHeartBeatWarning(int nTimeLapse)
 {
