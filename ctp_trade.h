@@ -36,7 +36,8 @@ private:
     void ReqQryInvestorPosition(const std::string &);
     void ReqQryInvestorPosition(const std::string & ,bool);
 
-	void ReqOrderInsert(const std::string & InstrumentID, const std::string & side, double price, long size);
+	void ReqOrderInsert(CThostFtdcInputOrderField *);
+	CThostFtdcInputOrderField * initorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
     void ReqQryTradingAccount(bool);
     void ReqQryTradingAccount();
     bool IsFlowControl(int );

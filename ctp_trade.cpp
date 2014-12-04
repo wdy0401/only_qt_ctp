@@ -217,56 +217,81 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
     }
 }
 //未完成
-void ctp_trade::ReqOrderInsert(const string & InstrumentID,const string & side,double price,long size)
+void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 {
-    CThostFtdcInputOrderField oireq;
-    memset(&oireq, 0, sizeof(oireq));
-	strncpy(oireq.InstrumentID, const_cast<char*>(InstrumentID.c_str()), sizeof(oireq.InstrumentID));
-    strncpy(oireq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(oireq.BrokerID));
-    strncpy(oireq.InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(oireq.InvestorID));
-    ///报单引用
-	add_order_ref(this->NowOrderRef);
-	strcpy(oireq.OrderRef,this->NowOrderRef);
- /*   ///用户代码
-//	TThostFtdcUserIDType	UserID;
-    ///报单价格条件: 限价
-    req.OrderPriceType = THOST_FTDC_OPT_LimitPrice;
-    ///买卖方向:
-    req.Direction = DIRECTION;
-    ///组合开平标志: 开仓
-    req.CombOffsetFlag[0] = THOST_FTDC_OF_Open;
-    ///组合投机套保标志
-    req.CombHedgeFlag[0] = THOST_FTDC_HF_Speculation;
-    ///价格
-    req.LimitPrice = LIMIT_PRICE;
-    ///数量: 1
-    req.VolumeTotalOriginal = 1;
-    ///有效期类型: 当日有效
-    req.TimeCondition = THOST_FTDC_TC_GFD;
-    ///GTD日期
-//	TThostFtdcDateType	GTDDate;
-    ///成交量类型: 任何数量
-    req.VolumeCondition = THOST_FTDC_VC_AV;
-    ///最小成交量: 1
-    req.MinVolume = 1;
-    ///触发条件: 立即
-    req.ContingentCondition = THOST_FTDC_CC_Immediately;
-    ///止损价
-//	TThostFtdcPriceType	StopPrice;
-    ///强平原因: 非强平
-    req.ForceCloseReason = THOST_FTDC_FCC_NotForceClose;
-    ///自动挂起标志: 否
-    req.IsAutoSuspend = 0;
-    ///业务单元
-//	TThostFtdcBusinessUnitType	BusinessUnit;
-    ///请求编号
-//	TThostFtdcRequestIDType	RequestID;
-    ///用户强评标志: 否
-    req.UserForceClose = 0;
-    judge=2;
-    int iResult = pUserApi->ReqOrderInsert(&req, ++iRequestID);
+    int iResult = pUserApi->ReqOrderInsert(porder, ++iRequestID);
     cerr << "--->>> 报单录入请求: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
-    */
+}
+CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
+{
+	CThostFtdcInputOrderField * oireq = new CThostFtdcInputOrderField;
+	memset(oireq, 0, sizeof(CThostFtdcInputOrderField));
+
+	///经纪公司代码
+	strncpy(oireq->BrokerID, const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()), sizeof(oireq->BrokerID));
+	///投资者代码
+	strncpy(oireq->InvestorID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(oireq->InvestorID));
+	///合约代码
+	strncpy(oireq->InstrumentID, const_cast<char*>(InstrumentID.c_str()), sizeof(oireq->InstrumentID));
+	///报单引用
+	add_order_ref(this->NowOrderRef);
+	strncpy(oireq->OrderRef, this->NowOrderRef, sizeof(oireq->OrderRef));
+	///用户代码
+	strncpy(oireq->UserID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(oireq->UserID));
+	///报单价格条件
+	oireq->OrderPriceType = THOST_FTDC_OPT_LimitPrice;
+	///买卖方向
+	if (side == "BUY" || side == "SELL")
+	{
+		oireq->Direction = side == "BUY" ? '0' : '1';
+	}
+	else
+	{
+		cerr << "--->>> order买卖方向错误: 请使用BUY SELL 指示买卖order方向" << endl;
+	}
+	
+	////如下两个是神马
+	///组合开平标志
+	strncpy(oireq->CombOffsetFlag, "0", 1);
+	///组合投机套保标志
+	oireq->CombHedgeFlag[0] = THOST_FTDC_HF_Speculation;
+
+	///价格
+	oireq->LimitPrice = price;
+	///数量
+	oireq->VolumeTotalOriginal = size;
+	///有效期类型
+	oireq->TimeCondition = THOST_FTDC_TC_GFD;
+	///GTD日期
+	strcpy(oireq->GTDDate, "");
+	///成交量类型
+	oireq->VolumeCondition = THOST_FTDC_VC_AV;
+	///最小成交量
+	oireq->MinVolume = 1;
+	///触发条件: 立即
+	oireq->ContingentCondition = THOST_FTDC_CC_Immediately;
+	///止损价
+	oireq->StopPrice=0;
+	///强平原因: 非强平
+	oireq->ForceCloseReason = THOST_FTDC_FCC_NotForceClose;
+	///自动挂起标志: 否
+	oireq->IsAutoSuspend = 0;
+	
+	///下面是神马
+	///业务单元
+	//TThostFtdcBusinessUnitType	BusinessUnit;
+	
+	///请求编号 发单时设置
+	//TThostFtdcRequestIDType	RequestID;
+	
+	///用户强评标志: 否
+	oireq->UserForceClose = 0;
+
+	///下面是神马
+	///互换单标志
+	//TThostFtdcBoolType	IsSwapOrder;
+	
+
 }
 //未完成
 void ctp_trade::ReqOrderAction(CThostFtdcOrderField *pOrder)
