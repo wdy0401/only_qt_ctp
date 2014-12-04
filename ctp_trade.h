@@ -36,9 +36,7 @@ private:
     void ReqQryInvestorPosition(const std::string &);
     void ReqQryInvestorPosition(const std::string & ,bool);
 
-	void ReqOrderInsert(CThostFtdcInputOrderField *);
-	CThostFtdcInputOrderField * initorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
-    void ReqQryTradingAccount(bool);
+	void ReqQryTradingAccount(bool);
     void ReqQryTradingAccount();
     bool IsFlowControl(int );
     bool IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo);
@@ -47,10 +45,15 @@ private:
     void ReqUserLogin();
     void ReqSettlementInfoConfirm();
     void ReqQryInvestorPosition();
-    void ReqOrderAction(CThostFtdcOrderField *pOrder);
+	
+	void ReqOrderInsert(CThostFtdcInputOrderField *);
+	CThostFtdcInputOrderField * initorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
+	void ReqOrderAction(CThostFtdcInputOrderActionField *pOrder);
+	CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
+	void change_order(const std::string & ordername, double price, long size);
+	void delete_order(const std::string & ordername);
 
-
-	void ctp_trade::add_order_ref(TThostFtdcOrderRefType);
+	void add_order_ref(TThostFtdcOrderRefType);
 
     CThostFtdcTraderApi				* pUserApi;
     CThostFtdcReqUserLoginField		* req;
@@ -61,6 +64,7 @@ private:
 
     long iRequestID;
     int maxdelaytime;
+	//可以添加iRequestID对应的map 以便于查询order状态
     std::map<std::string,CThostFtdcOrderField*> ordermap;
 
 

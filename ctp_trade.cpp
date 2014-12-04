@@ -216,7 +216,6 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
         }
     }
 }
-//未完成
 void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 {
     int iResult = pUserApi->ReqOrderInsert(porder, ++iRequestID);
@@ -290,59 +289,97 @@ CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, co
 	///下面是神马
 	///互换单标志
 	//TThostFtdcBoolType	IsSwapOrder;
-	
+	return oireq;
 
 }
-//未完成
-void ctp_trade::ReqOrderAction(CThostFtdcOrderField *pOrder)
+CThostFtdcInputOrderActionField * ctp_trade::initorderchange(const string & ordername)
 {
-    /*
-    if (pOrder->OrderStatus != THOST_FTDC_OST_Canceled)
-    {
-        CThostFtdcInputOrderActionField req;
-        memset(&req, 0, sizeof(req));
-        ///经纪公司代码
-        cout<<pOrder->BrokerID<<pOrder->InvestorID<<pOrder->ExchangeID<<pOrder->BrokerID<<pOrder->OrderSysID<<endl;
-        strcpy(req.BrokerID, pOrder->BrokerID);
-        ///投资者代码
-        strcpy(req.InvestorID, pOrder->InvestorID);
-        ///报单操作引用
-        TThostFtdcOrderActionRefType	OrderActionRef;
-        ///报单引用
-        strcpy(req.OrderRef, pOrder->OrderRef);
-        ///请求编号
+	map<string, CThostFtdcOrderField*>::iterator iter = ordermap.find(ordername);
+	if (iter == ordermap.end())
+	{
+		return nullptr;
+	}
+	else
+	{
+		CThostFtdcOrderField *pOrder = iter->second;
+		CThostFtdcInputOrderActionField * cgreq = new CThostFtdcInputOrderActionField;
+		memset(cgreq, 0, sizeof(*cgreq));
+		//cout << pOrder->BrokerID << pOrder->InvestorID << pOrder->ExchangeID << pOrder->BrokerID << pOrder->OrderSysID << endl;
+		///经纪公司代码
+		strcpy(cgreq->BrokerID, pOrder->BrokerID);
+		///投资者代码
+		strcpy(cgreq->InvestorID, pOrder->InvestorID);
+		///报单操作引用
+		TThostFtdcOrderActionRefType	OrderActionRef;
+		///报单引用
+		strcpy(cgreq->OrderRef, pOrder->OrderRef);
+		
+		///这有神马用处
+		///请求编号
+		///TThostFtdcRequestIDType	RequestID;
+		
+		///前置编号
+		cgreq->FrontID = FRONT_ID;
+		///会话编号
+		cgreq->SessionID = SESSION_ID;
+		///交易所代码
+		strcpy(cgreq->ExchangeID, pOrder->ExchangeID);
+		///报单编号
+		strcpy(cgreq->OrderSysID, pOrder->OrderSysID);
+		
+		///非初始化内容
+		///操作标志
+		///cgreq->ActionFlag = THOST_FTDC_AF_Delete;
+		///价格
+		//cgreq->LimitPrice=LIMIT_PRICE;
+		///数量变化
+		//TThostFtdcVolumeType	VolumeChange;
 
-        TThostFtdcRequestIDType	RequestID;
-        ///前置编号
-
-        printf("%d",SESSION_ID);
-        req.FrontID = FRONT_ID;
-        ///会话编号
-        req.SessionID = SESSION_ID;
-        ///交易所代码
-        strcpy(req.ExchangeID,pOrder->ExchangeID);
-        ///报单编号
-            strcpy(req.OrderSysID, pOrder->OrderSysID);
-        ///操作标志
-        req.ActionFlag = THOST_FTDC_AF_Delete;
-        ///价格
-        //req.LimitPrice=LIMIT_PRICE;
-        ///数量变化
-        //TThostFtdcVolumeType	VolumeChange;
-        ///用户代码
-        //TThostFtdcUserIDType	UserID;
-        ///合约代码
-        //strcpy(req.InstrumentID, pOrder->InstrumentID);
-        judge=3;
-
-        int iResult = pUserApi->ReqOrderAction(&req, ++iRequestID);cerr << "--->>> 报单操作请求: "  << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
-    }
-    else
-    {
-        cout<<"单子已经撤销过了"<<endl;
-        cmd();
-    }
-    */
+		///用户代码
+		strcpy(cgreq->UserID, pOrder->UserID);
+		///合约代码
+		strcpy(cgreq->InstrumentID, pOrder->InstrumentID);
+		
+		return cgreq;
+	}
+}
+//未完成
+void ctp_trade::change_order(const string & ordername,double price,long size)
+{
+	CThostFtdcInputOrderActionField * cgorder = initorderchange(ordername);
+	if (cgorder == nullptr)
+	{
+		cerr << "--->>> 报单操作请求: 待改单不存在 请确认   ordername="<< ordername <<endl;
+		return;
+	}
+	else
+	{
+		//此处存疑  这个volumechange是何意思 相对变化 绝对变化？
+		cgorder->LimitPrice = price;
+		cgorder->VolumeChange = size;
+		cgorder->ActionFlag = THOST_FTDC_AF_Modify;
+		ReqOrderAction(cgorder);
+	}
+}
+void ctp_trade::delete_order(const string & ordername)
+{
+	CThostFtdcInputOrderActionField * dlorder = initorderchange(ordername);
+	if (dlorder == nullptr)
+	{
+		cerr << "--->>> 报单操作请求: 待撤单不存在 请确认   ordername=" << ordername << endl;
+		return;
+	}
+	else
+	{
+		dlorder->ActionFlag = THOST_FTDC_AF_Delete;
+		ReqOrderAction(dlorder);
+	}
+}
+void ctp_trade::ReqOrderAction(CThostFtdcInputOrderActionField *pOrder)
+{
+	int iResult = pUserApi->ReqOrderAction(pOrder, ++iRequestID);
+	cerr << "--->>> 报单操作请求: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+	cerr << "--->>> 报单操作请求ID: " << iRequestID << " InstrumentID: " << pOrder->InstrumentID << endl;
 }
 char *ctp_trade::mk_trade_con_dir()
 {
