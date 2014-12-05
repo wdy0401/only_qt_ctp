@@ -225,7 +225,7 @@ void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
 {
     cerr << "Local Init order\t" << InstrumentID << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
-    cout << "Local Init order\t" << InstrumentID << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
+    cerr << "Local Init order\t" << InstrumentID << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
 	//cerr << InstrumentID;// << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
 	CThostFtdcInputOrderField * oireq = new CThostFtdcInputOrderField;
 	memset(oireq, 0, sizeof(CThostFtdcInputOrderField));
