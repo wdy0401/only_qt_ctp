@@ -171,9 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\libs\ctp\ThostFtdcMdApi.h" />
-    <ClInclude Include="ctp\ThostFtdcMdApi.h" />
     <ClInclude Include="..\libs\ctp\ThostFtdcTraderApi.h" />
-    <ClInclude Include="ctp\ThostFtdcTraderApi.h" />
     <ClInclude Include="..\gpp_qt\bar\bar.h" />
     <ClInclude Include="..\gpp_qt\bar\bars.h" />
     <ClInclude Include="..\gpp_qt\bar\bars_manage.h" />

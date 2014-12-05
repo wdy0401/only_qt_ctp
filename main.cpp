@@ -2,7 +2,7 @@
 #include<stdlib.h> 
 #include<iostream>
 #include<string>
-#include<Windows.h>
+//#include<Windows.h>
 
 #include"mainwindow.h"
 #include"sender.h"

@@ -118,13 +118,7 @@
     <ClInclude Include="..\libs\ctp\ThostFtdcMdApi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ctp\ThostFtdcMdApi.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\libs\ctp\ThostFtdcTraderApi.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ctp\ThostFtdcTraderApi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\gpp_qt\bar\bar.h">

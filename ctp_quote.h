@@ -2,7 +2,6 @@
 #define CTP_QUOTE
 
 #include"../libs/ctp/ThostFtdcMdApi.h"
-#include<QThread>
 #define MAX_CONTRACT_NUMBER 1024
 #define MAX_CONTRACT_NAME 1024
 
