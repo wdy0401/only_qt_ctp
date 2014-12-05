@@ -9,6 +9,8 @@
 #include"../gpp_qt/cfg/cfg.h"
 
 extern cfg simu_cfg;
+int iRequestID;
+
 using namespace std;
 
 ctp_trade::ctp_trade(ctp_trade_qthread * father)
@@ -17,10 +19,11 @@ ctp_trade::ctp_trade(ctp_trade_qthread * father)
 	ctp_trade();
 }
 ctp_trade::ctp_trade()
-	{
+{
+    iRequestID=0;
     cout<<"init trade"<<endl;
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
-    iRequestID=0;
+
 	req = new CThostFtdcReqUserLoginField;
     init();
 }
@@ -218,9 +221,13 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
 }
 void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 {
-	porder->RequestID = ++iRequestID;
+    cerr<<"iRequeseID in  p "<<porder->RequestID<<endl;
+    cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
+    cerr<<"SESSION_ID "<<SESSION_ID<<endl;
+
+    porder->RequestID = ++iRequestID;
 	int iResult = pUserApi->ReqOrderInsert(porder, porder->RequestID);
-    cerr << "--->>> 报单录入请求: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
+    cerr << "--->>> order insert: " << iResult ;//<< ((iResult == 0) ? ", Success" : ", Fail" << endl;
 }
 CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
 {
@@ -310,6 +317,8 @@ CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, co
 	///下面是神马
 	///互换单标志
 	//TThostFtdcBoolType	IsSwapOrder;
+    cerr<<"init is done"<<endl;
+
 	return oireq;
 
 }
@@ -446,6 +455,9 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         //save para
         this->FRONT_ID = pRspUserLogin->FrontID;
         this->SESSION_ID = pRspUserLogin->SessionID;
+
+        cerr<<"FRONT_ID init "<<FRONT_ID<<endl;
+        cerr<<"SESSION_ID init "<<SESSION_ID<<endl;
         cerr<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
 
         cerr<<"--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;

@@ -1,5 +1,8 @@
 #include "ctp_trade_qthread.h"
 #include "ctp_trade.h"
+
+
+
 ctp_trade_qthread::ctp_trade_qthread()
 {
 }

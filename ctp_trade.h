@@ -33,7 +33,7 @@ public:
 	void sendorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
 	void deleteorder(std::string ordername);
 
-private:
+//private:
     void ReqQryOrder(const std::string &);
     void ReqQryOrder(const std::string &,bool);
     void ReqQryInstrument(const std::string & );
@@ -63,7 +63,7 @@ private:
     TThostFtdcFrontIDType           FRONT_ID;
     TThostFtdcSessionIDType         SESSION_ID;
 
-    long iRequestID;
+//    int iRequestID;
     int maxdelaytime;
 
 	ctp_trade_qthread * ptfather ;
