@@ -89,5 +89,5 @@ void start_ctp_trade()
 //	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
 //	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
 
-	ctq->start();
+    ctq->start();
 }

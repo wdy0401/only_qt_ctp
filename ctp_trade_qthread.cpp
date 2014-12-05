@@ -12,5 +12,6 @@ void ctp_trade_qthread::run()
 }
 void ctp_trade_qthread::addorder()
 {
+    trade->testfunc();
     trade->sendorder("IF1412","BUY","OPEN",3200,1);
 }
