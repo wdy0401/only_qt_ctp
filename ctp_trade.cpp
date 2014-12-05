@@ -29,8 +29,6 @@ ctp_trade::ctp_trade()
     iRequestID=0;
     cout<<"init trade"<<endl;
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
-
-
     init();
 }
 void ctp_trade::init()
@@ -45,22 +43,22 @@ void ctp_trade::init()
 }
 void ctp_trade::ReqUserLogin()
 {
-    CThostFtdcReqUserLoginField * ulreq = new CThostFtdcReqUserLoginField;;
-    memset(ulreq, 0, sizeof(*ulreq));
-    strncpy(ulreq->BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(ulreq->BrokerID));
-    strncpy(ulreq->UserID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(ulreq->UserID));
-    strncpy(ulreq->Password,const_cast<char*>(simu_cfg.getparam("PASSWORD").c_str()),sizeof(ulreq->Password));
-    int iResult = pUserApi->ReqUserLogin(ulreq, ++iRequestID);
+	CThostFtdcReqUserLoginField ulreq;
+	memset(&ulreq, 0, sizeof(ulreq));
+    strncpy(ulreq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(ulreq.BrokerID));
+    strncpy(ulreq.UserID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(ulreq.UserID));
+    strncpy(ulreq.Password,const_cast<char*>(simu_cfg.getparam("PASSWORD").c_str()),sizeof(ulreq.Password));
+    int iResult = pUserApi->ReqUserLogin(&ulreq, ++iRequestID);
     cerr << "--->>> Sending login request: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
 void ctp_trade::ReqSettlementInfoConfirm()
 {
-    CThostFtdcSettlementInfoConfirmField screq;
-    memset(&screq, 0, sizeof(screq));
-    strncpy(screq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(screq.BrokerID));
-    strncpy(screq.InvestorID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(screq.InvestorID));
-    int iResult = pUserApi->ReqSettlementInfoConfirm(&screq, ++iRequestID);
-    cerr << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
+	CThostFtdcSettlementInfoConfirmField screq;
+	memset(&screq, 0, sizeof(screq));
+	strncpy(screq.BrokerID, const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()), sizeof(screq.BrokerID));
+	strncpy(screq.InvestorID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(screq.InvestorID));
+	int iResult = pUserApi->ReqSettlementInfoConfirm(&screq, ++iRequestID);
+	cerr << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
 void ctp_trade::ReqQryOrder(const string &  instrument_id)
 {
