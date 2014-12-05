@@ -23,13 +23,17 @@ public:
     void set_symbols_display(const std::string &);
     void symbol_price_display(const std::string & , double);
 
+signals:
+    void on_pushButton_3_clicked();
+    void on_pushButton_4_clicked();
+
 public slots:
     void show_quote_1(CThostFtdcDepthMarketDataField *pDepthMarketData);
     void show_quote_label(CThostFtdcDepthMarketDataField *pDepthMarketData);
 
 private slots:
     void on_pushButton_clicked();
-	void on_pushButton_2_clicked();
+    void on_pushButton_2_clicked();
 
 private:
 	Ui::MainWindow *ui;

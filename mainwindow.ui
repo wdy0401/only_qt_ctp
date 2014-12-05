@@ -37,10 +37,23 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="text">
+         <string>insert order</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="text">
+         <string>delete order</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
-   <zorder>textBrowser</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

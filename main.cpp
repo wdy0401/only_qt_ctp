@@ -82,7 +82,7 @@ void start_ctp_trade()
 	mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
 	
 	ctp_trade_qthread  * ctq = new ctp_trade_qthread;
-//	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_1);
+    QObject::connect(mw, &MainWindow::on_pushButton_3_clicked, ctq, &ctp_trade_qthread::addorder);
 //	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
 //	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
 

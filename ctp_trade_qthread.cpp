@@ -5,5 +5,9 @@ ctp_trade_qthread::ctp_trade_qthread()
 }
 void ctp_trade_qthread::run()
 {
-	ctp_trade * trade = new ctp_trade(this);
+    trade = new ctp_trade(this);
+}
+void ctp_trade_qthread::addorder()
+{
+    trade->sendorder("IF1412","BUY","OPEN",3200,1);
 }

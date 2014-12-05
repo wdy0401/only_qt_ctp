@@ -136,3 +136,14 @@ void MainWindow::on_pushButton_2_clicked()
         this->show_string("Trade is running");
     }
 }
+/*
+void MainWindow::on_pushButton_3_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+
+}
+*/

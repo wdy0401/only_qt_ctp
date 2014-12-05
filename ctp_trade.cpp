@@ -21,7 +21,9 @@ ctp_trade::ctp_trade()
     cout<<"init trade"<<endl;
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
     iRequestID=0;
-    req=new CThostFtdcReqUserLoginField;
+	req = new CThostFtdcReqUserLoginField;
+	memset(this->MaxOrderRef, '\0', 13);
+	memset(this->NowOrderRef, '\0', 13);
     init();
 }
 void ctp_trade::init()
@@ -218,11 +220,15 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
 }
 void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 {
-    int iResult = pUserApi->ReqOrderInsert(porder, ++iRequestID);
+	porder->RequestID = ++iRequestID;
+	int iResult = pUserApi->ReqOrderInsert(porder, porder->RequestID);
     cerr << "--->>> 报单录入请求: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
 }
 CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
 {
+    cerr << "Local Init order\t" << InstrumentID << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
+    cout << "Local Init order\t" << InstrumentID << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
+	//cerr << InstrumentID;// << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
 	CThostFtdcInputOrderField * oireq = new CThostFtdcInputOrderField;
 	memset(oireq, 0, sizeof(CThostFtdcInputOrderField));
 
@@ -236,7 +242,7 @@ CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, co
 	add_order_ref(this->NowOrderRef);
 	strncpy(oireq->OrderRef, this->NowOrderRef, sizeof(oireq->OrderRef));
 	///用户代码
-	strncpy(oireq->UserID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(oireq->UserID));
+    strncpy(oireq->UserID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(oireq->UserID));
 	///报单价格条件
 	oireq->OrderPriceType = THOST_FTDC_OPT_LimitPrice;
 	///买卖方向
@@ -248,10 +254,26 @@ CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, co
 	{
 		cerr << "--->>> order买卖方向错误: 请使用BUY SELL 指示买卖order方向" << endl;
 	}
-	
-	////如下两个是神马
 	///组合开平标志
-	strncpy(oireq->CombOffsetFlag, "0", 1);
+	if (openclose == "OPEN" || openclose == "CLOSE" || openclose == "CLOSET")
+	{
+		if (openclose == "OPEN")
+		{
+			oireq->CombOffsetFlag[0] = THOST_FTDC_OF_Open;
+		}
+		if (openclose == "CLOSE")
+		{
+			oireq->CombOffsetFlag[0] = THOST_FTDC_OF_Close;
+		}
+		if (openclose == "CLOSET")
+		{
+			oireq->CombOffsetFlag[0] = THOST_FTDC_OF_CloseToday;
+		}
+	}
+	else
+	{
+		cerr << "--->>> order开平方向错误: 请使用OPEN CLOSE CLOSET 指示开平order方向" << endl;
+	}
 	///组合投机套保标志
 	oireq->CombHedgeFlag[0] = THOST_FTDC_HF_Speculation;
 
@@ -276,6 +298,8 @@ CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, co
 	///自动挂起标志: 否
 	oireq->IsAutoSuspend = 0;
 	
+
+	//以下两处均未在文档中写明作用
 	///下面是神马
 	///业务单元
 	//TThostFtdcBusinessUnitType	BusinessUnit;
@@ -294,8 +318,8 @@ CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, co
 }
 CThostFtdcInputOrderActionField * ctp_trade::initorderchange(const string & ordername)
 {
-	map<string, CThostFtdcOrderField*>::iterator iter = ordermap.find(ordername);
-	if (iter == ordermap.end())
+    map<string, CThostFtdcOrderField*>::iterator iter = orderid_op.find(ordername);
+    if (iter == orderid_op.end())
 	{
 		return nullptr;
 	}
@@ -314,7 +338,7 @@ CThostFtdcInputOrderActionField * ctp_trade::initorderchange(const string & orde
 		///报单引用
 		strcpy(cgreq->OrderRef, pOrder->OrderRef);
 		
-		///这有神马用处
+		///非初始化内容
 		///请求编号
 		///TThostFtdcRequestIDType	RequestID;
 		
@@ -343,7 +367,6 @@ CThostFtdcInputOrderActionField * ctp_trade::initorderchange(const string & orde
 		return cgreq;
 	}
 }
-//未完成
 void ctp_trade::change_order(const string & ordername,double price,long size)
 {
 	CThostFtdcInputOrderActionField * cgorder = initorderchange(ordername);
@@ -355,6 +378,7 @@ void ctp_trade::change_order(const string & ordername,double price,long size)
 	else
 	{
 		//此处存疑  这个volumechange是何意思 相对变化 绝对变化？
+		cgorder->RequestID = ++iRequestID;
 		cgorder->LimitPrice = price;
 		cgorder->VolumeChange = size;
 		cgorder->ActionFlag = THOST_FTDC_AF_Modify;
@@ -371,6 +395,7 @@ void ctp_trade::delete_order(const string & ordername)
 	}
 	else
 	{
+		dlorder->RequestID = ++iRequestID;
 		dlorder->ActionFlag = THOST_FTDC_AF_Delete;
 		ReqOrderAction(dlorder);
 	}
@@ -424,25 +449,9 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         //save para
         this->FRONT_ID = pRspUserLogin->FrontID;
         this->SESSION_ID = pRspUserLogin->SessionID;
-		strncpy(this->MaxOrderRef, pRspUserLogin->MaxOrderRef, sizeof(pRspUserLogin->MaxOrderRef));
-		strncpy(this->MaxOrderRef, pRspUserLogin->MaxOrderRef, sizeof(pRspUserLogin->MaxOrderRef));
-		strncpy(this->NowOrderRef, this->MaxOrderRef, sizeof(this->MaxOrderRef));
-        cout<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
-
-        TThostFtdcOrderRefType tp;
-		strncpy(tp, this->MaxOrderRef, sizeof(this->MaxOrderRef));
-		int i = 0;
-        int sz=sizeof(pRspUserLogin->MaxOrderRef);
-        cout <<"sz"<<sz<<endl;
-        sz=sizeof(tp);
-        cout <<"tp"<<sz<<endl;
-        while (i < 10)
-		{
-			cout << "--->>>  kk " << tp << endl;
-            add_order_ref(tp);
-			i++;
-		}
-		
+        strcpy(this->MaxOrderRef, pRspUserLogin->MaxOrderRef);
+        strcpy(this->NowOrderRef, this->MaxOrderRef);
+        cerr<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
 
         cerr<<"--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
         ReqSettlementInfoConfirm();
@@ -545,7 +554,13 @@ void ctp_trade::OnRtnTrade(CThostFtdcTradeField *pTrade)
 	//继续添加功能
 	//
 }
-
+void ctp_trade::sendorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size)
+{
+	ReqOrderInsert(initorder(InstrumentID, side, openclose, price, size));
+}
+void ctp_trade::deleteorder(std::string ordername)
+{
+}
 //////////////////////////////////////////////////////////////////////////////////////////////
 //
 //Bool Functions
@@ -587,7 +602,32 @@ bool ctp_trade::IsTradingOrder(CThostFtdcOrderField *pOrder)
 void ctp_trade::add_order_ref(TThostFtdcOrderRefType p)
 {
     int size = sizeof(TThostFtdcOrderRefType);
-    cout<<"size"<<size<<endl;
+	cout << "size" << size << endl;
+	int sizep = sizeof(p);
+	cout << p << " sizep" << sizep << endl;
+
+	long tmplong = atoi(p);
+	cout << "long" << tmplong << endl;
+	
+	if (tmplong == 0)
+	{
+		memset(p, '0', sizeof(TThostFtdcOrderRefType));
+//		strcpy(p, "\0\0\0\0\0\0\0\0\0\0\0\0");
+	}
+	/*
+	if (sizep < size)
+	{
+		for (int i = 0; i < sizep; i++)
+		{
+			p[size - i] = p[sizep - i];
+		}
+		for (int i = sizep; i < size ; i++)
+		{
+			p[i] = '\0';
+		}
+	}
+	*/
+	cout << "nowp" << p << endl;
 	bool addbit = false;
     while (!(p[size - 2] >=48 && p[size - 2]<=57))
     {
@@ -597,6 +637,7 @@ void ctp_trade::add_order_ref(TThostFtdcOrderRefType p)
         }
         p[0] = '0';
     }
+	cout << "nowp" << p << endl;
 	for (int i = 2; i <= size; i++)
 	{
 		switch (p[size - i])
@@ -618,6 +659,6 @@ void ctp_trade::add_order_ref(TThostFtdcOrderRefType p)
 			break;
 		}
 	}
-
+	cout << "nowp" << p << endl;
 }
 

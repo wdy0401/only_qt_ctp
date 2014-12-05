@@ -28,6 +28,11 @@ public:
     virtual void OnRtnOrder(CThostFtdcOrderField *pOrder);
     virtual void OnRtnTrade(CThostFtdcTradeField *pTrade);
 
+
+	//发单函数
+	void sendorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
+	void deleteorder(std::string ordername);
+
 private:
     void ReqQryOrder(const std::string &);
     void ReqQryOrder(const std::string &,bool);
@@ -64,11 +69,14 @@ private:
 
     long iRequestID;
     int maxdelaytime;
-	//可以添加iRequestID对应的map 以便于查询order状态
-    std::map<std::string,CThostFtdcOrderField*> ordermap;
-
 
 	ctp_trade_qthread * ptfather ;
+
+
+	//可以添加iRequestID对应的map 以便于查询order状态
+	std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
+	std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
+	std::map<long, std::string> rid_orderid; //requestid -> uniqid
 
 };
 #endif // CTP_TRADE_H
