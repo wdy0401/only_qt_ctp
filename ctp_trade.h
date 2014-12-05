@@ -58,14 +58,10 @@ private:
 	void change_order(const std::string & ordername, double price, long size);
 	void delete_order(const std::string & ordername);
 
-	void add_order_ref(TThostFtdcOrderRefType);
-
     CThostFtdcTraderApi				* pUserApi;
     CThostFtdcReqUserLoginField		* req;
     TThostFtdcFrontIDType           FRONT_ID;
     TThostFtdcSessionIDType         SESSION_ID;
-    TThostFtdcOrderRefType          NowOrderRef;
-    TThostFtdcOrderRefType          MaxOrderRef;
 
     long iRequestID;
     int maxdelaytime;

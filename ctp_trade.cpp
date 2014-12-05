@@ -22,8 +22,6 @@ ctp_trade::ctp_trade()
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
     iRequestID=0;
 	req = new CThostFtdcReqUserLoginField;
-	memset(this->MaxOrderRef, '\0', 13);
-	memset(this->NowOrderRef, '\0', 13);
     init();
 }
 void ctp_trade::init()
@@ -239,8 +237,7 @@ CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, co
 	///合约代码
 	strncpy(oireq->InstrumentID, const_cast<char*>(InstrumentID.c_str()), sizeof(oireq->InstrumentID));
 	///报单引用
-	add_order_ref(this->NowOrderRef);
-	strncpy(oireq->OrderRef, this->NowOrderRef, sizeof(oireq->OrderRef));
+	///TThostFtdcOrderRefType OrderRef //ctp自动维护
 	///用户代码
     strncpy(oireq->UserID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(oireq->UserID));
 	///报单价格条件
@@ -449,8 +446,6 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         //save para
         this->FRONT_ID = pRspUserLogin->FrontID;
         this->SESSION_ID = pRspUserLogin->SessionID;
-        strcpy(this->MaxOrderRef, pRspUserLogin->MaxOrderRef);
-        strcpy(this->NowOrderRef, this->MaxOrderRef);
         cerr<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
 
         cerr<<"--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
@@ -599,66 +594,3 @@ bool ctp_trade::IsTradingOrder(CThostFtdcOrderField *pOrder)
 	//目前尚未使用
 	return true;
 }
-void ctp_trade::add_order_ref(TThostFtdcOrderRefType p)
-{
-    int size = sizeof(TThostFtdcOrderRefType);
-	cout << "size" << size << endl;
-	int sizep = sizeof(p);
-	cout << p << " sizep" << sizep << endl;
-
-	long tmplong = atoi(p);
-	cout << "long" << tmplong << endl;
-	
-	if (tmplong == 0)
-	{
-		memset(p, '0', sizeof(TThostFtdcOrderRefType));
-//		strcpy(p, "\0\0\0\0\0\0\0\0\0\0\0\0");
-	}
-	/*
-	if (sizep < size)
-	{
-		for (int i = 0; i < sizep; i++)
-		{
-			p[size - i] = p[sizep - i];
-		}
-		for (int i = sizep; i < size ; i++)
-		{
-			p[i] = '\0';
-		}
-	}
-	*/
-	cout << "nowp" << p << endl;
-	bool addbit = false;
-    while (!(p[size - 2] >=48 && p[size - 2]<=57))
-    {
-        for (int j = 2; j <= size; j++)
-        {
-            p[size-j] = p[size-j-1];
-        }
-        p[0] = '0';
-    }
-	cout << "nowp" << p << endl;
-	for (int i = 2; i <= size; i++)
-	{
-		switch (p[size - i])
-		{
-		case '0':p[size - i]++; addbit = false; break;
-		case '1':p[size - i]++; addbit = false; break;
-		case '2':p[size - i]++; addbit = false; break;
-		case '3':p[size - i]++; addbit = false; break;
-		case '4':p[size - i]++; addbit = false; break;
-		case '5':p[size - i]++; addbit = false; break;
-		case '6':p[size - i]++; addbit = false; break;
-		case '7':p[size - i]++; addbit = false; break;
-		case '8':p[size - i]++; addbit = false; break;
-		case '9':p[size - i] = '0'; addbit = true; break;
-        default:cerr << "--->>> Cannot add 1 in add_order_ref" << endl; cerr << "--->>> ori char * is: ###" << p <<"###"<<" i ="<< i << endl;
-		}
-		if (!addbit)
-		{
-			break;
-		}
-	}
-	cout << "nowp" << p << endl;
-}
-
