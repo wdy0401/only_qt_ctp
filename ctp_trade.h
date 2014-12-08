@@ -62,19 +62,7 @@ public:
     void delete_all_order();
 
 
-//    CThostFtdcTraderApi				* pUserApi;
-    TThostFtdcFrontIDType           FRONT_ID;
-    TThostFtdcSessionIDType         SESSION_ID;
 
-    int maxdelaytime;
-
-	ctp_trade_qthread * ptfather ;
-
-
-	//可以添加iRequestID对应的map 以便于查询order状态
-	std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
-	std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
-	std::map<long, std::string> rid_orderid; //requestid -> uniqid
 
 };
 #endif // CTP_TRADE_H

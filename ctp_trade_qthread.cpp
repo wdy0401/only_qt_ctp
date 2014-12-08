@@ -1,8 +1,8 @@
 #include "ctp_trade_qthread.h"
-#include "ctp_trade_cfg.h"
+//#include "ctp_trade_cfg.h"
 #include "ctp_trade.h"
 
-ctp_trade_cfg ctc;
+//ctp_trade_cfg ctc;
 CThostFtdcTraderApi * pUserApi;
 
 

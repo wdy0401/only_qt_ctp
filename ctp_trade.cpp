@@ -1,5 +1,5 @@
 #include "ctp_trade.h"
-#include "ctp_trade_cfg.h"
+//#include "ctp_trade_cfg.h"
 #include"ctp_trade_qthread.h"
 #include<Windows.h>
 #include<string>
@@ -10,10 +10,18 @@
 #include"../gpp_qt/cfg/cfg.h"
 
 
-extern CThostFtdcTraderApi * pUserApi;
+static CThostFtdcTraderApi * pUserApi;
+static    TThostFtdcFrontIDType           FRONT_ID;
+static    TThostFtdcSessionIDType         SESSION_ID;
+static    int maxdelaytime;
+static	ctp_trade_qthread * ptfather ;
+//可以添加iRequestID对应的map 以便于查询order状态
+static	std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
+static	std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
+static	std::map<long, std::string> rid_orderid; //requestid -> uniqid
 
 extern cfg simu_cfg;
-extern ctp_trade_cfg ctc;
+//extern ctp_trade_cfg ctc;
 int iRequestID;
 
 using namespace std;
@@ -28,7 +36,7 @@ void ctp_trade::testfunc()
 ctp_trade::ctp_trade(ctp_trade_qthread * father)
 {
 	ptfather = father;
-    ctc.ptfather=father;
+    //ctc.ptfather=father;
 	ctp_trade();
 }
 ctp_trade::ctp_trade()
@@ -423,12 +431,12 @@ void ctp_trade::delete_order(const string & ordername)
     CThostFtdcInputOrderActionField * dlorder = initorderchange(ordername);
 	if (dlorder == nullptr)
 	{
-		cerr << "--->>> 报单操作请求: 待撤单不存在 请确认   ordername=" << ordername << endl;
+        cerr << "--->>> Order not exist: Please confirm   ordername=" << ordername << endl;
 		return;
 	}
 	else
 	{
-        cerr << "order name " << ordername << "order deleting" <<endl;
+        cerr << "order name " << ordername << " order deleting" <<endl;
 		dlorder->RequestID = ++iRequestID;
 		dlorder->ActionFlag = THOST_FTDC_AF_Delete;
 		ReqOrderAction(dlorder);
@@ -436,9 +444,10 @@ void ctp_trade::delete_order(const string & ordername)
 }
 void ctp_trade::ReqOrderAction(CThostFtdcInputOrderActionField *pOrder)
 {
-	int iResult = pUserApi->ReqOrderAction(pOrder, ++iRequestID);
-	cerr << "--->>> 报单操作请求: " << iResult << ((iResult == 0) ? ", 成功" : ", 失败") << endl;
-	cerr << "--->>> 报单操作请求ID: " << iRequestID << " InstrumentID: " << pOrder->InstrumentID << endl;
+    cerr << endl << "--->>> ReqOrderAction" <<endl;
+    int iResult = pUserApi->ReqOrderAction(pOrder, ++iRequestID);
+    cerr << "--->>> ReqOrderAction : " << iResult << ((iResult == 0) ? ", success" : ", fail") << endl;
+    cerr << "--->>> ReqOrderAction :  ID " << iRequestID << " InstrumentID: " << pOrder->InstrumentID << endl;
 }
 char *ctp_trade::mk_trade_con_dir()
 {
@@ -481,8 +490,8 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
     if (bIsLast && !IsErrorRspInfo(pRspInfo))
     {
         //save para
-        this->FRONT_ID = pRspUserLogin->FrontID;
-        this->SESSION_ID = pRspUserLogin->SessionID;
+        FRONT_ID = pRspUserLogin->FrontID;
+        SESSION_ID = pRspUserLogin->SessionID;
         cerr<<"FRONT_ID init "<<FRONT_ID<<endl;
         cerr<<"SESSION_ID init "<<SESSION_ID<<endl;
         cerr<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
