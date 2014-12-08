@@ -32,8 +32,7 @@ public:
 
 
 	//·¢µ¥º¯Êý
-	void sendorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
-	void deleteorder(std::string ordername);
+    void sendorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
 
 //private:
     void ReqQryOrder(const std::string &);
@@ -57,8 +56,10 @@ public:
 	CThostFtdcInputOrderField * initorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
 	void ReqOrderAction(CThostFtdcInputOrderActionField *pOrder);
 	CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
+
 	void change_order(const std::string & ordername, double price, long size);
 	void delete_order(const std::string & ordername);
+    void delete_all_order();
 
     CThostFtdcTraderApi				* pUserApi;
     TThostFtdcFrontIDType           FRONT_ID;

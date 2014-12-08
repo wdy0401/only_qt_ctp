@@ -34,7 +34,8 @@ ctp_quote::ctp_quote(ctp_quote_qthread * father)
 }
 ctp_quote::ctp_quote()
 {
-    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi(mk_quote_con_dir());
+//    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi(mk_quote_con_dir());
+    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi();
     this->init();
     this->login();
 }
@@ -144,20 +145,23 @@ bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
 }
 char *ctp_quote::mk_quote_con_dir()
 {
-        string exedir=simu_cfg.getparam("QUOTE_CON_PATH");
-        if(exedir.size()>0)
-        {
-            wfunction::wmkdir(exedir);
-            return const_cast<char*>((exedir+"/").c_str());
-        }
-        else
-        {
-            exedir=QCoreApplication::applicationFilePath().toStdString();
-            cout<<exedir<<endl;
-            exedir=exedir.erase(exedir.find_last_of("/"),exedir.size());
-//            exedir=exedir.erase(exedir.find_last_of("\\"),exedir.size());
-            exedir=exedir+"/quote_con";
-            wfunction::wmkdir(exedir);
-        }
-        return const_cast<char*>((exedir+"/").c_str());
+    cerr << endl << "mk_quote_con_dir" <<endl;
+    string exedir=simu_cfg.getparam("QUOTE_CON_PATH");
+    if(exedir.size()>0)
+    {
+        wfunction::wmkdir(exedir);
+    }
+    else
+    {
+        exedir=QCoreApplication::applicationFilePath().toStdString();
+        exedir=exedir.erase(exedir.find_last_of("/"),exedir.size());
+        exedir=exedir+"/quote_con";
+        wfunction::wmkdir(exedir);
+    }
+//    exedir+="/";
+    exedir=wfunction::replacechar(exedir,"/","\\");
+    cerr<<"exedir "<<exedir<<endl;
+    char a[]="quote_con";
+    return a;
+//    return const_cast<char*>(exedir.c_str());
 }

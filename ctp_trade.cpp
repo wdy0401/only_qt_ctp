@@ -16,6 +16,7 @@ using namespace std;
 void ctp_trade::testfunc()
 {
 //    cerr<<"iRequeseID in  p "<<porder->RequestID<<endl;
+    cerr << endl << "--->>> testfunction" << endl;
     cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
     cerr<<"SESSION_ID "<<SESSION_ID<<endl;
 }
@@ -30,11 +31,14 @@ ctp_trade::ctp_trade()
     cout<<"init trade"<<endl;
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
     init();
+//    this->sendorder("IF1412","BUY","OPEN",3200,1);
 }
 void ctp_trade::init()
 {
-    pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi(this->mk_trade_con_dir());
+//    pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi(this->mk_trade_con_dir());
+    pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi();
     pUserApi->RegisterSpi((CThostFtdcTraderSpi*)this);
+//    pUserApi->RegisterSpi(this);
     pUserApi->SubscribePublicTopic(THOST_TERT_QUICK);
     pUserApi->SubscribePrivateTopic(THOST_TERT_QUICK);
     pUserApi->RegisterFront(const_cast<char*>(simu_cfg.getparam("TRADE_FRONT_ADDR").c_str()));// connect
@@ -58,7 +62,7 @@ void ctp_trade::ReqSettlementInfoConfirm()
 	strncpy(screq.BrokerID, const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()), sizeof(screq.BrokerID));
 	strncpy(screq.InvestorID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(screq.InvestorID));
 	int iResult = pUserApi->ReqSettlementInfoConfirm(&screq, ++iRequestID);
-	cerr << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
+    cerr << endl << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
 void ctp_trade::ReqQryOrder(const string &  instrument_id)
 {
@@ -226,16 +230,25 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
 }
 void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 {
+    cerr <<endl << "--->>>ReqOrderInsert" << endl;
     cerr<<"iRequeseID in  p "<<porder->RequestID<<endl;
     cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
     cerr<<"SESSION_ID "<<SESSION_ID<<endl;
 
     porder->RequestID = ++iRequestID;
 	int iResult = pUserApi->ReqOrderInsert(porder, porder->RequestID);
-    cerr << "--->>> order insert: " << iResult ;//<< ((iResult == 0) ? ", Success" : ", Fail" << endl;
+    if(iResult==0)
+    {
+        cerr << endl << "--->>> order insert: " << iResult << " Success" << endl;
+    }
+    else
+    {
+        cerr << endl << "--->>> order insert: " << iResult << " Fail" << endl;
+    }
 }
 CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
 {
+    cerr << endl << "--->>> Init order" << endl;
     cerr << "Local Init order\t" << InstrumentID << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
     cerr << "Local Init order\t" << InstrumentID << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
 	//cerr << InstrumentID;// << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
@@ -344,8 +357,9 @@ CThostFtdcInputOrderActionField * ctp_trade::initorderchange(const string & orde
 		strcpy(cgreq->BrokerID, pOrder->BrokerID);
 		///投资者代码
 		strcpy(cgreq->InvestorID, pOrder->InvestorID);
-		///报单操作引用
-		TThostFtdcOrderActionRefType	OrderActionRef;
+
+        ///报单操作引用
+        ///TThostFtdcOrderActionRefType	 OrderActionRef;
 		///报单引用
 		strcpy(cgreq->OrderRef, pOrder->OrderRef);
 		
@@ -398,7 +412,9 @@ void ctp_trade::change_order(const string & ordername,double price,long size)
 }
 void ctp_trade::delete_order(const string & ordername)
 {
-	CThostFtdcInputOrderActionField * dlorder = initorderchange(ordername);
+    cerr << endl << "--->>>delete_order init" << endl;
+    cerr << "order name " << ordername <<endl;
+    CThostFtdcInputOrderActionField * dlorder = initorderchange(ordername);
 	if (dlorder == nullptr)
 	{
 		cerr << "--->>> 报单操作请求: 待撤单不存在 请确认   ordername=" << ordername << endl;
@@ -406,6 +422,7 @@ void ctp_trade::delete_order(const string & ordername)
 	}
 	else
 	{
+        cerr << "order name " << ordername << "order deleting" <<endl;
 		dlorder->RequestID = ++iRequestID;
 		dlorder->ActionFlag = THOST_FTDC_AF_Delete;
 		ReqOrderAction(dlorder);
@@ -454,13 +471,12 @@ void ctp_trade::OnFrontConnected()
 }
 void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-    cerr << "--->>> " << "OnRspUserLogin" << endl;
+    cerr <<endl << "--->>> " << "OnRspUserLogin" << endl;
     if (bIsLast && !IsErrorRspInfo(pRspInfo))
     {
         //save para
         this->FRONT_ID = pRspUserLogin->FrontID;
         this->SESSION_ID = pRspUserLogin->SessionID;
-
         cerr<<"FRONT_ID init "<<FRONT_ID<<endl;
         cerr<<"SESSION_ID init "<<SESSION_ID<<endl;
         cerr<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
@@ -471,21 +487,28 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
 }
 void ctp_trade::OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField *pSettlementInfoConfirm, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-    cout<<"BrokerID:\t"<<pSettlementInfoConfirm->BrokerID<<"\t"<<"nRequestID:\t"<<nRequestID<<endl;
-    cerr << "--->>> " << "OnRspSettlementInfoConfirm" << endl;
+    cerr << endl << "--->>> " << "OnRspSettlementInfoConfirm" << endl;
+    cerr << "BrokerID:\t"<<pSettlementInfoConfirm->BrokerID<<"\t"<<"nRequestID:\t"<<nRequestID<<endl;
     if (bIsLast)
     {
         IsErrorRspInfo(pRspInfo);
     }
+    sendorder("IF1412","BUY","OPEN",3200,1);
+    delete_all_order();
+//    string tmp;
+//    cin>>tmp;
 }
 void ctp_trade::OnRspQryInstrument(CThostFtdcInstrumentField *pInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
 	//尚无此需求
-	cerr << "--->>> " << "OnRspQryInstrument" << endl;
-    if (bIsLast && !IsErrorRspInfo(pRspInfo))
+    cerr << endl << "--->>> " << "OnRspQryInstrument" << endl;
+    cerr << pInstrument->InstrumentID << " "<< pInstrument->InstrumentName <<endl;
+    cerr << "nRequtestID" << nRequestID << endl;
+    if ( bIsLast && !IsErrorRspInfo(pRspInfo))
     {
         //在此设置合约参数
 		//需要测试每次返回的指针是否一致，也就是是否需要copy InstrumentField的问题
+        cerr << "qryInstrument done" << endl;
     }
 }
 void ctp_trade::OnRspQryOrder(CThostFtdcOrderField *pOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
@@ -517,7 +540,8 @@ void ctp_trade::OnRspQryInvestorPosition(CThostFtdcInvestorPositionField *pInves
 }
 void ctp_trade::OnRspOrderInsert(CThostFtdcInputOrderField *pInputOrder, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {
-	//尚无此需求
+    //尚无此需求
+    //报单出现错误时才会调用此函数
 	cerr << "--->>> " << "OnRspOrderInsert" << endl;
 	if (bIsLast)
 	{
@@ -554,9 +578,20 @@ void ctp_trade::OnHeartBeatWarning(int nTimeLapse)
 	cerr << "--->>> " << "OnHeartBeatWarning" << endl;
 	cerr << "--->>> nTimerLapse = " << nTimeLapse << endl;
 }
-void ctp_trade::OnRtnOrder(CThostFtdcOrderField *pOrder)
+void ctp_trade::OnRtnOrder(CThostFtdcOrderField *p)
 {
-	//
+    cerr << endl << "--->>> OnRtnOrder" <<endl;
+    string mapid=wfunction::itos(p->FrontID)+"_"+wfunction::itos(p->SessionID)+"_"+p->OrderRef;
+    orderid_op[mapid]=p;
+    cerr << "map id\t" << mapid << endl;
+    cerr << "FrontID\t" << p->FrontID << endl;
+    cerr << "SessionID\t" << p->SessionID << endl;
+    cerr << "OrderRef\t" << p->OrderRef << endl;
+    cerr << "OrderStatus\t" << p->OrderStatus << endl;
+//    cerr << "OrderRef" << p->OrderRef << endl;
+
+
+    //
 	//继续添加功能
 	//
 }
@@ -568,10 +603,15 @@ void ctp_trade::OnRtnTrade(CThostFtdcTradeField *pTrade)
 }
 void ctp_trade::sendorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size)
 {
-	ReqOrderInsert(initorder(InstrumentID, side, openclose, price, size));
+    cerr << endl << "--->>>ctp_trade sendorder init" << endl;
+    ReqOrderInsert(initorder(InstrumentID, side, openclose, price, size));
 }
-void ctp_trade::deleteorder(std::string ordername)
+void ctp_trade::delete_all_order()
 {
+    for(std::map<std::string, CThostFtdcOrderField*>::iterator iter=orderid_op.begin() ; iter != orderid_op.end() ; iter++)
+    {
+        delete_order(iter->first);
+    }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 //
