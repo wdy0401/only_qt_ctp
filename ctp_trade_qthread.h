@@ -10,6 +10,7 @@ public:
 
 public slots:
     void addorder();
+    void delete_all_order();
 
 signals:protected:
     void run();

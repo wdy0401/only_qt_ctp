@@ -61,11 +61,11 @@ public:
 	void delete_order(const std::string & ordername);
     void delete_all_order();
 
+
 //    CThostFtdcTraderApi				* pUserApi;
     TThostFtdcFrontIDType           FRONT_ID;
     TThostFtdcSessionIDType         SESSION_ID;
 
-//    int iRequestID;
     int maxdelaytime;
 
 	ctp_trade_qthread * ptfather ;

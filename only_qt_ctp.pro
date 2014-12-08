@@ -28,7 +28,9 @@ SOURCES += main.cpp\
     ../gpp_qt/log_info/log_info.cpp \
 	ctp_trade_qthread.cpp\
     ctp_trade.cpp \
-    ctp_log.cpp
+    ctp_log.cpp \
+    trade_cfg.cpp \
+    ctp_trade_cfg.cpp
 
 HEADERS  += mainwindow.h \
     ctp/ThostFtdcMdApi.h \
@@ -46,7 +48,9 @@ HEADERS  += mainwindow.h \
     ctp_log.h \
 	ctp_trade_qthread.h\
     ../libs/ctp/ThostFtdcTraderApi.h \
-	../libs/ctp/ThostFtdcMdApi.h
+	../libs/ctp/ThostFtdcMdApi.h \
+    trade_cfg.h \
+    ctp_trade_cfg.h
 
 FORMS    += mainwindow.ui
 

@@ -36,12 +36,12 @@
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{077e2bd9-843c-46f3-8f15-f6705ab0ade7}</UniqueIdentifier>
+      <UniqueIdentifier>{3a5bac3a-23e8-462e-9024-a7e9c938b867}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{f82900d3-bd68-4492-88f9-8cbec0c91e1c}</UniqueIdentifier>
+      <UniqueIdentifier>{a1d3b02f-43d1-4509-ab89-c7142da84494}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
@@ -71,6 +71,12 @@
     <ClCompile Include="ctp_trade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ctp_trade_cfg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp_trade_qthread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\gpp_qt\log_info\log_info.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -98,19 +104,16 @@
     <ClCompile Include="Release\moc_ctp_quote_qthread.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\moc_mainwindow.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_mainwindow.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="ctp_trade_qthread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Debug\moc_ctp_trade_qthread.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Release\moc_ctp_trade_qthread.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_mainwindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_mainwindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
@@ -118,7 +121,13 @@
     <ClInclude Include="..\libs\ctp\ThostFtdcMdApi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ctp\ThostFtdcMdApi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\libs\ctp\ThostFtdcTraderApi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp\ThostFtdcTraderApi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\gpp_qt\bar\bar.h">
@@ -145,12 +154,21 @@
     <ClInclude Include="ctp_trade.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ctp_trade_cfg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="ctp_trade_qthread.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <ClInclude Include="..\gpp_qt\log_info\log_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <CustomBuild Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <ClInclude Include="trade_cfg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\gpp_qt\wfunction\wfunction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -164,9 +182,6 @@
   <ItemGroup>
     <CustomBuild Include="mainwindow.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ctp_trade_qthread.h">
-      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

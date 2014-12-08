@@ -1,7 +1,9 @@
 #include "ctp_trade_qthread.h"
+#include "ctp_trade_cfg.h"
 #include "ctp_trade.h"
 
-CThostFtdcTraderApi				* pUserApi;
+ctp_trade_cfg ctc;
+CThostFtdcTraderApi * pUserApi;
 
 
 ctp_trade_qthread::ctp_trade_qthread()
@@ -13,6 +15,9 @@ void ctp_trade_qthread::run()
 }
 void ctp_trade_qthread::addorder()
 {
-    trade->testfunc();
     trade->sendorder("IF1412","BUY","OPEN",3200,1);
+}
+void ctp_trade_qthread::delete_all_order()
+{
+    trade->delete_all_order();
 }

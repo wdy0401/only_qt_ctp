@@ -1,4 +1,5 @@
 #include "ctp_trade.h"
+#include "ctp_trade_cfg.h"
 #include"ctp_trade_qthread.h"
 #include<Windows.h>
 #include<string>
@@ -12,6 +13,7 @@
 extern CThostFtdcTraderApi * pUserApi;
 
 extern cfg simu_cfg;
+extern ctp_trade_cfg ctc;
 int iRequestID;
 
 using namespace std;
@@ -26,6 +28,7 @@ void ctp_trade::testfunc()
 ctp_trade::ctp_trade(ctp_trade_qthread * father)
 {
 	ptfather = father;
+    ctc.ptfather=father;
 	ctp_trade();
 }
 ctp_trade::ctp_trade()
@@ -235,8 +238,8 @@ void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 {
     cerr <<endl << "--->>>ReqOrderInsert" << endl;
     cerr<<"iRequeseID in  p "<<porder->RequestID<<endl;
-    cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
-    cerr<<"SESSION_ID "<<SESSION_ID<<endl;
+//    cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
+//    cerr<<"SESSION_ID "<<SESSION_ID<<endl;
 
     porder->RequestID = ++iRequestID;
 	int iResult = pUserApi->ReqOrderInsert(porder, porder->RequestID);
@@ -497,7 +500,7 @@ void ctp_trade::OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField 
         IsErrorRspInfo(pRspInfo);
     }
     sendorder("IF1412","BUY","OPEN",3200,1);
-    delete_all_order();
+//    delete_all_order();
 //    string tmp;
 //    cin>>tmp;
 }
@@ -611,9 +614,11 @@ void ctp_trade::sendorder(const std::string & InstrumentID, const std::string & 
 }
 void ctp_trade::delete_all_order()
 {
+    cerr << endl << "Delete all order init " << endl;
     for(std::map<std::string, CThostFtdcOrderField*>::iterator iter=orderid_op.begin() ; iter != orderid_op.end() ; iter++)
     {
-        delete_order(iter->first);
+        cerr << "Delete all order \t  now is " << iter->first << endl;
+		delete_order(iter->first);
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////

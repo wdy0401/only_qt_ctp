@@ -86,6 +86,7 @@ void start_ctp_trade()
 	
     ctq = new ctp_trade_qthread;
     QObject::connect(mw, &MainWindow::on_pushButton_3_clicked, ctq, &ctp_trade_qthread::addorder);
+    QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, ctq, &ctp_trade_qthread::delete_all_order);
 //	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
 //	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
 
