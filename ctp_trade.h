@@ -61,7 +61,7 @@ public:
 	void delete_order(const std::string & ordername);
     void delete_all_order();
 
-    CThostFtdcTraderApi				* pUserApi;
+//    CThostFtdcTraderApi				* pUserApi;
     TThostFtdcFrontIDType           FRONT_ID;
     TThostFtdcSessionIDType         SESSION_ID;
 

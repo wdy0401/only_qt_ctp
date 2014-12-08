@@ -8,6 +8,9 @@
 #include"../gpp_qt/wfunction/wfunction.h"
 #include"../gpp_qt/cfg/cfg.h"
 
+
+extern CThostFtdcTraderApi * pUserApi;
+
 extern cfg simu_cfg;
 int iRequestID;
 

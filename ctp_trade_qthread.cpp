@@ -1,6 +1,7 @@
 #include "ctp_trade_qthread.h"
 #include "ctp_trade.h"
 
+CThostFtdcTraderApi				* pUserApi;
 
 
 ctp_trade_qthread::ctp_trade_qthread()
