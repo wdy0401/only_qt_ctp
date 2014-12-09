@@ -1,17 +1,13 @@
 #include "ctp_trade_qthread.h"
-//#include "ctp_trade_cfg.h"
 #include "ctp_trade.h"
-
-//ctp_trade_cfg ctc;
-CThostFtdcTraderApi * pUserApi;
-
 
 ctp_trade_qthread::ctp_trade_qthread()
 {
 }
 void ctp_trade_qthread::run()
 {
-    trade = new ctp_trade(this);
+    trade = new ctp_trade;
+    trade->init(this);
 }
 void ctp_trade_qthread::addorder()
 {

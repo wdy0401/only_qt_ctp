@@ -10,18 +10,9 @@
 #include"../gpp_qt/cfg/cfg.h"
 
 
-static CThostFtdcTraderApi * pUserApi;
-static    TThostFtdcFrontIDType           FRONT_ID;
-static    TThostFtdcSessionIDType         SESSION_ID;
-static    int maxdelaytime;
-static	ctp_trade_qthread * ptfather ;
-//可以添加iRequestID对应的map 以便于查询order状态
-static	std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
-static	std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
-static	std::map<long, std::string> rid_orderid; //requestid -> uniqid
+
 
 extern cfg simu_cfg;
-//extern ctp_trade_cfg ctc;
 int iRequestID;
 
 using namespace std;
@@ -33,26 +24,20 @@ void ctp_trade::testfunc()
     cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
     cerr<<"SESSION_ID "<<SESSION_ID<<endl;
 }
-ctp_trade::ctp_trade(ctp_trade_qthread * father)
+void ctp_trade::init(ctp_trade_qthread * father)
 {
-	ptfather = father;
-    //ctc.ptfather=father;
-	ctp_trade();
+    ptfather = father;
+    init();
 }
-ctp_trade::ctp_trade()
+void ctp_trade::init()
 {
     iRequestID=0;
     cout<<"init trade"<<endl;
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
-    init();
-//    this->sendorder("IF1412","BUY","OPEN",3200,1);
-}
-void ctp_trade::init()
-{
 //    pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi(this->mk_trade_con_dir());
     pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi();
+//    tmpp=pUserApi;
     pUserApi->RegisterSpi((CThostFtdcTraderSpi*)this);
-//    pUserApi->RegisterSpi(this);
     pUserApi->SubscribePublicTopic(THOST_TERT_QUICK);
     pUserApi->SubscribePrivateTopic(THOST_TERT_QUICK);
     pUserApi->RegisterFront(const_cast<char*>(simu_cfg.getparam("TRADE_FRONT_ADDR").c_str()));// connect
@@ -61,8 +46,8 @@ void ctp_trade::init()
 }
 void ctp_trade::ReqUserLogin()
 {
-	CThostFtdcReqUserLoginField ulreq;
-	memset(&ulreq, 0, sizeof(ulreq));
+    CThostFtdcReqUserLoginField ulreq;
+    memset(&ulreq, 0, sizeof(ulreq));
     strncpy(ulreq.BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(ulreq.BrokerID));
     strncpy(ulreq.UserID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(ulreq.UserID));
     strncpy(ulreq.Password,const_cast<char*>(simu_cfg.getparam("PASSWORD").c_str()),sizeof(ulreq.Password));
@@ -71,11 +56,11 @@ void ctp_trade::ReqUserLogin()
 }
 void ctp_trade::ReqSettlementInfoConfirm()
 {
-	CThostFtdcSettlementInfoConfirmField screq;
-	memset(&screq, 0, sizeof(screq));
-	strncpy(screq.BrokerID, const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()), sizeof(screq.BrokerID));
-	strncpy(screq.InvestorID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(screq.InvestorID));
-	int iResult = pUserApi->ReqSettlementInfoConfirm(&screq, ++iRequestID);
+    CThostFtdcSettlementInfoConfirmField screq;
+    memset(&screq, 0, sizeof(screq));
+    strncpy(screq.BrokerID, const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()), sizeof(screq.BrokerID));
+    strncpy(screq.InvestorID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(screq.InvestorID));
+    int iResult = pUserApi->ReqSettlementInfoConfirm(&screq, ++iRequestID);
     cerr << endl << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
 void ctp_trade::ReqQryOrder(const string &  instrument_id)
@@ -246,11 +231,22 @@ void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 {
     cerr <<endl << "--->>>ReqOrderInsert" << endl;
     cerr<<"iRequeseID in  p "<<porder->RequestID<<endl;
-//    cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
-//    cerr<<"SESSION_ID "<<SESSION_ID<<endl;
+    //    cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
+    //    cerr<<"SESSION_ID "<<SESSION_ID<<endl;
 
     porder->RequestID = ++iRequestID;
-	int iResult = pUserApi->ReqOrderInsert(porder, porder->RequestID);
+    int iResult = pUserApi->ReqOrderInsert(porder, porder->RequestID);
+/*
+ *     if(tmpp==pUserApi)
+    {
+        cerr << "Yes tmpp is available here" <<endl;
+    }
+    else
+    {
+        cerr << "No tmpp is not available here" <<endl;
+        tmpp=pUserApi;
+    }
+*/
     if(iResult==0)
     {
         cerr << endl << "--->>> order insert: " << iResult << " Success" << endl;
@@ -508,10 +504,6 @@ void ctp_trade::OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField 
     {
         IsErrorRspInfo(pRspInfo);
     }
-    sendorder("IF1412","BUY","OPEN",3200,1);
-//    delete_all_order();
-//    string tmp;
-//    cin>>tmp;
 }
 void ctp_trade::OnRspQryInstrument(CThostFtdcInstrumentField *pInstrument, CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast)
 {

@@ -8,12 +8,11 @@ class ctp_trade_qthread;
 class ctp_trade : public CThostFtdcTraderSpi
 {
 public:
-
-    void testfunc();
-	ctp_trade();
-	ctp_trade(ctp_trade_qthread *);
+//	ctp_trade();
+    void init(ctp_trade_qthread *);
     void init();//set con file  dir
     char * mk_trade_con_dir();
+    void testfunc();
 
     virtual void OnFrontConnected();
     virtual void OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,	CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
@@ -33,8 +32,11 @@ public:
 
 	//发单函数
     void sendorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
+    void change_order(const std::string & ordername, double price, long size);
+    void delete_order(const std::string & ordername);
+    void delete_all_order();
 
-//private:
+private:
     void ReqQryOrder(const std::string &);
     void ReqQryOrder(const std::string &,bool);
     void ReqQryInstrument(const std::string & );
@@ -57,12 +59,15 @@ public:
 	void ReqOrderAction(CThostFtdcInputOrderActionField *pOrder);
 	CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
 
-	void change_order(const std::string & ordername, double price, long size);
-	void delete_order(const std::string & ordername);
-    void delete_all_order();
 
-
-
-
+    CThostFtdcTraderApi * pUserApi;
+    TThostFtdcFrontIDType           FRONT_ID;
+    TThostFtdcSessionIDType         SESSION_ID;
+    int maxdelaytime;
+    ctp_trade_qthread * ptfather ;
+    //可以添加iRequestID对应的map 以便于查询order状态
+    std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
+    std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
+    std::map<long, std::string> rid_orderid; //requestid -> uniqid
 };
 #endif // CTP_TRADE_H
