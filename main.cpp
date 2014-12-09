@@ -46,9 +46,7 @@ ctp_quote_qthread  * cqq;
 
 int main(int argc, char *argv[])
 {
-	QApplication::addLibraryPath(".");
-
-	QApplication a(argc, argv);
+    QApplication a(argc, argv);
     qa=&a;
     MainWindow w;
     mw=&w;
