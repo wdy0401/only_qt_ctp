@@ -280,7 +280,7 @@ CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, co
 	///买卖方向
 	if (side == "BUY" || side == "SELL")
 	{
-		oireq->Direction = side == "BUY" ? '0' : '1';
+		oireq->Direction = side == "BUY" ? THOST_FTDC_D_Buy : THOST_FTDC_D_Sell;
 	}
 	else
 	{
@@ -345,7 +345,7 @@ CThostFtdcInputOrderField * ctp_trade::initorder(const string & InstrumentID, co
 	///下面是神马
 	///互换单标志
 	//TThostFtdcBoolType	IsSwapOrder;
-    cerr<<"init is done"<<endl;
+    cerr<<"init order is done"<<endl;
 
 	return oireq;
 
@@ -589,7 +589,26 @@ void ctp_trade::OnRtnOrder(CThostFtdcOrderField *p)
 {
     cerr << endl << "--->>> OnRtnOrder" <<endl;
     string mapid=wfunction::itos(p->FrontID)+"_"+wfunction::itos(p->SessionID)+"_"+p->OrderRef;
-    orderid_op[mapid]=p;
+
+	switch (p->OrderStatus)
+	{
+	///全部成交
+	case THOST_FTDC_OST_AllTraded: orderid_op.erase(mapid); break;
+	///部分成交还在队列中
+	case THOST_FTDC_OST_PartTradedQueueing:break;
+	///部分成交不在队列中
+	case THOST_FTDC_OST_PartTradedNotQueueing: orderid_op.erase(mapid); break;
+	///未成交还在队列中
+	case THOST_FTDC_OST_NoTradeQueueing: break;
+	///未成交不在队列中
+	case THOST_FTDC_OST_NoTradeNotQueueing: orderid_op.erase(mapid); break;
+	///撤单
+	case THOST_FTDC_OST_Canceled: orderid_op.erase(mapid); break;
+	///未知， 表示 Thost已经接受用户 的委托指令，还没有 转发到交易所
+	case THOST_FTDC_OST_Unknown: orderid_op[mapid] = p; break;
+	///尚未触发
+	case THOST_FTDC_OST_NotTouched: break;
+	}
     cerr << "map id\t" << mapid << endl;
     cerr << "FrontID\t" << p->FrontID << endl;
     cerr << "SessionID\t" << p->SessionID << endl;

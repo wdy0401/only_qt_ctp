@@ -36,7 +36,7 @@ public:
     void delete_order(const std::string & ordername);
     void delete_all_order();
 
-private:
+
     void ReqQryOrder(const std::string &);
     void ReqQryOrder(const std::string &,bool);
     void ReqQryInstrument(const std::string & );
@@ -59,7 +59,7 @@ private:
 	void ReqOrderAction(CThostFtdcInputOrderActionField *pOrder);
 	CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
 
-
+private:
     CThostFtdcTraderApi * pUserApi;
     TThostFtdcFrontIDType           FRONT_ID;
     TThostFtdcSessionIDType         SESSION_ID;
