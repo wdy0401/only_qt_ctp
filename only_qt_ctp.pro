@@ -60,3 +60,13 @@ win32: LIBS += -L$$PWD/../libs/ctp/ -lthosttraderapi
 
 INCLUDEPATH += $$PWD/../libs/ctp
 DEPENDPATH += $$PWD/../libs/ctp
+
+win32: LIBS += -L$$PWD/../libs/ctp/ -lthostmduserapi
+
+INCLUDEPATH += $$PWD/../libs/ctp
+DEPENDPATH += $$PWD/../libs/ctp
+
+win32: LIBS += -L$$PWD/../libs/ctp/ -lthosttraderapi
+
+INCLUDEPATH += $$PWD/../libs/ctp
+DEPENDPATH += $$PWD/../libs/ctp

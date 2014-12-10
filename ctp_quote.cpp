@@ -27,21 +27,16 @@ extern log_info simu_log;
 
 using namespace std;
 
-ctp_quote::ctp_quote(ctp_quote_qthread * father)
+
+void ctp_quote::init(ctp_quote_qthread * father)
 {
     pqfather=father;
-    ctp_quote();
-}
-ctp_quote::ctp_quote()
-{
-//    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi(mk_quote_con_dir());
-    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi();
-    this->init();
-    this->login();
+    init();
 }
 void ctp_quote::init()
 {
-	nRequestID=0;
+    pUserApi=CThostFtdcMdApi::CreateFtdcMdApi();
+    nRequestID=0;
 	nppInstrumentID=0;
 	ctp_time_length=sizeof(TThostFtdcTimeType);
 	
@@ -64,6 +59,7 @@ void ctp_quote::init()
     }
     cout << "INFO: BrokerID: "<<req->BrokerID<<endl;
     cout << "INFO: UserID: "<<req->UserID<<endl;
+    login();
 }
 
 void ctp_quote::login()
