@@ -34,9 +34,7 @@ void ctp_trade::init()
     iRequestID=0;
     cout<<"init trade"<<endl;
     maxdelaytime=atoi(simu_cfg.getparam("MAX_QUERY_DELAY").c_str());
-//    pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi(this->mk_trade_con_dir());
     pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi();
-//    tmpp=pUserApi;
     pUserApi->RegisterSpi((CThostFtdcTraderSpi*)this);
     pUserApi->SubscribePublicTopic(THOST_TERT_QUICK);
     pUserApi->SubscribePrivateTopic(THOST_TERT_QUICK);
@@ -63,7 +61,7 @@ void ctp_trade::ReqSettlementInfoConfirm()
     int iResult = pUserApi->ReqSettlementInfoConfirm(&screq, ++iRequestID);
     cerr << endl << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
-void ctp_trade::ReqQryOrder(const string &  instrument_id)
+void ctp_trade::ReqQryOrder(const string & instrument_id)
 {
     ReqQryOrder(instrument_id,false);
 }
@@ -627,7 +625,7 @@ void ctp_trade::OnRtnTrade(CThostFtdcTradeField *pTrade)
 	//继续添加功能
 	//
 }
-void ctp_trade::sendorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size)
+void ctp_trade::addorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size)
 {
     cerr << endl << "--->>>ctp_trade sendorder init" << endl;
     ReqOrderInsert(initorder(InstrumentID, side, openclose, price, size));

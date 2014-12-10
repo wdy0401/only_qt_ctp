@@ -4,6 +4,8 @@
 #include<QLabel>
 #include<Qfont>
 #include<QPalette>
+#include<QSize>
+#include<QLineEdit>
 
 #include<map>
 #include<iostream>
@@ -24,6 +26,7 @@ extern wtimer tm;
 extern void start_ctp_quote();
 extern void start_ctp_trade();
 extern log_info simu_log;
+extern cfg simu_cfg;
 extern bars_manage simu_bars_manage;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -31,11 +34,52 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+}
+void MainWindow::init()
+{
+    set_symbols_display(simu_cfg.getparam("INSTRUMENT_ID"));
+    set_order_send(simu_cfg.getparam("INSTRUMENT_ID"));
     ctp_quote_running=false;
+    ctp_trade_running=false;
 }
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::set_order_send(const std::string & symbols)
+{
+    this->ui->fontComboBox->clear();
+    this->ui->fontComboBox->setFont(QFont("微软雅黑",9,-1,false));
+
+    list<string> symbol_list=wfunction::splitstring(symbols);
+    for(list<string>::iterator iter=symbol_list.begin();iter!=symbol_list.end();iter++)
+    {
+        this->ui->fontComboBox->addItem(QString::fromStdString(*iter));
+    }
+
+    this->ui->comboBox ->clear();
+    this->ui->comboBox->setFont(QFont("微软雅黑",9,-1,false));
+    this->ui->comboBox->addItem("买入");
+    this->ui->comboBox->addItem("卖出");
+
+    this->ui->comboBox_2 ->clear();
+    this->ui->comboBox_2->setFont(QFont("微软雅黑",9,-1,false));
+    this->ui->comboBox_2->addItem("开新仓");
+    this->ui->comboBox_2->addItem("平今");
+    this->ui->comboBox_2->addItem("平昨");
+
+    this->ui->fontComboBox_2->clear();
+    this->ui->fontComboBox_2->setFont(QFont("微软雅黑",9,-1,false));
+    QRegExp rxp("^[1-9][0-9]{0,10}\\.?[1-9]{0,3}$");
+    QValidator * validatorp = new QRegExpValidator(rxp,0);
+    this->ui->fontComboBox_2->lineEdit()->setValidator(validatorp);
+
+    this->ui->fontComboBox_3->clear();
+    this->ui->fontComboBox_3->setFont(QFont("微软雅黑",9,-1,false));
+    QRegExp rxs("^[1-9][0-9]{0,10}\\.?[1-9]{0,3}$");
+    QValidator * validators = new QRegExpValidator(rxs,0);
+    this->ui->fontComboBox_3->lineEdit()->setValidator(validators);
 }
 void MainWindow::set_symbols_display(const std::string & symbols)
 {
@@ -70,7 +114,7 @@ void MainWindow::symbol_price_display(const string & symbol, double price)
     }
     else
     {
-        cout<<"Error: function MainWindow::symbol_display"<<endl;
+        cerr<<"Error: function MainWindow::symbol_display"<<endl;
     }
 }
 
@@ -78,6 +122,11 @@ void MainWindow::symbol_price_display(const string & symbol, double price)
 void MainWindow::show_string(const string &text)
 {
     this->ui->textBrowser->append(QString::fromStdString(text));
+    qa->processEvents();
+}
+void MainWindow::show_string_trade(const string &text)
+{
+    this->ui->textBrowser_2->append(QString::fromStdString(text));
     qa->processEvents();
 }
 void MainWindow::show_quote_1(CThostFtdcDepthMarketDataField *pDepthMarketData)
@@ -124,24 +173,37 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    this->show_string("trade button pushed");
+    this->show_string_trade("trade button pushed");
 	if (!ctp_trade_running)
     {
         start_ctp_trade();
-        this->show_string("Start trade");
+        this->show_string_trade("Start trade");
 		ctp_trade_running = true;
     }
     else
     {
-        this->show_string("Trade is running");
+        this->show_string_trade("Trade is running");
+    }
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    if(this->ctp_trade_running)
+    {
+    emit check_add_order(
+        this->ui->fontComboBox->currentText().toStdString(),
+        this->ui->comboBox->currentText().toStdString(),
+        this->ui->comboBox_2->currentText().toStdString(),
+        this->ui->fontComboBox_2->currentText().toStdString(),
+        this->ui->fontComboBox_3->currentText().toStdString()
+                );
+    }
+    else
+    {
+        QMessageBox::information(this,"ERROR","请先开启trade进程");
     }
 }
 /*
-void MainWindow::on_pushButton_3_clicked()
-{
-
-}
-
 void MainWindow::on_pushButton_4_clicked()
 {
 

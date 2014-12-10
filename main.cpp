@@ -54,15 +54,15 @@ int main(int argc, char *argv[])
 	//reg string
 	qRegisterMetaType<string>("std::string");
 
-	//load simu para
+    //load simu para
     simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
-	
+
     //set para
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
     simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
     ctp_quote_log.setfile("d:/record/quote_"+wfunction::get_now_second()+".csv");
-    w.set_symbols_display(simu_cfg.getparam("INSTRUMENT_ID"));
 
+    w.init();
     w.show();
 
     return a.exec();
@@ -83,10 +83,8 @@ void start_ctp_trade()
 	mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
 	
     ctq = new ctp_trade_qthread;
-    QObject::connect(mw, &MainWindow::on_pushButton_3_clicked, ctq, &ctp_trade_qthread::addorder);
+    QObject::connect(mw, &MainWindow::check_add_order, ctq, &ctp_trade_qthread::check_add_order);
     QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, ctq, &ctp_trade_qthread::delete_all_order);
-//	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
-//	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
 
     ctq->start();
 }

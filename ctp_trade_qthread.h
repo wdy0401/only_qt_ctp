@@ -6,14 +6,15 @@ class ctp_trade_qthread :public QThread
 {
 	Q_OBJECT
 public:
-    ctp_trade_qthread();
 
 public slots:
-    void addorder();
     void delete_all_order();
+    void check_add_order(const std::string &,const std::string &,const std::string &,const std::string &,const std::string &);
 
 signals:protected:
     void run();
+
+private:
     ctp_trade * trade;
 };
 #endif
