@@ -19,12 +19,14 @@
 #include"../gpp_qt/bar/bars_manage.h"
 #include"../gpp_qt/wfunction/wfunction.h"
 
+#include"ctp_manage.h"
+
 using namespace std;
 
 extern QApplication * qa;
 extern wtimer tm;
 extern void start_ctp_quote();
-extern void start_ctp_trade();
+extern ctp_manage * cm;
 extern log_info simu_log;
 extern cfg simu_cfg;
 extern bars_manage simu_bars_manage;
@@ -58,17 +60,6 @@ void MainWindow::set_order_send(const std::string & symbols)
         this->ui->fontComboBox->addItem(QString::fromStdString(*iter));
     }
 
-    this->ui->comboBox ->clear();
-    this->ui->comboBox->setFont(QFont("微软雅黑",9,-1,false));
-    this->ui->comboBox->addItem("买入");
-    this->ui->comboBox->addItem("卖出");
-
-    this->ui->comboBox_2 ->clear();
-    this->ui->comboBox_2->setFont(QFont("微软雅黑",9,-1,false));
-    this->ui->comboBox_2->addItem("开新仓");
-    this->ui->comboBox_2->addItem("平今");
-    this->ui->comboBox_2->addItem("平昨");
-
     this->ui->fontComboBox_2->clear();
     this->ui->fontComboBox_2->setFont(QFont("微软雅黑",9,-1,false));
     QRegExp rxp("^[1-9][0-9]{0,10}\\.?[1-9]{0,3}$");
@@ -80,6 +71,19 @@ void MainWindow::set_order_send(const std::string & symbols)
     QRegExp rxs("^[1-9][0-9]{0,10}\\.?[1-9]{0,3}$");
     QValidator * validators = new QRegExpValidator(rxs,0);
     this->ui->fontComboBox_3->lineEdit()->setValidator(validators);
+
+
+    this->ui->comboBox ->clear();
+    this->ui->comboBox->setFont(QFont("微软雅黑",9,-1,false));
+    this->ui->comboBox->addItem("买入");
+    this->ui->comboBox->addItem("卖出");
+
+    this->ui->comboBox_2 ->clear();
+    this->ui->comboBox_2->setFont(QFont("微软雅黑",9,-1,false));
+    this->ui->comboBox_2->addItem("开新仓");
+    this->ui->comboBox_2->addItem("平今");
+    this->ui->comboBox_2->addItem("平昨");
+
 }
 void MainWindow::set_symbols_display(const std::string & symbols)
 {
@@ -131,29 +135,31 @@ void MainWindow::show_string_trade(const string &text)
 }
 void MainWindow::show_quote_1(CThostFtdcDepthMarketDataField *pDepthMarketData)
 {
-    cout<< pDepthMarketData->TradingDay;
-    cout<< "," << pDepthMarketData->UpdateTime;
-    cout<< ":" << pDepthMarketData->UpdateMillisec;
-    cout<< "," << pDepthMarketData->InstrumentID;
-    cout<< "," << pDepthMarketData->BidPrice1;
-    cout<< "," << pDepthMarketData->AskPrice1;
-    cout<< "," << pDepthMarketData->BidVolume1;
-    cout<< "," << pDepthMarketData->AskVolume1;
-    cout<< "," << pDepthMarketData->LastPrice;
-    cout<< "," << pDepthMarketData->HighestPrice;
-    cout<< "," << pDepthMarketData->LowestPrice;
-    cout<< "," << pDepthMarketData->Volume;
-    cout<< endl;
+    //输出信息太多 显得乱
 
-    simu_bars_manage.updatebar(pDepthMarketData->InstrumentID,pDepthMarketData->LastPrice);
+//    cout<< pDepthMarketData->TradingDay;
+//    cout<< "," << pDepthMarketData->UpdateTime;
+//    cout<< ":" << pDepthMarketData->UpdateMillisec;
+//    cout<< "," << pDepthMarketData->InstrumentID;
+//    cout<< "," << pDepthMarketData->BidPrice1;
+//    cout<< "," << pDepthMarketData->AskPrice1;
+//    cout<< "," << pDepthMarketData->BidVolume1;
+//    cout<< "," << pDepthMarketData->AskVolume1;
+//    cout<< "," << pDepthMarketData->LastPrice;
+//    cout<< "," << pDepthMarketData->HighestPrice;
+//    cout<< "," << pDepthMarketData->LowestPrice;
+//    cout<< "," << pDepthMarketData->Volume;
+//    cout<< endl;
 
-     string ctpinfo= pDepthMarketData->UpdateTime;
-     ctpinfo+="\t";
-     ctpinfo+=pDepthMarketData->InstrumentID;
-     ctpinfo+="\t";
-     ctpinfo+=wfunction::ftos(pDepthMarketData->LastPrice);
-     this->ui->textBrowser->append(QString::fromStdString(wfunction::joinquote(ctpinfo)));
-     qa->processEvents();
+//    simu_bars_manage.updatebar(pDepthMarketData->InstrumentID,pDepthMarketData->LastPrice);
+
+//     string ctpinfo= pDepthMarketData->UpdateTime;
+//     ctpinfo+="\t";
+//     ctpinfo+=pDepthMarketData->InstrumentID;
+//     ctpinfo+="\t";
+//     ctpinfo+=wfunction::ftos(pDepthMarketData->LastPrice);
+//     this->ui->textBrowser->append(QString::fromStdString(wfunction::joinquote(ctpinfo)));
+//     qa->processEvents();
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -161,7 +167,7 @@ void MainWindow::on_pushButton_clicked()
     this->show_string("quote button pushed");
 	if (!ctp_quote_running)
     {
-		start_ctp_quote();
+        cm->start_ctp_quote();
         this->show_string("Start quote");
 		ctp_quote_running = true;
     }
@@ -176,7 +182,7 @@ void MainWindow::on_pushButton_2_clicked()
     this->show_string_trade("trade button pushed");
 	if (!ctp_trade_running)
     {
-        start_ctp_trade();
+        cm->start_ctp_trade();
         this->show_string_trade("Start trade");
 		ctp_trade_running = true;
     }

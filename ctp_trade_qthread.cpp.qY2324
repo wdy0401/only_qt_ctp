@@ -1,0 +1,47 @@
+#include "ctp_trade_qthread.h"
+#include "ctp_trade.h"
+#include<QMessageBox>
+#include "mainwindow.h"
+#include<string>
+
+using namespace std;
+
+extern MainWindow * mw;
+
+void ctp_trade_qthread::run()
+{
+    trade = new ctp_trade;
+    trade->init(this);
+}
+void ctp_trade_qthread::delete_all_order()
+{
+    trade->delete_all_order();
+}
+void ctp_trade_qthread::check_add_order(const std::string & ID,const std::string & side ,const std::string & openclose ,const std::string & price ,const std::string & size)
+{
+    if(ID.empty())
+    {
+        QMessageBox::information(mw,"ERROR","请填写合约名");
+    }
+    else if(side.empty())
+    {
+        QMessageBox::information(mw,"ERROR","请填写合约名");
+    }
+    else if(openclose.empty())
+    {
+        QMessageBox::information(mw,"ERROR","请填写合约名");
+    }
+    else if(price.empty())
+    {
+        QMessageBox::information(mw,"ERROR","请填写合约名");
+    }
+    else if(size.empty())
+    {
+        QMessageBox::information(mw,"ERROR","请填写合约名");
+    }
+    else
+    {
+        trade->addorder(ID, side, openclose, QString::fromStdString(price).toDouble(), QString::fromStdString(size).toInt());
+    }
+        QMessageBox::information(mw,"ERROR","请填写合约名");
+}

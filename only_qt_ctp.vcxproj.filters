@@ -36,12 +36,12 @@
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{3a5bac3a-23e8-462e-9024-a7e9c938b867}</UniqueIdentifier>
+      <UniqueIdentifier>{f6c2c360-9779-4b8d-bc06-7041c72951bc}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{a1d3b02f-43d1-4509-ab89-c7142da84494}</UniqueIdentifier>
+      <UniqueIdentifier>{5f8c67e7-6791-47ea-8333-f0bc3b09043f}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
@@ -62,6 +62,9 @@
     <ClCompile Include="ctp_log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ctp_manage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="ctp_quote.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,9 +72,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ctp_trade.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ctp_trade_cfg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ctp_trade_qthread.cpp">
@@ -84,6 +84,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mainwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gpp_qt\match_engine\order.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gpp_qt\match_engine\orderlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\gpp_qt\wfunction\wfunction.cpp">
@@ -145,6 +151,9 @@
     <CustomBuild Include="ctp_log.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <ClInclude Include="ctp_manage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ctp_quote.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -152,9 +161,6 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <ClInclude Include="ctp_trade.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ctp_trade_cfg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <CustomBuild Include="ctp_trade_qthread.h">
@@ -166,7 +172,10 @@
     <CustomBuild Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="trade_cfg.h">
+    <ClInclude Include="..\gpp_qt\match_engine\order.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gpp_qt\match_engine\orderlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\gpp_qt\wfunction\wfunction.h">

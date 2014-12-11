@@ -2,26 +2,66 @@
 #include "ctp_trade.h"
 #include<QMessageBox>
 #include "mainwindow.h"
+#include<string>
+#include"../gpp_qt/cfg/cfg.h"
+
+using namespace std;
 
 extern MainWindow * mw;
+extern cfg simu_cfg;
 
 void ctp_trade_qthread::run()
 {
-    trade = new ctp_trade;
-    trade->init(this);
+    if(check_init_para())
+    {
+        trade = new ctp_trade;
+        trade->init(this);
+    }
+    else
+    {
+        this->quit();
+    }
 }
-void ctp_trade_qthread::delete_all_order()
+bool ctp_trade_qthread::check_init_para()
+{
+    if(simu_cfg.getparam("TRADE_FRONT_ADDR")=="")
+    {
+        QMessageBox::information(mw, "ERROR", "TRADE_FRONT_ADDR not exist !");
+        this->exit();
+        return false;
+    }
+    return true;
+}
+void ctp_trade_qthread::delete_all_pending_order()
 {
     trade->delete_all_order();
 }
 void ctp_trade_qthread::check_add_order(const std::string & ID,const std::string & side ,const std::string & openclose ,const std::string & price ,const std::string & size)
 {
-    if(ID.size()>0 && side.size()>0 && openclose.size()>0 && price.size()>0 && size.size()>0)
+	if (ID.empty())
+	{
+        QMessageBox::information(mw, "ERROR", "合约为空");
+	}
+	else if (side.empty())
+	{
+        QMessageBox::information(mw, "ERROR", "缺少方向");
+	}
+	else if (openclose.empty())
+	{
+        QMessageBox::information(mw, "ERROR", "缺少开平仓");
+	}
+	else if (price.empty())
+	{
+        QMessageBox::information(mw, "ERROR", "缺少价格");
+	}
+	else if (size.empty())
+	{
+        QMessageBox::information(mw, "ERROR", "缺少手数");
+	}
+	else
     {
-        trade->addorder(ID, side, openclose, QString::fromStdString(price).toDouble(), QString::fromStdString(size).toInt());
-    }
-    else
-    {
-        QMessageBox::information(mw,"ERROR","请填写合约名");
-    }
+        string sd=side=="买入"?"BUY":"SELL";
+        string oc=openclose=="开新仓"?"OPEN":openclose=="平今"?"CLOSET":"CLOSE";
+        trade->addorder(ID, sd, oc, QString::fromStdString(price).toDouble(), QString::fromStdString(size).toInt());
+	}
 }

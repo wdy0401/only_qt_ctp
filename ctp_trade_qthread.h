@@ -6,9 +6,10 @@ class ctp_trade_qthread :public QThread
 {
 	Q_OBJECT
 public:
+    bool check_init_para();
 
 public slots:
-    void delete_all_order();
+    void delete_all_pending_order();
     void check_add_order(const std::string &,const std::string &,const std::string &,const std::string &,const std::string &);
 
 signals:protected:
