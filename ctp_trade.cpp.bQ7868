@@ -13,6 +13,7 @@
 
 
 extern cfg simu_cfg;
+int iRequestID;
 
 using namespace std;
 
@@ -227,6 +228,10 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
 void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 {
     cerr <<endl << "--->>>ReqOrderInsert" << endl;
+    cerr<<"iRequeseID in  p "<<porder->RequestID<<endl;
+    //    cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
+    //    cerr<<"SESSION_ID "<<SESSION_ID<<endl;
+
     porder->RequestID = ++iRequestID;
     cerr<<"iRequeseID in  p "<<porder->RequestID<<endl;
     int iResult = pUserApi->ReqOrderInsert(porder, porder->RequestID);

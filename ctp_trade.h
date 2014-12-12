@@ -64,6 +64,7 @@ private:
     TThostFtdcFrontIDType           FRONT_ID;
     TThostFtdcSessionIDType         SESSION_ID;
     int maxdelaytime;
+    int iRequestID;
     ctp_trade_qthread * ptfather ;
     //可以添加iRequestID对应的map 以便于查询order状态
     std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
