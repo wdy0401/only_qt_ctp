@@ -22,7 +22,7 @@ public:
 
     void init();
     void set_order_send(const std::string &);
-    void show_string(const std::string &);
+    void show_string_quote(const std::string &);
     void show_string_trade(const std::string &);
     void set_symbols_display(const std::string &);
     void symbol_price_display(const std::string & , double);
@@ -41,9 +41,7 @@ private slots:
     void on_pushButton_3_clicked();
 
 private:
-	Ui::MainWindow *ui;
-	bool ctp_quote_running;
-	bool ctp_trade_running;
+    Ui::MainWindow *ui;
     std::map<std::string,QLabel *> quote_labels;
 };
 

@@ -70,26 +70,3 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-/*
-void start_ctp_quote()
-{
-	mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
-	
-    cqq = new ctp_quote_qthread;
-	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_1);
-	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
-	QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
-
-	cqq->start();
-}
-void start_ctp_trade()
-{
-	mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
-	
-    ctq = new ctp_trade_qthread;
-    QObject::connect(mw, &MainWindow::check_add_order, ctq, &ctp_trade_qthread::check_add_order);
-    QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, ctq, &ctp_trade_qthread::delete_all_pending_order);
-
-    ctq->start();
-}
-*/

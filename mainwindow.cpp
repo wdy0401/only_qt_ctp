@@ -41,8 +41,6 @@ void MainWindow::init()
 {
     set_symbols_display(simu_cfg.getparam("INSTRUMENT_ID"));
     set_order_send(simu_cfg.getparam("INSTRUMENT_ID"));
-    ctp_quote_running=false;
-    ctp_trade_running=false;
 }
 MainWindow::~MainWindow()
 {
@@ -123,7 +121,7 @@ void MainWindow::symbol_price_display(const string & symbol, double price)
 }
 
 
-void MainWindow::show_string(const string &text)
+void MainWindow::show_string_quote(const string &text)
 {
     this->ui->textBrowser->append(QString::fromStdString(text));
     qa->processEvents();
@@ -164,37 +162,19 @@ void MainWindow::show_quote_1(CThostFtdcDepthMarketDataField *pDepthMarketData)
 
 void MainWindow::on_pushButton_clicked()
 {
-    this->show_string("quote button pushed");
-	if (!ctp_quote_running)
-    {
-        cm->start_ctp_quote();
-        this->show_string("Start quote");
-		ctp_quote_running = true;
-    }
-    else
-    {
-        this->show_string("Quote is running");
-    }
+    this->show_string_quote("quote button pushed");
+    cm->start_ctp_quote();
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
     this->show_string_trade("trade button pushed");
-	if (!ctp_trade_running)
-    {
-        cm->start_ctp_trade();
-        this->show_string_trade("Start trade");
-		ctp_trade_running = true;
-    }
-    else
-    {
-        this->show_string_trade("Trade is running");
-    }
+    cm->start_ctp_trade();
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    if(this->ctp_trade_running)
+    if(cm->is_trade_running())
     {
     emit check_add_order(
         this->ui->fontComboBox->currentText().toStdString(),

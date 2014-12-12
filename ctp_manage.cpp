@@ -13,12 +13,13 @@ extern MainWindow *mw;
 
 ctp_manage::ctp_manage()
 {
+    ctp_quote_running=false;
+    ctp_trade_running=false;
 }
 bool ctp_manage::check_trade_init_para()
 {
     if(simu_cfg.getparam("TRADE_FRONT_ADDR")=="")
     {
-        QMessageBox::information(mw, "ERROR", "TRADE_FRONT_ADDR not exist !");
         return false;
     }
     return true;
@@ -27,33 +28,60 @@ bool ctp_manage::check_quote_init_para()
 {
     if(simu_cfg.getparam("QUOTE_FRONT_ADDR")=="")
     {
-        QMessageBox::information(mw, "ERROR", "QUOTE_FRONT_ADDR not exist !");
         return false;
     }
     return true;
 }
 void ctp_manage::start_ctp_quote()
 {
-//    mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
-    if(this->check_quote_init_para())
+    if(!ctp_quote_running)
     {
-        ctp_quote_qthread  * cqq;
-        cqq = new ctp_quote_qthread;
-        QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_1);
-        QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
-        QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
-        cqq->start();
+        if(this->check_quote_init_para())
+        {
+            ctp_quote_qthread  * cqq;
+            cqq = new ctp_quote_qthread;
+            QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_1);
+            QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
+            QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
+            mw->show_string_quote("Start quote");
+            ctp_quote_running = true;
+            cqq->start();
+        }
+        else
+        {
+            QMessageBox::information(mw, "ERROR", "QUOTE_FRONT_ADDR not exist !");
+            mw->show_string_quote("ERROR:\tQUOTE_FRONT_ADDR not exist !");
+        }
+    }
+    else
+    {
+        QMessageBox::information(mw, "INFO","Quote is running");
+        mw->show_string_quote("Quote is running");
     }
 }
 void ctp_manage::start_ctp_trade()
 {
-//    mw->setWindowTitle(QString::fromStdString(simu_cfg.getparam("FEED_SOURSE")));
-    if(this->check_trade_init_para())
+    if(!ctp_trade_running)
     {
-        ctp_trade_qthread  * ctq;
-        ctq = new ctp_trade_qthread;
-        QObject::connect(mw, &MainWindow::check_add_order, ctq, &ctp_trade_qthread::check_add_order);
-        QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, ctq, &ctp_trade_qthread::delete_all_pending_order);
-        ctq->start();
+        if(this->check_trade_init_para())
+        {
+            ctp_trade_qthread  * ctq;
+            ctq = new ctp_trade_qthread;
+            QObject::connect(mw, &MainWindow::check_add_order, ctq, &ctp_trade_qthread::check_add_order);
+            QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, ctq, &ctp_trade_qthread::delete_all_pending_order);
+            mw->show_string_trade("Start trade");
+            ctp_trade_running = true;
+            ctq->start();
+        }
+        else
+        {
+            QMessageBox::information(mw, "ERROR", "TRADE_FRONT_ADDR not exist !");
+            mw->show_string_trade("ERROR:\tTRADE_FRONT_ADDR not exist !");
+        }
+    }
+    else
+    {
+        QMessageBox::information(mw, "INFO","Trade is running");
+        mw->show_string_trade("Trade is running");
     }
 }
