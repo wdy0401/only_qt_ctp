@@ -31,14 +31,6 @@ public:
     virtual void OnRtnOrder(CThostFtdcOrderField *pOrder);
     virtual void OnRtnTrade(CThostFtdcTradeField *pTrade);
 
-
-	//发单函数
-    void addorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
-    void change_order(const std::string & ordername, double price, long size);
-    void delete_order(const std::string & ordername);
-    void delete_all_order();
-
-
     void ReqQryOrder(const std::string &);
     void ReqQryOrder(const std::string &,bool);
     void ReqQryInstrument(const std::string & );
@@ -63,6 +55,13 @@ public:
 
 signals:
     void show_warning(const std::string &);
+
+public slots:
+    //发单函数
+    void addorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
+    void change_order(const std::string & ordername, double price, long size);
+    void delete_order(const std::string & ordername);
+    void delete_all_order();
 
 private:
     CThostFtdcTraderApi * pUserApi;
