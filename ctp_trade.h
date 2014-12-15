@@ -3,10 +3,12 @@
 #include "../libs/ctp/ThostFtdcTraderApi.h"
 #include<string>
 #include<map>
+#include<QObject>
 
 class ctp_trade_qthread;
-class ctp_trade : public CThostFtdcTraderSpi
+class ctp_trade : public QObject, public CThostFtdcTraderSpi
 {
+    Q_OBJECT
 public:
 //	ctp_trade();
     void init(ctp_trade_qthread *);
@@ -59,6 +61,9 @@ public:
 	void ReqOrderAction(CThostFtdcInputOrderActionField *pOrder);
 	CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
 
+signals:
+    void show_warning(const std::string &);
+
 private:
     CThostFtdcTraderApi * pUserApi;
     TThostFtdcFrontIDType           FRONT_ID;
@@ -70,5 +75,6 @@ private:
     std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
     std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
     std::map<long, std::string> rid_orderid; //requestid -> uniqid
+
 };
 #endif // CTP_TRADE_H

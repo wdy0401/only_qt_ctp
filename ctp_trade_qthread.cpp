@@ -12,15 +12,16 @@ extern cfg simu_cfg;
 
 void ctp_trade_qthread::run()
 {
-    if(check_init_para())
-    {
-        trade = new ctp_trade;
-        trade->init(this);
-    }
-    else
-    {
-        this->quit();
-    }
+    trade->init(this);
+//    trade = new ctp_trade;
+//    trade->init(this);
+}
+void ctp_trade_qthread::init()
+{
+    trade = new ctp_trade;
+    ol=new orderlist;
+    QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_quote);
+    QObject::connect(trade,&ctp_trade::show_warning,ol,&orderlist::show_warning);
 }
 bool ctp_trade_qthread::check_init_para()
 {

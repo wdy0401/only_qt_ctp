@@ -63,12 +63,14 @@ void MainWindow::set_order_send(const std::string & symbols)
     QRegExp rxp("^[1-9][0-9]{0,10}\\.?[1-9]{0,3}$");
     QValidator * validatorp = new QRegExpValidator(rxp,0);
     this->ui->fontComboBox_2->lineEdit()->setValidator(validatorp);
+    this->ui->fontComboBox_2->setCurrentText("4000");
 
     this->ui->fontComboBox_3->clear();
     this->ui->fontComboBox_3->setFont(QFont("微软雅黑",9,-1,false));
     QRegExp rxs("^[1-9][0-9]{0,10}\\.?[1-9]{0,3}$");
     QValidator * validators = new QRegExpValidator(rxs,0);
     this->ui->fontComboBox_3->lineEdit()->setValidator(validators);
+    this->ui->fontComboBox_3->setCurrentText("1");
 
 
     this->ui->comboBox ->clear();

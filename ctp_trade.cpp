@@ -598,6 +598,7 @@ void ctp_trade::OnRtnOrder(CThostFtdcOrderField *p)
     cerr << "OrderRef\t" << p->OrderRef << endl;
     cerr << "OrderStatus\t" << p->OrderStatus << endl;
     cerr << "iRequestID\t" << p->RequestID << endl;
+    emit show_warning("Warning from OnRtnOrder");
 
 //    cerr << "OrderRef" << p->OrderRef << endl;
 

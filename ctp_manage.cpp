@@ -71,6 +71,7 @@ void ctp_manage::start_ctp_trade()
             QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, ctq, &ctp_trade_qthread::delete_all_pending_order);
             mw->show_string_trade("Start trade");
             ctp_trade_running = true;
+            ctq->init();
             ctq->start();
         }
         else
