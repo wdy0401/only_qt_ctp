@@ -3,7 +3,7 @@
 #include<QThread>
 #include"ctp_trade.h"
 
-#include"../gpp_qt/match_engine/orderlist.h"
+#include"ctp_order_manager.h"
 
 class ctp_trade_qthread :public QThread
 {
@@ -21,7 +21,7 @@ signals:protected:
 
 private:
     ctp_trade * trade;
-    orderlist * ol;
+    ctp_order_manager * order_manager;
 };
 #endif
 // *

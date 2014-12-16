@@ -40,8 +40,8 @@ bars_manage simu_bars_manage;
 MainWindow * mw;
 QApplication * qa;
 
-
 ctp_manage * cm;
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

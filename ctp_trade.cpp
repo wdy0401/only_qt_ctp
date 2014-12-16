@@ -532,7 +532,8 @@ void ctp_trade::OnRspOrderInsert(CThostFtdcInputOrderField *pInputOrder, CThostF
 {
     //尚无此需求
     //报单出现错误时才会调用此函数
-	cerr << "--->>> " << "OnRspOrderInsert" << endl;
+    cerr << "--->>> " << "OnRspOrderInsert" << endl;
+    cerr << "--->>> " << "未通过Thost参数校验" << endl;
 	if (bIsLast)
 	{
 		IsErrorRspInfo(pRspInfo);
@@ -567,51 +568,6 @@ void ctp_trade::OnHeartBeatWarning(int nTimeLapse)
 {
 	cerr << "--->>> " << "OnHeartBeatWarning" << endl;
 	cerr << "--->>> nTimerLapse = " << nTimeLapse << endl;
-}
-void ctp_trade::OnRtnOrder(CThostFtdcOrderField *p)
-{
-    cerr << endl << "--->>> OnRtnOrder" <<endl;
-    string mapid=wfunction::itos(p->FrontID)+"_"+wfunction::itos(p->SessionID)+"_"+p->OrderRef;
-
-	switch (p->OrderStatus)
-	{
-	///全部成交
-	case THOST_FTDC_OST_AllTraded: orderid_op.erase(mapid); break;
-	///部分成交还在队列中
-	case THOST_FTDC_OST_PartTradedQueueing:break;
-	///部分成交不在队列中
-	case THOST_FTDC_OST_PartTradedNotQueueing: orderid_op.erase(mapid); break;
-	///未成交还在队列中
-	case THOST_FTDC_OST_NoTradeQueueing: break;
-	///未成交不在队列中
-	case THOST_FTDC_OST_NoTradeNotQueueing: orderid_op.erase(mapid); break;
-	///撤单
-	case THOST_FTDC_OST_Canceled: orderid_op.erase(mapid); break;
-	///未知， 表示 Thost已经接受用户 的委托指令，还没有 转发到交易所
-	case THOST_FTDC_OST_Unknown: orderid_op[mapid] = p; break;
-	///尚未触发
-	case THOST_FTDC_OST_NotTouched: break;
-	}
-    cerr << "map id\t" << mapid << endl;
-    cerr << "FrontID\t" << p->FrontID << endl;
-    cerr << "SessionID\t" << p->SessionID << endl;
-    cerr << "OrderRef\t" << p->OrderRef << endl;
-    cerr << "OrderStatus\t" << p->OrderStatus << endl;
-    cerr << "iRequestID\t" << p->RequestID << endl;
-    emit show_warning("Warning from OnRtnOrder");
-
-//    cerr << "OrderRef" << p->OrderRef << endl;
-
-
-    //
-	//继续添加功能
-	//
-}
-void ctp_trade::OnRtnTrade(CThostFtdcTradeField *pTrade)
-{
-	//
-	//继续添加功能
-	//
 }
 void ctp_trade::addorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size)
 {

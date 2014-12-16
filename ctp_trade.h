@@ -28,8 +28,6 @@ public:
     virtual void OnRspError(CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
     virtual void OnFrontDisconnected(int nReason);
     virtual void OnHeartBeatWarning(int nTimeLapse);
-    virtual void OnRtnOrder(CThostFtdcOrderField *pOrder);
-    virtual void OnRtnTrade(CThostFtdcTradeField *pTrade);
 
     void ReqQryOrder(const std::string &);
     void ReqQryOrder(const std::string &,bool);
@@ -55,6 +53,8 @@ public:
 
 signals:
     void show_warning(const std::string &);
+    void OnRtnOrder(CThostFtdcOrderField *pOrder);
+    void OnRtnTrade(CThostFtdcTradeField *pTrade);
 
 public slots:
     //·¢µ¥º¯Êý

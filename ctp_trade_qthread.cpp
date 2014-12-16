@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include<string>
 #include"../gpp_qt/cfg/cfg.h"
+#include"ctp_order_manager.h"
 
 using namespace std;
 
@@ -19,9 +20,12 @@ void ctp_trade_qthread::run()
 void ctp_trade_qthread::init()
 {
     trade = new ctp_trade;
-    ol=new orderlist;
+    order_manager =new ctp_order_manager;
     QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_quote);
-    QObject::connect(trade,&ctp_trade::show_warning,ol,&orderlist::show_warning);
+    QObject::connect(trade,&ctp_trade::show_warning,order_manager,&ctp_order_manager::show_warning);
+
+    QObject::connect(trade,&ctp_trade::OnRtnOrder,order_manager,&ctp_order_manager::OnRtnOrder);
+    QObject::connect(trade,&ctp_trade::OnRtnTrade,order_manager,&ctp_order_manager::OnRtnTrade);
 }
 bool ctp_trade_qthread::check_init_para()
 {
