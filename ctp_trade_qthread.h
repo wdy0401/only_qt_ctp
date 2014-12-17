@@ -10,6 +10,7 @@ class ctp_trade_qthread :public QThread
 	Q_OBJECT
 public:
     bool check_init_para();
+    ctp_trade * get_tradep(){return trade;}
     void init();
 
 public slots:

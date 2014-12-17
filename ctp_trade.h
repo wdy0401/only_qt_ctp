@@ -15,6 +15,7 @@ public:
     void init();//set con file  dir
     char * mk_trade_con_dir();
     void testfunc();
+    int add_iRequestID(){return ++iRequestID;}
 
     virtual void OnFrontConnected();
     virtual void OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,	CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
@@ -55,13 +56,8 @@ signals:
     void show_warning(const std::string &);
     void OnRtnOrder(CThostFtdcOrderField *pOrder);
     void OnRtnTrade(CThostFtdcTradeField *pTrade);
+    void OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin);
 
-public slots:
-    //·¢µ¥º¯Êý
-    void addorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
-    void change_order(const std::string & ordername, double price, long size);
-    void delete_order(const std::string & ordername);
-    void delete_all_order();
 
 private:
     CThostFtdcTraderApi * pUserApi;

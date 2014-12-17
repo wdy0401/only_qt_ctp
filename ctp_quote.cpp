@@ -132,6 +132,8 @@ void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarke
     tm.settic(atof(wfunction::ctp_time_char_convert(pDepthMarketData->UpdateTime,sizeof(TThostFtdcTimeType))));
 //    broadcast_quote(const std::string &symbol, const std::string &ba, long level, double price, long size);
     pqfather->broadcast_markerdata(pDepthMarketData);
+    emit broadcast_quote(pDepthMarketData->InstrumentID,"BID",1,pDepthMarketData->BidPrice1,pDepthMarketData->BidVolume1);
+    emit broadcast_quote(pDepthMarketData->InstrumentID,"ASK",1,pDepthMarketData->AskPrice1,pDepthMarketData->AskVolume1);
 }
 bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
 {

@@ -21,7 +21,8 @@ void ctp_trade_qthread::run()
 void ctp_trade_qthread::init()
 {
     trade = new ctp_trade;
-    order_manager =new ctp_order_manager;
+    //order_manager =new ctp_order_manager;
+    order_manager->set_trade(trade);
 
     QObject::connect(mw, &MainWindow::check_add_order, this, &ctp_trade_qthread::check_add_order);
     QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, this, &ctp_trade_qthread::delete_all_pending_order);
@@ -31,6 +32,7 @@ void ctp_trade_qthread::init()
 
     QObject::connect(trade,&ctp_trade::OnRtnOrder,order_manager,&ctp_order_manager::OnRtnOrder);
     QObject::connect(trade,&ctp_trade::OnRtnTrade,order_manager,&ctp_order_manager::OnRtnTrade);
+    QObject::connect(trade,&ctp_trade::OnLogin,order_manager,&ctp_order_manager::OnLogin);
 }
 bool ctp_trade_qthread::check_init_para()
 {
@@ -44,7 +46,7 @@ bool ctp_trade_qthread::check_init_para()
 }
 void ctp_trade_qthread::delete_all_pending_order()
 {
-    trade->delete_all_order();
+//    order_manager->delete_all_order();
 }
 void ctp_trade_qthread::check_add_order(const std::string & ID,const std::string & side ,const std::string & openclose ,const std::string & price ,const std::string & size)
 {
@@ -72,6 +74,6 @@ void ctp_trade_qthread::check_add_order(const std::string & ID,const std::string
     {
         string sd=side=="买入"?"BUY":"SELL";
         string oc=openclose=="开新仓"?"OPEN":openclose=="平今"?"CLOSET":"CLOSE";
-        trade->addorder(ID, sd, oc, QString::fromStdString(price).toDouble(), QString::fromStdString(size).toInt());
+        order_manager->new_order(ID, sd, oc, QString::fromStdString(price).toDouble(), QString::fromStdString(size).toInt());
 	}
 }

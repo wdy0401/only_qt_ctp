@@ -2,7 +2,9 @@
 #define CTP_ORDER_MANAGER_H
 
 #include"ctp_order.h"
+#include"ctp_trade.h"
 #include"tactic.h"
+
 #include<list>
 #include<map>
 #include<string>
@@ -19,9 +21,10 @@ class ctp_order_manager :public QObject
 public:
     void init();
     void set_tactic(tactic * );
+    void set_trade(ctp_trade *);
     std::string new_order(const std::string symbol,const std::string buysell, const std::string & openclose ,double price,long size);
     void cancel_order(const std::string & ordername);
-    void change_order(const std::string & ordername,const std::string & change_cancel,double changeto);
+    void change_order(const std::string & ordername,double price,long size);
     //还可加入查询order状态的函数
 
 public slots:
@@ -29,6 +32,7 @@ public slots:
     void rev_quote(const std::string & symbol, const std::string & ba, long level, double price, long size);
     void OnRtnOrder(CThostFtdcOrderField *pOrder);
     void OnRtnTrade(CThostFtdcTradeField *pTrade);
+    void OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin);
 
 signals:
     void ack(const std::string & ordername,const std::string & type,const std::string & info);
@@ -51,7 +55,15 @@ private:
     TThostFtdcFrontIDType       FRONT_ID;
     TThostFtdcSessionIDType    SESSION_ID;
 
+    int iRequestID;
+    std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
+    std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
+    std::map<long, std::string> rid_orderid; //requestid -> uniqid
+
     tactic * tc;
+    ctp_trade * trade;
+    CThostFtdcInputOrderField * initorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
+    CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
 };
 
 #endif
