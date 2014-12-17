@@ -10,7 +10,7 @@ public:
     ctp_quote_qthread();
     void init();
 signals:
-    void broadcast_markerdata(CThostFtdcDepthMarketDataField *pDepthMarketData);
+    void broadcast_marketdata(CThostFtdcDepthMarketDataField *pDepthMarketData);
 protected:
     void run();
 private:

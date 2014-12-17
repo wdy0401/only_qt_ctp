@@ -40,9 +40,9 @@ void ctp_manager::start_ctp_quote()
         {
             ctp_quote_qthread  * cqq;
             cqq = new ctp_quote_qthread;
-            QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_1);
-            QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, mw, &MainWindow::show_quote_label);
-            QObject::connect(cqq, &ctp_quote_qthread::broadcast_markerdata, &ctp_quote_log, &ctp_log::writeinfo);
+            QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, mw, &MainWindow::show_quote_1);
+            QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, mw, &MainWindow::show_quote_label);
+            QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, &ctp_quote_log, &ctp_log::writeinfo);
             mw->show_string_quote("Start quote");
             ctp_quote_running = true;
             cqq->init();

@@ -191,9 +191,3 @@ void MainWindow::on_pushButton_3_clicked()
         QMessageBox::information(this,"ERROR","请先开启trade进程");
     }
 }
-/*
-void MainWindow::on_pushButton_4_clicked()
-{
-
-}
-*/

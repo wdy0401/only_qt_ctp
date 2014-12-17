@@ -31,7 +31,8 @@ void ctp_log::writeinfo(CThostFtdcDepthMarketDataField *pDepthMarketData)
     os.setf(ios::fixed);
     os<<setprecision(2);
     os<< "," << pDepthMarketData->PreSettlementPrice;
-    os<< "," << pDepthMarketData->SettlementPrice;
+    // SettlementPrice 是无效数据
+    //os<< "," << pDepthMarketData->SettlementPrice;
     os<< endl;
     outlog<<os.str();
 }

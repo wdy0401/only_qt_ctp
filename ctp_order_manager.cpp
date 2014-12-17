@@ -34,7 +34,7 @@ void ctp_order_manager::set_trade(ctp_trade * p)
 {
     trade=p;
 }
-void ctp_order_manager::rev_quote(const string &symbol, const string &ba, long level, double price, long size)
+void ctp_order_manager::rec_quote(const string &symbol, const string &ba, long level, double price, long size)
 {
     emit send_quote(symbol,ba,level,price,size);
 }
@@ -194,7 +194,6 @@ CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & Instrume
     cerr<<"init order is done"<<endl;
 
     return oireq;
-
 }
 
 CThostFtdcInputOrderActionField * ctp_order_manager::initorderchange(const string & ordername)

@@ -14,5 +14,5 @@ void ctp_quote_qthread::run()
 void ctp_quote_qthread::init()
 {
     quote=new ctp_quote;
-    QObject::connect(quote,&ctp_quote::broadcast_quote ,order_manager,&ctp_order_manager::rev_quote);
+    QObject::connect(quote,&ctp_quote::broadcast_quote ,order_manager,&ctp_order_manager::rec_quote);
 }

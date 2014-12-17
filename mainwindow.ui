@@ -40,35 +40,35 @@
             <item row="0" column="1">
              <widget class="QPushButton" name="pushButton_8">
               <property name="text">
-               <string>add symbol</string>
+               <string>##add symbol</string>
               </property>
              </widget>
             </item>
             <item row="0" column="2">
              <widget class="QPushButton" name="pushButton_10">
               <property name="text">
-               <string>show symbol</string>
+               <string>##show symbol</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
              <widget class="QPushButton" name="pushButton_7">
               <property name="text">
-               <string>stop quote</string>
+               <string>##stop quote</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
              <widget class="QPushButton" name="pushButton_9">
               <property name="text">
-               <string>delete symbol</string>
+               <string>##delete symbol</string>
               </property>
              </widget>
             </item>
             <item row="1" column="2">
              <widget class="QPushButton" name="pushButton_11">
               <property name="text">
-               <string>deleta all symbol</string>
+               <string>##deleta all symbol</string>
               </property>
              </widget>
             </item>
@@ -138,7 +138,7 @@
           <item row="0" column="1">
            <widget class="QPushButton" name="pushButton_4">
             <property name="text">
-             <string>delete all order</string>
+             <string>##delete all order</string>
             </property>
            </widget>
           </item>
@@ -152,14 +152,14 @@
           <item row="1" column="0">
            <widget class="QPushButton" name="pushButton_5">
             <property name="text">
-             <string>show order</string>
+             <string>##show order</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
            <widget class="QPushButton" name="pushButton_6">
             <property name="text">
-             <string>load order</string>
+             <string>##load order</string>
             </property>
            </widget>
           </item>

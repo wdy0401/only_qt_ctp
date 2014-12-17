@@ -29,7 +29,7 @@ public:
 
 public slots:
     void show_warning(const std::string &);
-    void rev_quote(const std::string & symbol, const std::string & ba, long level, double price, long size);
+    void rec_quote(const std::string & symbol, const std::string & ba, long level, double price, long size);
     void OnRtnOrder(CThostFtdcOrderField *pOrder);
     void OnRtnTrade(CThostFtdcTradeField *pTrade);
     void OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin);
