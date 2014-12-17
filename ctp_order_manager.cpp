@@ -7,14 +7,28 @@
 #include"../gpp_qt/wfunction/wfunction.h"
 
 #include"../../libs/ctp/ThostFtdcTraderApi.h"
-
+#include"tactic.h"
 extern MainWindow * mw;
-
+extern ctp_order_manager * order_manager;
 using namespace std;
 
 void ctp_order_manager::init()
 {
     _ordercount=0;
+    order_manager=this;
+}
+void ctp_order_manager::set_tactic(tactic * p)
+{
+    tc=p;
+    QObject::connect(this,&ctp_order_manager::ack,tc,&tactic::ack);
+    QObject::connect(this,&ctp_order_manager::done,tc,&tactic::done);
+    QObject::connect(this,&ctp_order_manager::rej,tc,&tactic::rej);
+    QObject::connect(this,&ctp_order_manager::fill,tc,&tactic::fill);
+    QObject::connect(this,&ctp_order_manager::send_quote,tc,&tactic::quote);
+}
+void ctp_order_manager::rev_quote(const string &symbol, const string &ba, long level, double price, long size)
+{
+    emit send_quote(symbol,ba,level,price,size);
 }
 void ctp_order_manager::show_warning(const string & warninfo)
 {

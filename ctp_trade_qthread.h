@@ -21,7 +21,6 @@ signals:protected:
 
 private:
     ctp_trade * trade;
-    ctp_order_manager * order_manager;
 };
 #endif
 // *

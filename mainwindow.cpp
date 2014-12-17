@@ -19,14 +19,14 @@
 #include"../gpp_qt/bar/bars_manage.h"
 #include"../gpp_qt/wfunction/wfunction.h"
 
-#include"ctp_manage.h"
+#include"ctp_manager.h"
 
 using namespace std;
 
 extern QApplication * qa;
 extern wtimer tm;
 extern void start_ctp_quote();
-extern ctp_manage * cm;
+extern ctp_manager * cm;
 extern log_info simu_log;
 extern cfg simu_cfg;
 extern bars_manage simu_bars_manage;

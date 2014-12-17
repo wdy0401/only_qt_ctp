@@ -29,9 +29,10 @@ SOURCES += main.cpp\
 	ctp_trade_qthread.cpp\
     ctp_trade.cpp \
 	ctp_log.cpp \
-    ctp_manage.cpp \
     ctp_order.cpp \
-    ctp_order_manager.cpp
+    ctp_order_manager.cpp \
+    tactic.cpp \
+    ctp_manager.cpp
 
 HEADERS  += mainwindow.h \
     ctp/ThostFtdcMdApi.h \
@@ -50,9 +51,10 @@ HEADERS  += mainwindow.h \
 	ctp_trade_qthread.h\
     ../libs/ctp/ThostFtdcTraderApi.h \
 	../libs/ctp/ThostFtdcMdApi.h \
-    ctp_manage.h \
     ctp_order.h \
-    ctp_order_manager.h
+    ctp_order_manager.h \
+    tactic.h \
+    ctp_manager.h
 
 FORMS    += mainwindow.ui
 

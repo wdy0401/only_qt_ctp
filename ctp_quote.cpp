@@ -130,6 +130,7 @@ void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarke
 {
     //tm must be set before any slots.
     tm.settic(atof(wfunction::ctp_time_char_convert(pDepthMarketData->UpdateTime,sizeof(TThostFtdcTimeType))));
+//    broadcast_quote(const std::string &symbol, const std::string &ba, long level, double price, long size);
     pqfather->broadcast_markerdata(pDepthMarketData);
 }
 bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)

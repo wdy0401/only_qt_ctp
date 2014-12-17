@@ -27,7 +27,8 @@
 #include"ctp_trade.h"
 #include"ctp_trade_qthread.h"
 #include"ctp_log.h"
-#include"ctp_manage.h"
+#include"ctp_manager.h"
+#include"ctp_order_manager.h"
 using namespace std;
 
 wtimer tm;
@@ -37,10 +38,12 @@ log_info loginfo;//gpp_qt log
 ctp_log ctp_quote_log;//qoute log
 bars_manage simu_bars_manage;
 
+ctp_order_manager * order_manager;
+
 MainWindow * mw;
 QApplication * qa;
 
-ctp_manage * cm;
+ctp_manager * cm;
 
 int main(int argc, char *argv[])
 {
@@ -57,7 +60,7 @@ int main(int argc, char *argv[])
     simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
 
     //set cm
-    cm=new ctp_manage();
+    cm=new ctp_manager();
 
     //set para
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));

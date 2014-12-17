@@ -10,6 +10,7 @@ using namespace std;
 
 extern MainWindow * mw;
 extern cfg simu_cfg;
+extern ctp_order_manager * order_manager;
 
 void ctp_trade_qthread::run()
 {
@@ -21,6 +22,10 @@ void ctp_trade_qthread::init()
 {
     trade = new ctp_trade;
     order_manager =new ctp_order_manager;
+
+    QObject::connect(mw, &MainWindow::check_add_order, this, &ctp_trade_qthread::check_add_order);
+    QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, this, &ctp_trade_qthread::delete_all_pending_order);
+
     QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_quote);
     QObject::connect(trade,&ctp_trade::show_warning,order_manager,&ctp_order_manager::show_warning);
 

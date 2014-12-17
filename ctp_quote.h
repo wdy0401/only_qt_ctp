@@ -2,13 +2,14 @@
 #define CTP_QUOTE
 
 #include"../libs/ctp/ThostFtdcMdApi.h"
+#include<QObject>
 #define MAX_CONTRACT_NUMBER 1024
 #define MAX_CONTRACT_NAME 1024
-
 class ctp_quote_qthread;
 
-class ctp_quote : public CThostFtdcMdSpi
+class ctp_quote : public QObject, CThostFtdcMdSpi
 {
+    Q_OBJECT
 public:
     void init(ctp_quote_qthread *);
     void init();
@@ -26,6 +27,9 @@ public:
     void SubscribeMarketData();
 
     bool IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo);
+
+signals:
+    void broadcast_quote(const std::string &symbol, const std::string &ba, long level, double price, long size);
 	
 private:
 	CThostFtdcReqUserLoginField * req;

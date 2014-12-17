@@ -1,10 +1,10 @@
-#ifndef CTP_MANAGE_H
-#define CTP_MANAGE_H
+#ifndef CTP_MANAGER_H
+#define CTP_MANAGER_H
 
-class ctp_manage
+class ctp_manager
 {
 public:
-    ctp_manage();
+    ctp_manager();
 
     bool check_quote_init_para();
     bool check_trade_init_para();
