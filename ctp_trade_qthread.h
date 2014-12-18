@@ -2,7 +2,6 @@
 #define CTP_TRADE_QTHREAD
 #include<QThread>
 #include"ctp_trade.h"
-
 #include"ctp_order_manager.h"
 
 class ctp_trade_qthread :public QThread
@@ -11,6 +10,7 @@ class ctp_trade_qthread :public QThread
 public:
     bool check_init_para();
     ctp_trade * get_tradep(){return trade;}
+    void set_ctp_order_manager(ctp_order_manager * p){order_manager=p;}
     void init();
 
 public slots:
@@ -22,5 +22,6 @@ signals:protected:
 
 private:
     ctp_trade * trade;
+    ctp_order_manager * order_manager;
 };
 #endif

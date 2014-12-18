@@ -29,7 +29,6 @@ extern ctp_manager * cm;
 extern log_info simu_log;
 extern cfg simu_cfg;
 extern bars_manage simu_bars_manage;
-extern ctp_manager * cm;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

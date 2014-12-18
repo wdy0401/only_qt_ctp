@@ -2,8 +2,6 @@
 #include "ctp_quote.h"
 #include"ctp_order_manager.h"
 
-extern ctp_order_manager * order_manager;
-
 ctp_quote_qthread::ctp_quote_qthread()
 {
 }

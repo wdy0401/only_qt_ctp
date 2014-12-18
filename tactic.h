@@ -22,8 +22,9 @@ public slots:
     virtual void fill(const std::string & ordername,long size){}
 private:
     int ordersize;
-    double lastprice;
+    int ordersize_1;
     double lasttradeprice;
+    double lasttradeprice_1;
     ctp_order_manager * om;
 };
 

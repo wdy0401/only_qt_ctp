@@ -46,6 +46,7 @@ void ctp_manager::start_ctp_quote()
             QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, &ctp_quote_log, &ctp_log::writeinfo);
             mw->show_string_quote("Start quote");
             ctp_quote_running = true;
+            cqq->set_ctp_order_manager(get_ctp_order_mamager());
             cqq->init();
             cqq->start();
         }
@@ -71,6 +72,7 @@ void ctp_manager::start_ctp_trade()
             ctq = new ctp_trade_qthread;
             mw->show_string_trade("Start trade");
             ctp_trade_running = true;
+            ctq->set_ctp_order_manager(get_ctp_order_mamager());
             ctq->init();
             ctq->start();
         }
@@ -85,14 +87,6 @@ void ctp_manager::start_ctp_trade()
         QMessageBox::information(mw, "INFO","Trade is running");
         mw->show_string_trade("Trade is running");
     }
-}
-void ctp_manager::set_ctp_order_mamager(ctp_order_manager * p)
-{
-    om=p;
-}
-void ctp_manager::set_tactic(tactic * p)
-{
-    tc=p;
 }
 void ctp_manager::run_tactic()
 {

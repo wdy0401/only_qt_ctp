@@ -38,8 +38,6 @@ log_info loginfo;//gpp_qt log
 ctp_log ctp_quote_log;//qoute log
 bars_manage simu_bars_manage;
 
-ctp_order_manager * order_manager;
-
 MainWindow * mw;
 QApplication * qa;
 
@@ -59,16 +57,15 @@ int main(int argc, char *argv[])
     //load simu para
     simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
 
-    //set cm
-    cm=new ctp_manager();
-
     //set para
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
     simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
     ctp_quote_log.setfile("d:/record/quote_"+wfunction::get_now_second()+".csv");
 
-    //set ordermanager and tactic
-    order_manager=new ctp_order_manager;
+    //set cm ordermanager and tactic
+    cm=new ctp_manager();
+
+    ctp_order_manager * order_manager=new ctp_order_manager;
     tactic * tc=new tactic;
     cm->set_ctp_order_mamager(order_manager);
     cm->set_tactic(tc);

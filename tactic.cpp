@@ -6,7 +6,6 @@ using namespace std;
 void tactic::init()
 {
     ordersize=0;
-    lastprice=0;
     lasttradeprice=0;
 }
 void tactic::set_ctp_order_manager(ctp_order_manager * p)
@@ -18,24 +17,19 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
 //    cerr <<"now ordersize\t"<<ordersize<< "\tnow price\t " <<price << "\tlast trade price\t" << lasttradeprice <<endl;
     if(symbol=="IF1412")
     {
-        if(lastprice==0)
-        {
-            lastprice=price;
-        }
         if(lasttradeprice==0)
         {
             lasttradeprice=price;
         }
-
         if(ordersize==0)
         {
-            if(price-lastprice>1*LIMITSTEP)
+            if(price-lasttradeprice>1*LIMITSTEP)
             {
                 om->new_order(symbol,"SELL","OPEN",price-PRICESTEP,ORDERSZ);
                 lasttradeprice=price;
                 ordersize--;
             }
-            if(price-lastprice<-1*LIMITSTEP)
+            if(price-lasttradeprice<-1*LIMITSTEP)
             {
                 om->new_order(symbol,"BUY","OPEN",price+PRICESTEP,ORDERSZ);
                 lasttradeprice=price;
@@ -70,6 +64,58 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
                 om->new_order(symbol,"BUY","CLOSE",price+PRICESTEP,ORDERSZ);
                 lasttradeprice=price;
                 ordersize++;
+            }
+        }
+    }
+    if(symbol=="IF1503")
+    {
+        if(lasttradeprice_1==0)
+        {
+            lasttradeprice_1=price;
+        }
+        if(ordersize_1==0)
+        {
+            if(price-lasttradeprice_1>1*LIMITSTEP)
+            {
+                om->new_order(symbol,"BUY","OPEN",price+PRICESTEP,ORDERSZ);
+                lasttradeprice_1=price;
+                ordersize_1--;
+            }
+            if(price-lasttradeprice_1<-1*LIMITSTEP)
+            {
+                om->new_order(symbol,"SELL","OPEN",price-PRICESTEP,ORDERSZ);
+                lasttradeprice_1=price;
+                ordersize_1++;
+            }
+        }
+        else if(ordersize_1>0)
+        {
+            if(price-lasttradeprice_1>1*LIMITSTEP)
+            {
+                om->new_order(symbol,"BUY","OPEN",price+PRICESTEP,ORDERSZ);
+                lasttradeprice_1=price;
+                ordersize_1--;
+            }
+            if(price-lasttradeprice_1<-1*LIMITSTEP)
+            {
+                om->new_order(symbol,"SELL","CLOSE",price-PRICESTEP,ORDERSZ);
+                lasttradeprice_1=price;
+                ordersize_1++;
+            }
+        }
+        else if(ordersize_1<0)
+        {
+            if(price-lasttradeprice_1>1*LIMITSTEP)
+            {
+                om->new_order(symbol,"BUY","CLOSE",price+PRICESTEP,ORDERSZ);
+                lasttradeprice_1=price;
+                ordersize_1--;
+            }
+            if(price-lasttradeprice_1<-1*LIMITSTEP)
+            {
+                om->new_order(symbol,"SELL","OPEN",price-PRICESTEP,ORDERSZ);
+                lasttradeprice_1=price;
+                ordersize_1++;
             }
         }
     }

@@ -17,8 +17,10 @@ public:
     bool is_quote_running(){return ctp_quote_running;}
     bool is_trade_running(){return ctp_trade_running;}
 
-    void set_ctp_order_mamager(ctp_order_manager *);
-    void set_tactic(tactic *);
+    void set_ctp_order_mamager(ctp_order_manager * p){om=p;}
+    void set_tactic(tactic * p){tc=p;}
+
+    ctp_order_manager * get_ctp_order_mamager(){return om;}
 
 public slots:
     void run_tactic();
