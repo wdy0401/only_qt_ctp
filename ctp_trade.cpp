@@ -9,20 +9,10 @@
 #include"../gpp_qt/wfunction/wfunction.h"
 #include"../gpp_qt/cfg/cfg.h"
 
-
-
-
 extern cfg simu_cfg;
 
 using namespace std;
 
-void ctp_trade::testfunc()
-{
-//    cerr<<"iRequestID in  p "<<porder->RequestID<<endl;
-    cerr << endl << "--->>> testfunction" << endl;
-    cerr<<"FRONT_ID  "<<FRONT_ID<<endl;
-    cerr<<"SESSION_ID "<<SESSION_ID<<endl;
-}
 void ctp_trade::init(ctp_trade_qthread * father)
 {
     ptfather = father;
@@ -227,7 +217,6 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
 void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
 {
     cerr <<endl << "--->>>ReqOrderInsert" << endl;
-    porder->RequestID = ++iRequestID;
     cerr<<"iRequeseID in  p "<<porder->RequestID<<endl;
     int iResult = pUserApi->ReqOrderInsert(porder, porder->RequestID);
     if(iResult==0)

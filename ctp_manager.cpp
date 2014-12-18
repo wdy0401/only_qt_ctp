@@ -15,6 +15,7 @@ ctp_manager::ctp_manager()
 {
     ctp_quote_running=false;
     ctp_trade_running=false;
+    QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, this, &ctp_manager::run_tactic);
 }
 bool ctp_manager::check_trade_init_para()
 {
@@ -85,3 +86,26 @@ void ctp_manager::start_ctp_trade()
         mw->show_string_trade("Trade is running");
     }
 }
+void ctp_manager::set_ctp_order_mamager(ctp_order_manager * p)
+{
+    om=p;
+}
+void ctp_manager::set_tactic(tactic * p)
+{
+    tc=p;
+}
+void ctp_manager::run_tactic()
+{
+    if(ctp_quote_running)
+    {
+        om->set_tactic(tc);
+        tc->init();
+        tc->set_ctp_order_manager(om);
+    }
+    else
+    {
+        QMessageBox::information(mw, "INFO","Quote is NOT running. Please run quote first");
+        mw->show_string_quote("Run quote before run tactic");
+    }
+}
+

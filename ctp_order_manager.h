@@ -55,7 +55,6 @@ private:
     TThostFtdcFrontIDType       FRONT_ID;
     TThostFtdcSessionIDType    SESSION_ID;
 
-    int iRequestID;
     std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
     std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
     std::map<long, std::string> rid_orderid; //requestid -> uniqid

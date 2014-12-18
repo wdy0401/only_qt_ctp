@@ -67,12 +67,11 @@ int main(int argc, char *argv[])
     simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
     ctp_quote_log.setfile("d:/record/quote_"+wfunction::get_now_second()+".csv");
 
-    tactic * tc=new tactic;
+    //set ordermanager and tactic
     order_manager=new ctp_order_manager;
-
-    order_manager->set_tactic(tc);
-    tc->init();
-    tc->set_ctp_order_manager(order_manager);
+    tactic * tc=new tactic;
+    cm->set_ctp_order_mamager(order_manager);
+    cm->set_tactic(tc);
 
     w.init();
     w.show();

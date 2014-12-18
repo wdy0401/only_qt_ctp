@@ -14,8 +14,8 @@ public:
     void init(ctp_trade_qthread *);
     void init();//set con file  dir
     char * mk_trade_con_dir();
-    void testfunc();
     int add_iRequestID(){return ++iRequestID;}
+    int get_iRequestID(){return iRequestID;}
 
     virtual void OnFrontConnected();
     virtual void OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,	CThostFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);

@@ -18,7 +18,6 @@ using namespace std;
 void ctp_order_manager::init()
 {
     _ordercount=0;
-//    order_manager=this;
 }
 void ctp_order_manager::set_tactic(tactic * p)
 {
@@ -29,7 +28,6 @@ void ctp_order_manager::set_tactic(tactic * p)
     QObject::connect(this,&ctp_order_manager::fill,tc,&tactic::fill);
     QObject::connect(this,&ctp_order_manager::send_quote,tc,&tactic::quote);
 }
-
 void ctp_order_manager::set_trade(ctp_trade * p)
 {
     trade=p;
@@ -48,7 +46,7 @@ std::string ctp_order_manager::new_order(const std::string InstrumentID,const st
     string ordername="";
     cerr << endl << "--->>>ctp_trade sendorder init" << endl;
     CThostFtdcInputOrderField * porder=initorder(InstrumentID, side, openclose, price, size);
-    cerr << "BrokerID "<< porder->BrokerID<<endl;
+    ordername=InstrumentID+"#"+wfunction::itos(porder->RequestID);
     trade->ReqOrderInsert(porder);
     return ordername;
 }
@@ -106,8 +104,6 @@ CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & Instrume
 {
     cerr << endl << "--->>> Init order" << endl;
     cerr << "Local Init order\t" << InstrumentID << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
-    cerr << "Local Init order\t" << InstrumentID << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
-    //cerr << InstrumentID;// << "\t" << side << "\t" << openclose << "\t" << price << "\t" << size << endl;
     CThostFtdcInputOrderField * oireq = new CThostFtdcInputOrderField;
     memset(oireq, 0, sizeof(CThostFtdcInputOrderField));
 
@@ -183,7 +179,7 @@ CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & Instrume
     //TThostFtdcBusinessUnitType	BusinessUnit;
 
     ///请求编号 发单时设置
-    //TThostFtdcRequestIDType	RequestID;
+    oireq->RequestID=trade->add_iRequestID();
 
     ///用户强评标志: 否
     oireq->UserForceClose = 0;
@@ -261,7 +257,7 @@ void ctp_order_manager::change_order(const string & ordername,double price,long 
     else
     {
         //此处存疑  这个volumechange是何意思 相对变化 绝对变化？
-        cgorder->RequestID = ++iRequestID;
+        cgorder->RequestID = trade->add_iRequestID();
         cgorder->LimitPrice = price;
         cgorder->VolumeChange = size;
         cgorder->ActionFlag = THOST_FTDC_AF_Modify;
@@ -281,7 +277,7 @@ void ctp_order_manager::cancel_order(const string & ordername)
     else
     {
         cerr << "order name " << ordername << " order deleting" <<endl;
-        dlorder->RequestID = ++iRequestID;
+        dlorder->RequestID = trade->add_iRequestID();
         dlorder->ActionFlag = THOST_FTDC_AF_Delete;
         trade->ReqOrderAction(dlorder);
     }

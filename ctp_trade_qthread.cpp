@@ -25,7 +25,6 @@ void ctp_trade_qthread::init()
     order_manager->set_trade(trade);
 
     QObject::connect(mw, &MainWindow::check_add_order, this, &ctp_trade_qthread::check_add_order);
-    QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, this, &ctp_trade_qthread::delete_all_pending_order);
 
     QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_quote);
     QObject::connect(trade,&ctp_trade::show_warning,order_manager,&ctp_order_manager::show_warning);
