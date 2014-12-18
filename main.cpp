@@ -38,17 +38,14 @@ log_info loginfo;//gpp_qt log
 ctp_log ctp_quote_log;//qoute log
 bars_manage simu_bars_manage;
 
-MainWindow * mw;
-QApplication * qa;
-
-ctp_manager * cm;
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    qa=&a;
+    QApplication * qa=&a;
     MainWindow w;
-    mw=&w;
+    MainWindow * mw=&w;
+    mw->set_qa(qa);
 
 	//reg string
     qRegisterMetaType<string>("std::string");
@@ -63,7 +60,11 @@ int main(int argc, char *argv[])
     ctp_quote_log.setfile("d:/record/quote_"+wfunction::get_now_second()+".csv");
 
     //set cm ordermanager and tactic
-    cm=new ctp_manager();
+
+    ctp_manager * cm=new ctp_manager();
+    cm->set_mainwindow(mw);
+    cm->init();
+    mw->set_ctp_manager(cm);
 
     ctp_order_manager * order_manager=new ctp_order_manager;
     tactic * tc=new tactic;

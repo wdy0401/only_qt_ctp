@@ -9,7 +9,6 @@
 
 #include"../../libs/ctp/ThostFtdcTraderApi.h"
 #include"tactic.h"
-extern MainWindow * mw;
 extern cfg simu_cfg;
 
 using namespace std;

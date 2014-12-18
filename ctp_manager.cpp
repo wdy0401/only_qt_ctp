@@ -9,9 +9,8 @@
 
 extern cfg simu_cfg;
 extern ctp_log ctp_quote_log;
-extern MainWindow *mw;
 
-ctp_manager::ctp_manager()
+void ctp_manager::init()
 {
     ctp_quote_running=false;
     ctp_trade_running=false;
@@ -73,6 +72,7 @@ void ctp_manager::start_ctp_trade()
             mw->show_string_trade("Start trade");
             ctp_trade_running = true;
             ctq->set_ctp_order_manager(get_ctp_order_mamager());
+            ctq->set_mainwindow(get_mainwindow());
             ctq->init();
             ctq->start();
         }

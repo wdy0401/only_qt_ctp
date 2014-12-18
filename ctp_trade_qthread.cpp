@@ -8,7 +8,7 @@
 
 using namespace std;
 
-extern MainWindow * mw;
+
 extern cfg simu_cfg;
 
 void ctp_trade_qthread::run()
@@ -23,8 +23,8 @@ void ctp_trade_qthread::init()
     QObject::connect(mw, &MainWindow::check_add_order, this, &ctp_trade_qthread::check_add_order);
 
     QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_quote);
-    QObject::connect(trade,&ctp_trade::show_warning,order_manager,&ctp_order_manager::show_warning);
 
+    QObject::connect(trade,&ctp_trade::show_warning,order_manager,&ctp_order_manager::show_warning);
     QObject::connect(trade,&ctp_trade::OnRtnOrder,order_manager,&ctp_order_manager::OnRtnOrder);
     QObject::connect(trade,&ctp_trade::OnRtnTrade,order_manager,&ctp_order_manager::OnRtnTrade);
     QObject::connect(trade,&ctp_trade::OnLogin,order_manager,&ctp_order_manager::OnLogin);

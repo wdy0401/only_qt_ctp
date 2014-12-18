@@ -2,13 +2,14 @@
 #define CTP_MANAGER_H
 #include"tactic.h"
 #include"ctp_order_manager.h"
+#include"mainwindow.h"
 #include"QObject"
 class ctp_manager:public QObject
 {
     Q_OBJECT
 public:
-    ctp_manager();
 
+    void init();
     bool check_quote_init_para();
     bool check_trade_init_para();
     void start_ctp_quote();
@@ -19,7 +20,9 @@ public:
 
     void set_ctp_order_mamager(ctp_order_manager * p){om=p;}
     void set_tactic(tactic * p){tc=p;}
+    void set_mainwindow(MainWindow *p){mw=p;}
 
+    MainWindow * get_mainwindow(){return mw;}
     ctp_order_manager * get_ctp_order_mamager(){return om;}
 
 public slots:
@@ -29,6 +32,7 @@ private:
     bool ctp_quote_running;
     bool ctp_trade_running;
 
+    MainWindow *mw;
     ctp_order_manager * om;
     tactic * tc;
 };

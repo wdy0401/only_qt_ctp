@@ -1,13 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include<QMainWindow>
+#include<QApplication>
 #include<QLabel>
 #include<QMessageBox>
 
 #include<string>
 #include<map>
 #include"../ctp/ThostFtdcMdApi.h"
+class ctp_manager;
+
 namespace Ui {
 class MainWindow;
 }
@@ -27,6 +30,9 @@ public:
     void set_symbols_display(const std::string &);
     void symbol_price_display(const std::string & , double);
 
+    void set_ctp_manager(ctp_manager * p){cm=p;}
+    void set_qa(QApplication * p){qa=p;}
+
 signals:
     void on_pushButton_4_clicked();
     void check_add_order(const std::string &,const std::string &,const std::string &,const std::string &,const std::string &);
@@ -43,6 +49,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     std::map<std::string,QLabel *> quote_labels;
+    ctp_manager * cm;
+    QApplication * qa;
 };
 
 #endif // MAINWINDOW_H

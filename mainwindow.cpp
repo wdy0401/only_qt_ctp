@@ -23,9 +23,7 @@
 
 using namespace std;
 
-extern QApplication * qa;
 extern wtimer tm;
-extern ctp_manager * cm;
 extern log_info simu_log;
 extern cfg simu_cfg;
 extern bars_manage simu_bars_manage;
