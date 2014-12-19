@@ -9,7 +9,6 @@ using namespace std;
 ctp_log::ctp_log()
 {
 }
-
 void ctp_log::writeinfo(CThostFtdcDepthMarketDataField *pDepthMarketData)
 {
     ostringstream os;

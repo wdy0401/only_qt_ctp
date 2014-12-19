@@ -22,10 +22,14 @@ public:
     void init();
     void set_tactic(tactic * );
     void set_trade(ctp_trade *);
+
     std::string new_order(const std::string symbol,const std::string buysell, const std::string & openclose ,double price,long size);
     void cancel_order(const std::string & ordername);
     void change_order(const std::string & ordername,double price,long size);
     //还可加入查询order状态的函数
+
+    TThostFtdcFrontIDType get_front_id(){return FRONT_ID;}
+    TThostFtdcSessionIDType get_session_id(){return SESSION_ID;}
 
 public slots:
     void show_warning(const std::string &);
