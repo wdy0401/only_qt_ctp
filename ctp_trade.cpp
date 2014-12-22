@@ -282,10 +282,10 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         //save para
         FRONT_ID = pRspUserLogin->FrontID;
         SESSION_ID = pRspUserLogin->SessionID;
+        strcpy(this->MaxOrderRef,pRspUserLogin->MaxOrderRef);
         cerr<<"FRONT_ID init "<<FRONT_ID<<endl;
         cerr<<"SESSION_ID init "<<SESSION_ID<<endl;
         cerr<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
-
         cerr<<"--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
         ReqSettlementInfoConfirm();
     }

@@ -30,6 +30,7 @@ public:
 
     TThostFtdcFrontIDType get_front_id(){return FRONT_ID;}
     TThostFtdcSessionIDType get_session_id(){return SESSION_ID;}
+    void  add_OrderRef();
 
 public slots:
     void show_warning(const std::string &);
@@ -47,17 +48,16 @@ signals:
 
 private:
     std::map <std::string, std::list<long>> _ordername_iRequestID;
+    std::map <std::string, ctp_order *> _ordername_order;
     std::map <long, std::string> _iRequestID_ordername;
-    std::map <long, CThostFtdcOrderField *> _iRequestID_porder;
-    std::map <long, CThostFtdcTradeField *> _iRequestID_porder_trade;
 
-    std::map <std::string,ctp_order *> _pend_order;
-    std::map <std::string,ctp_order *> _run_order;
-    std::map <std::string,ctp_order *> _done_order;
     long _ordercount;
 
-    TThostFtdcFrontIDType       FRONT_ID;
-    TThostFtdcSessionIDType    SESSION_ID;
+    TThostFtdcFrontIDType    FRONT_ID;
+    TThostFtdcSessionIDType SESSION_ID;
+    TThostFtdcOrderRefType  MaxOrderRef;
+    TThostFtdcOrderRefType  NowOrderRef;
+    int nowref;
 
     std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
     std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield

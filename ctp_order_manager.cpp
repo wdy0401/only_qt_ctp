@@ -44,7 +44,23 @@ std::string ctp_order_manager::new_order(const std::string InstrumentID,const st
     string ordername="";
     cerr << endl << "--->>>ctp_trade sendorder init" << endl;
     CThostFtdcInputOrderField * porder=initorder(InstrumentID, side, openclose, price, size);
-    ordername=InstrumentID+"#"+wfunction::itos(porder->RequestID);
+    ordername=InstrumentID+"#"+side+"#"+openclose+"#"+wfunction::ftos(price)+"#"+wfunction::itos(size)+"#"+wfunction::itos(porder->RequestID);
+    cerr << "Order name\t" << ordername << endl;
+
+    if(_ordername_iRequestID.find(ordername)!=_ordername_iRequestID.end())
+    {
+        _ordername_iRequestID[ordername].push_back(porder->RequestID);
+    }
+    else
+    {
+        list<long> tmplist;
+        tmplist.push_back(porder->RequestID);
+        _ordername_iRequestID[ordername]=tmplist;
+    }
+    ctp_order * ctporder=new ctp_order(porder,this);
+    _ordername_order[ordername]=ctporder;
+    _iRequestID_ordername[porder->RequestID]=ordername;
+
     trade->ReqOrderInsert(porder);
     return ordername;
 }
@@ -52,12 +68,15 @@ void ctp_order_manager::OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin)
 {
     FRONT_ID = pRspUserLogin->FrontID;
     SESSION_ID = pRspUserLogin->SessionID;
+    strcpy(this->MaxOrderRef,pRspUserLogin->MaxOrderRef);
+    this->nowref=atoi(this->MaxOrderRef);
 }
 void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
 {
     cerr << endl << "--->>> OnRtnOrder" <<endl;
     string mapid=wfunction::itos(p->FrontID)+"_"+wfunction::itos(p->SessionID)+"_"+p->OrderRef;
-/*
+    p->RequestID;
+    /*
     switch (p->OrderStatus)
     {
     ///全部成交
@@ -78,7 +97,7 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
     case THOST_FTDC_OST_NotTouched: break;
 
     }
-  */
+    */
     cerr << "map id\t" << mapid << endl;
     cerr << "FrontID\t" << p->FrontID << endl;
     cerr << "SessionID\t" << p->SessionID << endl;
@@ -112,7 +131,15 @@ CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & Instrume
     ///合约代码
     strncpy(oireq->InstrumentID, const_cast<char*>(InstrumentID.c_str()), sizeof(oireq->InstrumentID));
     ///报单引用
-    ///TThostFtdcOrderRefType OrderRef //ctp自动维护
+    add_OrderRef();
+    strncpy(oireq->OrderRef,this->NowOrderRef, sizeof(TThostFtdcOrderRefType));
+    ///
+    ///
+    ///
+    ///TThostFtdcOrderRefType OrderRef
+    ///
+    ///     strncpy(oireq->OrderRef, const_cast<char*>(this->addOrderRefInstrumentID.c_str()), sizeof(oireq->InstrumentID));
+
     ///用户代码
     strncpy(oireq->UserID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(oireq->UserID));
     ///报单价格条件
@@ -278,5 +305,17 @@ void ctp_order_manager::cancel_order(const string & ordername)
         dlorder->RequestID = trade->add_iRequestID();
         dlorder->ActionFlag = THOST_FTDC_AF_Delete;
         trade->ReqOrderAction(dlorder);
+    }
+}
+void ctp_order_manager::add_OrderRef()
+{
+    this->nowref++;
+    int char_sz=sizeof(TThostFtdcOrderRefType);
+    memset(this->NowOrderRef,'0',char_sz);
+    string tmpstring=wfunction::itos(this->nowref);
+    tmpstring.insert(0,'0',char_sz-tmpstring.size());
+    for(string::size_type i=0 ;i< char_sz;i++)
+    {
+        this->NowOrderRef[i]=tmpstring[i];
     }
 }

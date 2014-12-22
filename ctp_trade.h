@@ -61,8 +61,9 @@ signals:
 
 private:
     CThostFtdcTraderApi * pUserApi;
-    TThostFtdcFrontIDType           FRONT_ID;
-    TThostFtdcSessionIDType         SESSION_ID;
+    TThostFtdcFrontIDType FRONT_ID;
+    TThostFtdcSessionIDType SESSION_ID;
+    TThostFtdcOrderRefType MaxOrderRef;
     int maxdelaytime;
     int iRequestID;
     ctp_trade_qthread * ptfather ;
