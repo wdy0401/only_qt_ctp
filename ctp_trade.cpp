@@ -344,7 +344,7 @@ void ctp_trade::OnRspOrderInsert(CThostFtdcInputOrderField *pInputOrder, CThostF
     //尚无此需求
     //报单出现错误时才会调用此函数
     cerr << "--->>> " << "OnRspOrderInsert" << endl;
-    cerr << "--->>> " << "未通过Thost参数校验" << endl;
+    cerr << "--->>> " << "Thost parameter check fail" << endl;
 	if (bIsLast)
 	{
 		IsErrorRspInfo(pRspInfo);
@@ -419,3 +419,21 @@ bool ctp_trade::IsTradingOrder(CThostFtdcOrderField *pOrder)
 	//目前尚未使用
 	return true;
 }
+
+//测试可知 直接传递指针p 会导致OrderStatus字段不可用
+void ctp_trade::OnRtnOrder(CThostFtdcOrderField *p)
+{
+    CThostFtdcOrderField * tmpp=new CThostFtdcOrderField;
+    memcpy(tmpp,p,sizeof(CThostFtdcOrderField));
+    emit this->send_rtn_order(tmpp);
+    delete tmpp;
+}
+
+void ctp_trade::OnRtnTrade(CThostFtdcTradeField *p)
+{
+    CThostFtdcTradeField * tmpp=new CThostFtdcTradeField;
+    memcpy(tmpp,p,sizeof(CThostFtdcTradeField));
+    emit this->send_rtn_trade(tmpp);
+    delete tmpp;
+}
+

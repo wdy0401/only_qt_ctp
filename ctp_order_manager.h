@@ -58,10 +58,7 @@ private:
     TThostFtdcOrderRefType  MaxOrderRef;
     TThostFtdcOrderRefType  NowOrderRef;
     int nowref;
-
-    std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
-    std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
-    std::map<long, std::string> rid_orderid; //requestid -> uniqid
+    int _order_ref_sz;
 
     tactic * tc;
     ctp_trade * trade;

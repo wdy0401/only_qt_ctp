@@ -52,10 +52,12 @@ public:
 	void ReqOrderAction(CThostFtdcInputOrderActionField *pOrder);
 	CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
 
-signals:
-    void show_warning(const std::string &);
     void OnRtnOrder(CThostFtdcOrderField *pOrder);
     void OnRtnTrade(CThostFtdcTradeField *pTrade);
+signals:
+    void show_warning(const std::string &);
+    void send_rtn_order(CThostFtdcOrderField *pOrder);
+    void send_rtn_trade(CThostFtdcTradeField *pTrade);
     void OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin);
 
 

@@ -25,8 +25,8 @@ void ctp_trade_qthread::init()
     QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_quote);
 
     QObject::connect(trade,&ctp_trade::show_warning,order_manager,&ctp_order_manager::show_warning);
-    QObject::connect(trade,&ctp_trade::OnRtnOrder,order_manager,&ctp_order_manager::OnRtnOrder);
-    QObject::connect(trade,&ctp_trade::OnRtnTrade,order_manager,&ctp_order_manager::OnRtnTrade);
+    QObject::connect(trade,&ctp_trade::send_rtn_order,order_manager,&ctp_order_manager::OnRtnOrder);
+    QObject::connect(trade,&ctp_trade::send_rtn_trade,order_manager,&ctp_order_manager::OnRtnTrade);
     QObject::connect(trade,&ctp_trade::OnLogin,order_manager,&ctp_order_manager::OnLogin);
 }
 bool ctp_trade_qthread::check_init_para()

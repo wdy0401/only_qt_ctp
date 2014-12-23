@@ -120,3 +120,9 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
         }
     }
 }
+
+void tactic::ack(const std::string & ordername,const std::string & type,const std::string & info)
+{
+    cerr<<"--->>> ack from tactic"<<endl;
+    cerr << "ordername " << ordername <<"\ttype\t"<<type<<endl;
+}

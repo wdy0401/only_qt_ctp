@@ -1,7 +1,10 @@
 #include "ctp_order_manager.h"
+
 #include"mainwindow.h"
 #include<QMessageBox>
 
+#include<map>
+#include<string>
 #include<iostream>
 
 #include"../gpp_qt/wfunction/wfunction.h"
@@ -16,6 +19,8 @@ using namespace std;
 void ctp_order_manager::init()
 {
     _ordercount=0;
+    _order_ref_sz=sizeof(TThostFtdcOrderRefType);
+
 }
 void ctp_order_manager::set_tactic(tactic * p)
 {
@@ -75,34 +80,73 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
 {
     cerr << endl << "--->>> OnRtnOrder" <<endl;
     string mapid=wfunction::itos(p->FrontID)+"_"+wfunction::itos(p->SessionID)+"_"+p->OrderRef;
-    p->RequestID;
-    /*
-    switch (p->OrderStatus)
+
+    if(p->FrontID!=this->FRONT_ID || p->SessionID!=this->SESSION_ID)
     {
+        cerr << "Rtn from other ctp"<<endl;
+        cerr << "Rtn FrontID " << p->FrontID<<"\tSessionID\t"<<p->SessionID<<endl;
+        cerr << "This FrontID " << this->FRONT_ID<<"\tSessionID\t"<<this->SESSION_ID<<endl;
+        return;
+    }
+
     ///全部成交
-    case THOST_FTDC_OST_AllTraded: orderid_op.erase(mapid); break;
-    ///部分成交还在队列中
-    case THOST_FTDC_OST_PartTradedQueueing:break;
-    ///部分成交不在队列中
-    case THOST_FTDC_OST_PartTradedNotQueueing: orderid_op.erase(mapid); break;
-    ///未成交还在队列中
-    case THOST_FTDC_OST_NoTradeQueueing: break;
-    ///未成交不在队列中
-    case THOST_FTDC_OST_NoTradeNotQueueing: orderid_op.erase(mapid); break;
-    ///撤单
-    case THOST_FTDC_OST_Canceled: orderid_op.erase(mapid); break;
-    ///未知， 表示 Thost已经接受用户 的委托指令，还没有 转发到交易所
-    case THOST_FTDC_OST_Unknown: orderid_op[mapid] = p; break;
-    ///尚未触发
-    case THOST_FTDC_OST_NotTouched: break;
+    if(p->OrderStatus == THOST_FTDC_OST_AllTraded)
+    {
 
     }
-    */
+    ///部分成交还在队列中
+    else if(p->OrderStatus == THOST_FTDC_OST_PartTradedQueueing)
+    {
+
+    }
+    ///部分成交不在队列中
+    else if(p->OrderStatus == THOST_FTDC_OST_PartTradedNotQueueing)
+    {
+
+    }
+    ///未成交还在队列中
+    else if(p->OrderStatus == THOST_FTDC_OST_NoTradeQueueing)
+    {
+
+    }
+    ///未成交不在队列中
+    else if(p->OrderStatus == THOST_FTDC_OST_NoTradeNotQueueing)
+    {
+
+    }
+    ///撤单
+    else if(p->OrderStatus == THOST_FTDC_OST_Canceled)
+    {
+
+    }
+    ///未知 ctp已接受 还未发到交易所
+    else if(p->OrderStatus == THOST_FTDC_OST_Unknown)
+    {
+        std::map <long, std::string>::iterator iter=_iRequestID_ordername.find(p->RequestID);
+        if(iter!=_iRequestID_ordername.end())
+        {
+            emit ack(iter->second,"CTP_ACK","");
+        }
+    }
+    ///尚未触发
+    else if(p->OrderStatus == THOST_FTDC_OST_NotTouched)
+    {
+
+    }
+    ///已触发
+    else if(p->OrderStatus == THOST_FTDC_OST_Touched)
+    {
+
+    }
+    else
+    {
+        cerr << "Unknow OrderStatus"<< p->OrderStatus <<endl;
+    }
     cerr << "map id\t" << mapid << endl;
     cerr << "FrontID\t" << p->FrontID << endl;
     cerr << "SessionID\t" << p->SessionID << endl;
     cerr << "OrderRef\t" << p->OrderRef << endl;
-//    cerr << "OrderStatus\t" << p->OrderStatus << endl;
+    cerr << "OrderStatus\t" << p->OrderStatus << endl;
     cerr << "iRequestID\t" << p->RequestID << endl;
     show_warning("Warning from OnRtnOrder");
 
@@ -113,9 +157,13 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
     //继续添加功能
     //
 }
-void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *pTrade)
+void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
 {
-
+    cerr << endl << "--->>> OnRtnTrade" <<endl;
+    cerr << "OrderRef\t" << p->OrderRef << endl;
+    cerr << "Fill size\t" << p->Volume<<endl;
+    cerr << "Fill price\t" << p->Price<<endl;
+    show_warning("Warning from OnRtnTrade");
 }
 CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
 {
@@ -133,13 +181,6 @@ CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & Instrume
     ///报单引用
     add_OrderRef();
     strncpy(oireq->OrderRef,this->NowOrderRef, sizeof(TThostFtdcOrderRefType));
-    ///
-    ///
-    ///
-    ///TThostFtdcOrderRefType OrderRef
-    ///
-    ///     strncpy(oireq->OrderRef, const_cast<char*>(this->addOrderRefInstrumentID.c_str()), sizeof(oireq->InstrumentID));
-
     ///用户代码
     strncpy(oireq->UserID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(oireq->UserID));
     ///报单价格条件
@@ -219,14 +260,14 @@ CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & Instrume
 
 CThostFtdcInputOrderActionField * ctp_order_manager::initorderchange(const string & ordername)
 {
-    map<string, CThostFtdcOrderField*>::iterator iter = orderid_op.find(ordername);
-    if (iter == orderid_op.end())
+    std::map <std::string, ctp_order *>::iterator iter = _ordername_order.find(ordername);
+    if (iter == _ordername_order.end())
     {
         return nullptr;
     }
     else
     {
-        CThostFtdcOrderField *pOrder = iter->second;
+        CThostFtdcOrderField * pOrder = iter->second->of;
         CThostFtdcInputOrderActionField * cgreq = new CThostFtdcInputOrderActionField;
         memset(cgreq, 0, sizeof(*cgreq));
         //cout << pOrder->BrokerID << pOrder->InvestorID << pOrder->ExchangeID << pOrder->BrokerID << pOrder->OrderSysID << endl;
@@ -310,12 +351,11 @@ void ctp_order_manager::cancel_order(const string & ordername)
 void ctp_order_manager::add_OrderRef()
 {
     this->nowref++;
-    int char_sz=sizeof(TThostFtdcOrderRefType);
-    memset(this->NowOrderRef,'0',char_sz);
-    string tmpstring=wfunction::itos(this->nowref);
-    tmpstring.insert(0,'0',char_sz-tmpstring.size());
-    for(string::size_type i=0 ;i< char_sz;i++)
+    int tmpint=this->nowref;
+    this->NowOrderRef[_order_ref_sz-1]='\0';
+    for(string::size_type i=2 ;i<= _order_ref_sz;i++)
     {
-        this->NowOrderRef[i]=tmpstring[i];
+        this->NowOrderRef[_order_ref_sz-i]=48+tmpint%10;
+        tmpint=tmpint/10;
     }
 }
