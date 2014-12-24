@@ -152,7 +152,7 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
     ///部分成交不在队列中
     else if(p->OrderStatus == THOST_FTDC_OST_PartTradedNotQueueing)
     {
-        emit rej(iter->second,"FILL","PART_NOTQUEUE");
+        emit done(iter->second,"CANCEL","PART_NOTQUEUE");
     }
     ///未成交还在队列中
     else if(p->OrderStatus == THOST_FTDC_OST_NoTradeQueueing)
@@ -160,39 +160,39 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
         fillstr= p->ExchangeID;
         fillstr+=p->OrderSysID;
         _fill_ordername[fillstr]=iter->second;
-        emit ack(iter->second,"EXG_ACK","");
+        emit ack(iter->second,"SEND","EXG_ACK");
     }
     ///未成交不在队列中
     else if(p->OrderStatus == THOST_FTDC_OST_NoTradeNotQueueing)
     {
-        emit rej(iter->second,"EXG_ACK","");
+        emit rej(iter->second,"SEND","EXG_ACK");
     }
     ///撤单
     else if(p->OrderStatus == THOST_FTDC_OST_Canceled)
     {
         if(_ordername_order[iter->second]->of->OrderStatus==THOST_FTDC_OST_Unknown)
         {
-            emit rej(iter->second,"EXG_ACK","");
+            emit rej(iter->second,"SEND","EXG_ACK");
         }
         else
         {
-            emit done(iter->second,"CANCEL","");
+            emit done(iter->second,"CANCEL","DONE");
         }
     }
     ///未知 ctp已接受 还未发到交易所
     else if(p->OrderStatus == THOST_FTDC_OST_Unknown)
     {
-        emit ack(iter->second,"CTP_ACK","");
+        emit ack(iter->second,"SEND","CTP_ACK");
     }
     ///尚未触发
     else if(p->OrderStatus == THOST_FTDC_OST_NotTouched)
     {
-        cerr << "map fillstr \t" << fillstr <<"\t"<<iter->second<<endl; emit ack(iter->second,"CTP_ACK","NOTTOUCH");
+        emit ack(iter->second,"SEND","CTP_ACK_NOTTOUCH");
     }
     ///已触发
     else if(p->OrderStatus == THOST_FTDC_OST_Touched)
     {
-        emit ack(iter->second,"CTP_ACK","TOUCHED");
+        emit ack(iter->second,"SEND","CTP_ACK_TOUCHED");
     }
     else
     {
@@ -420,6 +420,7 @@ void ctp_order_manager::cancel_order(const string & ordername)
     if (dlorder == nullptr)
     {
         cerr << "--->>> Order not exist: Please confirm   ordername=" << ordername << endl;
+        rej(ordername,"CANCEL","NOTFOUND");
         return;
     }
     else
@@ -427,6 +428,7 @@ void ctp_order_manager::cancel_order(const string & ordername)
         cerr << "order name " << ordername << " order deleting" <<endl;
         dlorder->RequestID = trade->add_iRequestID();
         dlorder->ActionFlag = THOST_FTDC_AF_Delete;
+        ack(ordername,"CANCEL","LOCAL_ACK");
         trade->ReqOrderAction(dlorder);
     }
 }
