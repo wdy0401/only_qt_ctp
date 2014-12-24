@@ -69,3 +69,18 @@ private:
 };
 
 #endif
+
+
+//对于多策略   可以采用包装的形式 将tactic与管理tactic的信息包装到一个类里面
+//如
+//tactic * tc;
+//signals:
+//quote();
+//fill()
+//....
+
+//private:
+//    tactic name;
+//    quote_symbols;
+
+// 以此来筛选将那些信息发送到tactic 报单信息 quote信息等

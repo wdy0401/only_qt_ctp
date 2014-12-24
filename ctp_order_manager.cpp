@@ -420,7 +420,7 @@ void ctp_order_manager::cancel_order(const string & ordername)
     if (dlorder == nullptr)
     {
         cerr << "--->>> Order not exist: Please confirm   ordername=" << ordername << endl;
-        rej(ordername,"CANCEL","NOTFOUND");
+        emit rej(ordername,"CANCEL","NOTFOUND");
         return;
     }
     else
@@ -428,7 +428,7 @@ void ctp_order_manager::cancel_order(const string & ordername)
         cerr << "order name " << ordername << " order deleting" <<endl;
         dlorder->RequestID = trade->add_iRequestID();
         dlorder->ActionFlag = THOST_FTDC_AF_Delete;
-        ack(ordername,"CANCEL","LOCAL_ACK");
+        emit ack(ordername,"CANCEL","LOCAL_ACK");
         trade->ReqOrderAction(dlorder);
     }
 }
