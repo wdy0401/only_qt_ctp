@@ -313,7 +313,7 @@ CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & Instrume
     ///业务单元
     //TThostFtdcBusinessUnitType	BusinessUnit;
 
-    ///请求编号 发单时设置
+    ///请求编号
     oireq->RequestID=trade->add_iRequestID();
 
     ///用户强评标志: 否
@@ -350,10 +350,8 @@ CThostFtdcInputOrderActionField * ctp_order_manager::initorderchange(const strin
         ///报单引用
         strcpy(cgreq->OrderRef, pOrder->OrderRef);
 
-        ///非初始化内容
         ///请求编号
-        ///TThostFtdcRequestIDType	RequestID;
-
+        cgreq->RequestID=trade->add_iRequestID();;
         ///前置编号
         cgreq->FrontID = FRONT_ID;
         ///会话编号
@@ -397,6 +395,21 @@ void ctp_order_manager::change_order(const string & ordername,double price,long 
         cgorder->VolumeChange = size;
         cgorder->ActionFlag = THOST_FTDC_AF_Modify;
         trade->ReqOrderAction(cgorder);
+    }
+}
+void ctp_order_manager::cancel_all_order()
+{
+    for(std::map <std::string, ctp_order *>::iterator iter =_ordername_order.begin();iter!=_ordername_order.end();iter++)
+    {
+        if(iter->second->of->OrderStatus==THOST_FTDC_OST_NoTradeQueueing
+                || iter->second->of->OrderStatus==THOST_FTDC_OST_PartTradedQueueing
+                || iter->second->of->OrderStatus==THOST_FTDC_OST_Unknown
+                || iter->second->of->OrderStatus==THOST_FTDC_OST_NotTouched
+                || iter->second->of->OrderStatus==THOST_FTDC_OST_Touched
+                )
+        {
+            cancel_order(iter->first);
+        }
     }
 }
 void ctp_order_manager::cancel_order(const string & ordername)
