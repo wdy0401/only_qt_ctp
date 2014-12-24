@@ -78,9 +78,8 @@ void ctp_order_manager::OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin)
 }
 void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
 {
+    static string fillstr;
     cerr << endl << "--->>> OnRtnOrder" <<endl;
-    string mapid=wfunction::itos(p->FrontID)+"_"+wfunction::itos(p->SessionID)+"_"+p->OrderRef;
-
     if(p->FrontID!=this->FRONT_ID || p->SessionID!=this->SESSION_ID)
     {
         cerr << "Rtn from other ctp"<<endl;
@@ -88,78 +87,148 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
         cerr << "This FrontID " << this->FRONT_ID<<"\tSessionID\t"<<this->SESSION_ID<<endl;
         return;
     }
+    std::map <long, std::string>::iterator iter=_iRequestID_ordername.find(p->RequestID);
+    if(iter==_iRequestID_ordername.end())
+    {
+        cerr << "ERROR: order not in list"
+             << "\tBrokerID\t"<<p->BrokerID
+             << "\tBrokerOrderSeq\t"<<p->BrokerOrderSeq
+             << "\tExchangeID\t"<<p->ExchangeID
+             << "\tOrderSysID\t"<<p->OrderSysID
+             << "\tTraderID\t"<<p->TraderID
+             << "\tInstrumentID\t"<<p->InstrumentID
+             <<endl;
+        return;
+    }
+//    /////////////////////////////////////////////////////////////////////////
+//    ///TFtdcOrderStatusType是一个报单状态类型
+//    /////////////////////////////////////////////////////////////////////////
+//    ///
+//    ///全部成交
+//    #define THOST_FTDC_OST_AllTraded '0'
+
+//    ///部分成交还在队列中
+//    #define THOST_FTDC_OST_PartTradedQueueing '1'
+
+//    ///部分成交不在队列中
+//    #define THOST_FTDC_OST_PartTradedNotQueueing '2'
+
+//    ///未成交还在队列中
+//    #define THOST_FTDC_OST_NoTradeQueueing '3'
+
+//    ///未成交不在队列中
+//    #define THOST_FTDC_OST_NoTradeNotQueueing '4'
+
+//    ///撤单
+//    #define THOST_FTDC_OST_Canceled '5'
+
+//    ///未知
+//    #define THOST_FTDC_OST_Unknown 'a'
+
+//    ///尚未触发
+//    #define THOST_FTDC_OST_NotTouched 'b'
+
+//    ///已触发
+//    #define THOST_FTDC_OST_Touched 'c'
+
+//    typedef char TThostFtdcOrderStatusType;
 
     ///全部成交
     if(p->OrderStatus == THOST_FTDC_OST_AllTraded)
     {
-
+        fillstr= p->ExchangeID;
+        fillstr+=p->OrderSysID;
+        _fill_ordername[fillstr]=iter->second;
+        emit done(iter->second,"FILL","ALL");
     }
     ///部分成交还在队列中
     else if(p->OrderStatus == THOST_FTDC_OST_PartTradedQueueing)
     {
-
+        fillstr= p->ExchangeID;
+        fillstr+=p->OrderSysID;
+        _fill_ordername[fillstr]=iter->second;
+        emit done(iter->second,"FILL","PART");
     }
     ///部分成交不在队列中
     else if(p->OrderStatus == THOST_FTDC_OST_PartTradedNotQueueing)
     {
-
+        emit rej(iter->second,"FILL","PART_NOTQUEUE");
     }
     ///未成交还在队列中
     else if(p->OrderStatus == THOST_FTDC_OST_NoTradeQueueing)
     {
-
+        fillstr= p->ExchangeID;
+        fillstr+=p->OrderSysID;
+        _fill_ordername[fillstr]=iter->second;
+        emit ack(iter->second,"EXG_ACK","");
     }
     ///未成交不在队列中
     else if(p->OrderStatus == THOST_FTDC_OST_NoTradeNotQueueing)
     {
-
+        emit rej(iter->second,"EXG_ACK","");
     }
     ///撤单
     else if(p->OrderStatus == THOST_FTDC_OST_Canceled)
     {
-
+        if(_ordername_order[iter->second]->of->OrderStatus==THOST_FTDC_OST_Unknown)
+        {
+            emit rej(iter->second,"EXG_ACK","");
+        }
+        else
+        {
+            emit done(iter->second,"CANCEL","");
+        }
     }
     ///未知 ctp已接受 还未发到交易所
     else if(p->OrderStatus == THOST_FTDC_OST_Unknown)
     {
-        std::map <long, std::string>::iterator iter=_iRequestID_ordername.find(p->RequestID);
-        if(iter!=_iRequestID_ordername.end())
-        {
-            emit ack(iter->second,"CTP_ACK","");
-        }
+        emit ack(iter->second,"CTP_ACK","");
     }
     ///尚未触发
     else if(p->OrderStatus == THOST_FTDC_OST_NotTouched)
     {
-
+        cerr << "map fillstr \t" << fillstr <<"\t"<<iter->second<<endl; emit ack(iter->second,"CTP_ACK","NOTTOUCH");
     }
     ///已触发
     else if(p->OrderStatus == THOST_FTDC_OST_Touched)
     {
-
+        emit ack(iter->second,"CTP_ACK","TOUCHED");
     }
     else
     {
         cerr << "Unknow OrderStatus"<< p->OrderStatus <<endl;
     }
-    cerr << "map id\t" << mapid << endl;
+    _ordername_order[iter->second]->of->OrderStatus=p->OrderStatus;
+
     cerr << "FrontID\t" << p->FrontID << endl;
     cerr << "SessionID\t" << p->SessionID << endl;
     cerr << "OrderRef\t" << p->OrderRef << endl;
     cerr << "OrderStatus\t" << p->OrderStatus << endl;
     cerr << "iRequestID\t" << p->RequestID << endl;
-    show_warning("Warning from OnRtnOrder");
-
-//    cerr << "OrderRef" << p->OrderRef << endl;
-
-
-    //
-    //继续添加功能
-    //
+    cerr << "ExchangeID\t"<< p->ExchangeID <<endl;
+    cerr << "OrderSysID\t"<< p->OrderSysID <<endl;
 }
 void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
 {
     cerr << endl << "--->>> OnRtnTrade" <<endl;
+    static string fillstr;
+    fillstr= p->ExchangeID;
+    fillstr+=p->OrderSysID;
+
+    std::map <std::string, std::string>::iterator iter=_fill_ordername.find(fillstr);
+    if(iter==_fill_ordername.end())
+    {
+        cerr << "ERROR: order not in list"
+             << "\tBrokerID\t"<<p->BrokerID
+             << "\tBrokerOrderSeq\t"<<p->BrokerOrderSeq
+             << "\tExchangeID\t"<<p->ExchangeID
+             << "\tOrderSysID\t"<<p->OrderSysID
+             << "\tTraderID\t"<<p->TraderID
+             << "\tInstrumentID\t"<<p->InstrumentID
+             <<endl;
+        return;
+    }
+    emit fill(iter->second,p->InstrumentID,p->Price,p->Volume);
     cerr << "OrderRef\t" << p->OrderRef << endl;
     cerr << "Fill size\t" << p->Volume<<endl;
     cerr << "Fill price\t" << p->Price<<endl;

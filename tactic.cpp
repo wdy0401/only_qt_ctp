@@ -123,6 +123,21 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
 
 void tactic::ack(const std::string & ordername,const std::string & type,const std::string & info)
 {
-    cerr<<"--->>> ack from tactic"<<endl;
-    cerr << "ordername " << ordername <<"\ttype\t"<<type<<endl;
+    cerr<<endl<<"--->>> ack from tactic"<<endl;
+    cerr << "ordername " << ordername <<"\ttype\t"<<type<<"\tinfo\t"<<info<<endl;
+}
+void tactic::done(const std::string & ordername,const std::string & type,const std::string & info)
+{
+    cerr<<endl<<"--->>> done from tactic"<<endl;
+    cerr << "ordername " << ordername <<"\ttype\t"<<type<<"\tinfo\t"<<info<<endl;
+}
+void tactic::rej(const std::string & ordername,const std::string & type,const std::string & info)
+{
+    cerr<<endl<<"--->>> rej from tactic"<<endl;
+    cerr << "ordername " << ordername <<"\ttype\t"<<type<<"\tinfo\t"<<info<<endl;
+}
+void tactic::fill(const std::string & ordername,const std::string symbol,double price, long size)
+{
+    cerr<<endl<<"--->>> fill from tactic"<<endl;
+    cerr << "ordername " << ordername <<"\tsymbol\t"<<symbol <<"\tprice\t"<<price<<"\tsize\t"<<size<<endl;
 }

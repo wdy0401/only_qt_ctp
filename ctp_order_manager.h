@@ -43,13 +43,14 @@ signals:
     void ack(const std::string & ordername,const std::string & type,const std::string & info);
     void done(const std::string & ordername,const std::string & type,const std::string & info);
     void rej(const std::string & ordername,const std::string & type,const std::string & info);
-    void fill(const std::string & ordername,long size);
+    void fill(const std::string & ordername,const std::string & symbol,double price, long size);
     void send_quote(const std::string & symbol, const std::string & ba, long level, double price, long size);
 
 private:
     std::map <std::string, std::list<long>> _ordername_iRequestID;
     std::map <std::string, ctp_order *> _ordername_order;
     std::map <long, std::string> _iRequestID_ordername;
+    std::map <std::string,std::string > _fill_ordername;
 
     long _ordercount;
 

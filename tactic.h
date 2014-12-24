@@ -17,9 +17,9 @@ public:
 public slots:
     virtual void quote(const std::string & symbol, const std::string & ba, long level, double price, long quotesize);
     virtual void ack(const std::string & ordername,const std::string & type,const std::string & info);
-    virtual void done(const std::string & ordername,const std::string & type,const std::string & info){}
-    virtual void rej(const std::string & ordername,const std::string & type,const std::string & info){}
-    virtual void fill(const std::string & ordername,long size){}
+    virtual void done(const std::string & ordername,const std::string & type,const std::string & info);
+    virtual void rej(const std::string & ordername,const std::string & type,const std::string & info);
+    virtual void fill(const std::string & ordername,const std::string symbol,double price, long size);
 private:
     int ordersize;
     int ordersize_1;
