@@ -49,7 +49,7 @@ std::string ctp_order_manager::new_order(const std::string InstrumentID,const st
     string ordername="";
     cerr << endl << "--->>>ctp_trade sendorder init" << endl;
     CThostFtdcInputOrderField * porder=initorder(InstrumentID, side, openclose, price, size);
-    ordername=InstrumentID+"#"+side+"#"+openclose+"#"+wfunction::ftos(price)+"#"+wfunction::itos(size)+"#"+wfunction::itos(porder->RequestID);
+    ordername=InstrumentID+"_"+side+"_"+openclose+"_"+wfunction::ftos(price)+"_"+wfunction::itos(size)+"_"+wfunction::itos(porder->RequestID);
     cerr << "Order name\t" << ordername << endl;
 
     if(_ordername_iRequestID.find(ordername)!=_ordername_iRequestID.end())
@@ -63,6 +63,10 @@ std::string ctp_order_manager::new_order(const std::string InstrumentID,const st
         _ordername_iRequestID[ordername]=tmplist;
     }
     ctp_order * ctporder=new ctp_order(porder,this);
+
+    strncpy(ctporder->of->BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(ctporder->of->BrokerID));
+    strncpy(ctporder->of->UserID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(ctporder->of->UserID));
+
     _ordername_order[ordername]=ctporder;
     _iRequestID_ordername[porder->RequestID]=ordername;
 
@@ -199,13 +203,16 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
         cerr << "Unknow OrderStatus"<< p->OrderStatus <<endl;
     }
     _ordername_order[iter->second]->of->OrderStatus=p->OrderStatus;
+    _ordername_order[iter->second]->set_uniq_order(p);
 
-    cerr << "FrontID\t" << p->FrontID << endl;
-    cerr << "SessionID\t" << p->SessionID << endl;
-    cerr << "OrderRef\t" << p->OrderRef << endl;
-    cerr << "OrderStatus\t" << p->OrderStatus << endl;
-    cerr << "iRequestID\t" << p->RequestID << endl;
-    cerr << "ExchangeID\t"<< p->ExchangeID <<endl;
+    cerr << "--->>> OnRtnOrder\t";
+    cerr << "ordername\t" << iter->second<<"\t";
+    cerr << "FrontID\t" << p->FrontID << "\t";
+    cerr << "SessionID\t" << p->SessionID << "\t";
+    cerr << "OrderRef\t" << p->OrderRef << "\t";
+    cerr << "OrderStatus\t" << p->OrderStatus << "\t";
+    cerr << "iRequestID\t" << p->RequestID << "\t";
+    cerr << "ExchangeID\t"<< p->ExchangeID <<"\t";
     cerr << "OrderSysID\t"<< p->OrderSysID <<endl;
 }
 void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
@@ -229,6 +236,7 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
         return;
     }
     emit fill(iter->second,p->InstrumentID,p->Price,p->Volume);
+    _ordername_order[iter->second]->set_uniq_trade(p);
     cerr << "OrderRef\t" << p->OrderRef << endl;
     cerr << "Fill size\t" << p->Volume<<endl;
     cerr << "Fill price\t" << p->Price<<endl;
@@ -399,6 +407,7 @@ void ctp_order_manager::change_order(const string & ordername,double price,long 
 }
 void ctp_order_manager::cancel_all_order()
 {
+    cerr << endl << "--->>> Cancel_all_order init" <<endl;
     for(std::map <std::string, ctp_order *>::iterator iter =_ordername_order.begin();iter!=_ordername_order.end();iter++)
     {
         if(iter->second->of->OrderStatus==THOST_FTDC_OST_NoTradeQueueing
@@ -408,14 +417,14 @@ void ctp_order_manager::cancel_all_order()
                 || iter->second->of->OrderStatus==THOST_FTDC_OST_Touched
                 )
         {
+            cerr << endl <<"Cancel start\t" <<iter->first<<"\tNow status\t" <<iter->second->of->OrderStatus<<endl;
             cancel_order(iter->first);
         }
     }
 }
 void ctp_order_manager::cancel_order(const string & ordername)
 {
-    cerr << endl << "--->>>delete_order init" << endl;
-    cerr << "order name " << ordername <<endl;
+    cerr << endl << "--->>>delete_order init\t";
     CThostFtdcInputOrderActionField * dlorder = initorderchange(ordername);
     if (dlorder == nullptr)
     {
@@ -425,9 +434,22 @@ void ctp_order_manager::cancel_order(const string & ordername)
     }
     else
     {
-        cerr << "order name " << ordername << " order deleting" <<endl;
+        cerr << "\torder deleting\t" << "order name " << ordername <<endl;
         dlorder->RequestID = trade->add_iRequestID();
         dlorder->ActionFlag = THOST_FTDC_AF_Delete;
+
+        cerr << "FrontID\t" << dlorder->FrontID << "\t";
+        cerr << "SessionID\t" << dlorder->SessionID << "\t";
+        cerr << "OrderRef\t" << dlorder->OrderRef << "\t";
+        cerr << "ExchangeID\t" << dlorder->ExchangeID << "\t";
+        cerr << "OrderSysID\t" << dlorder->OrderSysID << "\t";
+        cerr << "BrokerID\t" << dlorder->BrokerID << "\t";
+        cerr << "UserID\t" << dlorder->UserID << "\t";
+        cerr << "InvestorID\t" << dlorder->InvestorID << "\t";
+        cerr << "InstrumentID\t" << dlorder->InstrumentID << "\t";
+        cerr << "OrderStatus\t" <<_ordername_order[ordername]->of->OrderStatus << endl;
+
+
         emit ack(ordername,"CANCEL","LOCAL_ACK");
         trade->ReqOrderAction(dlorder);
     }

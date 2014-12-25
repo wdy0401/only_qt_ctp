@@ -152,7 +152,7 @@
           <item row="1" column="0">
            <widget class="QPushButton" name="pushButton_5">
             <property name="text">
-             <string>##show order</string>
+             <string>delete pending order</string>
             </property>
            </widget>
           </item>

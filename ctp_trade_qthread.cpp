@@ -21,7 +21,7 @@ void ctp_trade_qthread::init()
     order_manager->set_trade(trade);
 
     QObject::connect(mw, &MainWindow::check_add_order, this, &ctp_trade_qthread::check_add_order);
-
+    QObject::connect(mw,&MainWindow::on_pushButton_5_clicked,order_manager,&ctp_order_manager::cancel_all_order);
     QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_quote);
 
     QObject::connect(trade,&ctp_trade::show_warning,order_manager,&ctp_order_manager::show_warning);
@@ -38,10 +38,6 @@ bool ctp_trade_qthread::check_init_para()
         return false;
     }
     return true;
-}
-void ctp_trade_qthread::delete_all_pending_order()
-{
-//    order_manager->delete_all_order();
 }
 void ctp_trade_qthread::check_add_order(const std::string & ID,const std::string & side ,const std::string & openclose ,const std::string & price ,const std::string & size)
 {

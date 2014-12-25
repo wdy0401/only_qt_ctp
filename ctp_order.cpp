@@ -6,20 +6,22 @@ ctp_order::ctp_order(CThostFtdcInputOrderField * p,ctp_order_manager * pcom)
     SessionID=pcom->get_session_id();
     of=new CThostFtdcOrderField;
     strcpy(of->OrderRef,p->OrderRef);
+    strcpy(of->InvestorID,p->InvestorID);
+    strcpy(of->UserID,p->UserID);
+    strcpy(of->InstrumentID,p->InstrumentID);
 }
 void ctp_order::set_uniq_order(CThostFtdcOrderField *p)
 {
-    strcpy(of->BrokerID ,  p->BrokerID);
     strcpy(of->OrderRef,p->OrderRef);
     of->BrokerOrderSeq = p->BrokerOrderSeq;
     strcpy(of->ExchangeID ,  p->ExchangeID);
     strcpy(of->TraderID ,  p->TraderID);
     strcpy(of->OrderLocalID ,  p->OrderLocalID);
     strcpy(of->OrderSysID ,  p->OrderSysID);
+	of->OrderStatus=p->OrderStatus;
 }
 void ctp_order::set_uniq_trade(CThostFtdcTradeField *p)
 {
-    strcpy(of->BrokerID ,  p->BrokerID);
     strcpy(of->OrderRef,p->OrderRef);
     of->BrokerOrderSeq = p->BrokerOrderSeq;
     strcpy(of->ExchangeID ,  p->ExchangeID);
@@ -27,8 +29,6 @@ void ctp_order::set_uniq_trade(CThostFtdcTradeField *p)
     strcpy(of->OrderLocalID ,  p->OrderLocalID);
     strcpy(of->OrderSysID ,  p->OrderSysID);
 }
-
-
 //这是确定order的组合
 
 //FrontID

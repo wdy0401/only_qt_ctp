@@ -234,8 +234,8 @@ void ctp_trade::ReqOrderAction(CThostFtdcInputOrderActionField *pOrder)
 {
     cerr << endl << "--->>> ReqOrderAction" <<endl;
     int iResult = pUserApi->ReqOrderAction(pOrder, ++iRequestID);
-    cerr << "--->>> ReqOrderAction : " << iResult << ((iResult == 0) ? ", success" : ", fail") << endl;
-    cerr << "--->>> ReqOrderAction :  ID " << iRequestID << " InstrumentID: " << pOrder->InstrumentID << endl;
+    cerr << "ReqOrderAction : " << iResult << ((iResult == 0) ? ", success" : ", fail") << endl;
+    cerr << "ReqOrderAction :  ID " << iRequestID << " InstrumentID: " << pOrder->InstrumentID << endl;
 }
 char *ctp_trade::mk_trade_con_dir()
 {
@@ -259,11 +259,6 @@ char *ctp_trade::mk_trade_con_dir()
 //////////////////////////////////////////////////////////////////////////////////////////////
 //
 //Functions called from exchange.
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-//需要一个框架，对order进行整体把握
-//就是下面很多函数需要继续添加功能
 //
 //////////////////////////////////////////////////////////////////////////////////////////////
 

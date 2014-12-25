@@ -16,7 +16,6 @@ public:
     void init();
 
 public slots:
-    void delete_all_pending_order();
     void check_add_order(const std::string &,const std::string &,const std::string &,const std::string &,const std::string &);
 
 signals:protected:
