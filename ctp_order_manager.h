@@ -26,6 +26,7 @@ public:
     std::string new_order(const std::string symbol,const std::string buysell, const std::string & openclose ,double price,long size);
     void cancel_order(const std::string & ordername);
     void cancel_all_order();
+    void test_change_order();
     void change_order(const std::string & ordername,double price,long size);
     //还可加入查询order状态的函数
 

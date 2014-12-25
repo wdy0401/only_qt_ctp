@@ -465,3 +465,20 @@ void ctp_order_manager::add_OrderRef()
         tmpint=tmpint/10;
     }
 }
+void ctp_order_manager::test_change_order()
+{
+    cerr << endl << "--->>> Change_all_order init" <<endl;
+    for(std::map <std::string, ctp_order *>::iterator iter =_ordername_order.begin();iter!=_ordername_order.end();iter++)
+    {
+        if(iter->second->of->OrderStatus==THOST_FTDC_OST_NoTradeQueueing
+                || iter->second->of->OrderStatus==THOST_FTDC_OST_PartTradedQueueing
+                || iter->second->of->OrderStatus==THOST_FTDC_OST_Unknown
+                || iter->second->of->OrderStatus==THOST_FTDC_OST_NotTouched
+                || iter->second->of->OrderStatus==THOST_FTDC_OST_Touched
+                )
+        {
+            cerr << endl <<"Change start\t" <<iter->first<<"\tNow status\t" <<iter->second->of->OrderStatus<<endl;
+            change_order(iter->first,3199,2);
+        }
+    }
+}
