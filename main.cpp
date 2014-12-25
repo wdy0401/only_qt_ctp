@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
     ctp_order_manager * order_manager=new ctp_order_manager;
     tactic * tc=new tactic;
     order_manager->init();
+    order_manager->set_mw(mw);
     cm->set_ctp_order_mamager(order_manager);
     cm->set_tactic(tc);
 

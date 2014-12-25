@@ -12,6 +12,7 @@
 #include<QObject>
 
 #include"../libs/ctp/ThostFtdcTraderApi.h"
+#include"mainwindow.h"
 
 class fillpolicy;
 class ctp_order_manager :public QObject
@@ -22,6 +23,7 @@ public:
     void init();
     void set_tactic(tactic * );
     void set_trade(ctp_trade *);
+    void set_mw(MainWindow * p){mw=p;}
 
     std::string new_order(const std::string symbol,const std::string buysell, const std::string & openclose ,double price,long size);
     void cancel_order(const std::string & ordername);
@@ -65,6 +67,7 @@ private:
 
     tactic * tc;
     ctp_trade * trade;
+    MainWindow * mw;
     CThostFtdcInputOrderField * initorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
     CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
 };
