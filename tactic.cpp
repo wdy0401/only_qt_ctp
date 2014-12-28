@@ -67,7 +67,7 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
             }
         }
     }
-    if(symbol=="IF1601")//先不测试这个
+    if(symbol=="IF1503")//先不测试这个
     {
         if(lasttradeprice_1==0)
         {

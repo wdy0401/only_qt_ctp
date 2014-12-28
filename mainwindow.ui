@@ -159,7 +159,7 @@
           <item row="1" column="1">
            <widget class="QPushButton" name="pushButton_6">
             <property name="text">
-             <string>change order size</string>
+             <string>change order size </string>
             </property>
            </widget>
           </item>

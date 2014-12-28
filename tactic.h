@@ -4,7 +4,7 @@
 #include<string>
 
 const int PRICESTEP=5;
-const int LIMITSTEP=3;
+const int LIMITSTEP=5;
 const int ORDERSZ=1;
 class ctp_order_manager;
 class tactic: public QObject
