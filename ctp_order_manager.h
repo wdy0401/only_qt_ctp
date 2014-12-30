@@ -75,6 +75,11 @@ private:
 #endif
 
 
+//待完成                  增添4个框 分别为 bid ask price size 其默认值为当前合约成交价的 + - 1    1
+//增添三个个按钮     显示询价  发送报价 撤销报价
+
+
+
 //对于多策略   可以采用包装的形式 将tactic与管理tactic的信息包装到一个类里面
 //如
 //tactic * tc;
@@ -88,3 +93,6 @@ private:
 //    quote_symbols;
 
 // 以此来筛选将那些信息发送到tactic 报单信息 quote信息等
+
+
+
