@@ -6,7 +6,9 @@ using namespace std;
 void tactic::init()
 {
     ordersize=0;
+    ordersize_1=0;
     lasttradeprice=0;
+    lasttradeprice_1=0;
 }
 void tactic::set_ctp_order_manager(ctp_order_manager * p)
 {
@@ -67,7 +69,7 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
             }
         }
     }
-    if(symbol=="IF1503")//先不测试这个
+    if(symbol=="IF1503")
     {
         if(lasttradeprice_1==0)
         {
