@@ -872,7 +872,14 @@
           <item>
            <widget class="QPushButton" name="pushButton_13">
             <property name="text">
-             <string>显示询价</string>
+             <string>发送询价</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_15">
+            <property name="text">
+             <string>回应询价</string>
             </property>
            </widget>
           </item>
@@ -880,13 +887,6 @@
            <widget class="QPushButton" name="pushButton_14">
             <property name="text">
              <string>撤回报价</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_15">
-            <property name="text">
-             <string>待定</string>
             </property>
            </widget>
           </item>

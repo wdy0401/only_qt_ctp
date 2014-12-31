@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     ctp_order.cpp \
     ctp_order_manager.cpp \
     tactic.cpp \
-    ctp_manager.cpp
+    ctp_manager.cpp \
+    need_to_do.cpp
 
 HEADERS  += mainwindow.h \
     ctp/ThostFtdcMdApi.h \
@@ -54,7 +55,8 @@ HEADERS  += mainwindow.h \
     ctp_order.h \
     ctp_order_manager.h \
     tactic.h \
-    ctp_manager.h
+    ctp_manager.h \
+    need_to_do.h
 
 FORMS    += mainwindow.ui
 

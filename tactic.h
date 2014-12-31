@@ -2,6 +2,7 @@
 #define TACTIC_H
 #include<QObject>
 #include<string>
+#include"../libs/ctp/ThostFtdcMdApi.h"
 
 const int PRICESTEP=5;
 const int LIMITSTEP=5;
@@ -15,6 +16,7 @@ public:
     void init();
 
 public slots:
+    virtual void book(const CThostFtdcDepthMarketDataField *pDepthMarketData);
     virtual void quote(const std::string & symbol, const std::string & ba, long level, double price, long quotesize);
     virtual void ack(const std::string & ordername,const std::string & type,const std::string & info);
     virtual void done(const std::string & ordername,const std::string & type,const std::string & info);

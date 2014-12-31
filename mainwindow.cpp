@@ -38,6 +38,7 @@ void MainWindow::init()
 {
     set_symbols_display(simu_cfg.getparam("INSTRUMENT_ID"));
     set_order_send(simu_cfg.getparam("INSTRUMENT_ID"));
+    set_market_maker(simu_cfg.getparam("MARKET_MAKER_ID"));
     set_seperate_label();
 }
 MainWindow::~MainWindow()
@@ -45,9 +46,46 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::set_market_maker()
+void MainWindow::set_market_maker(const std::string & symbols)
 {
+    this->ui->fontComboBox_4->clear();
+    this->ui->fontComboBox_4->setFont(QFont("微软雅黑",9,-1,false));
+    QRegExp rxp_4("^([1-9][0-9]{0,10}|0\\.)\\.?[0-9]{0,4}$");
+    QValidator * validators_4 = new QRegExpValidator(rxp_4,0);
+    this->ui->fontComboBox_4->lineEdit()->setValidator(validators_4);
+    this->ui->fontComboBox_4->setCurrentText("1");
 
+    this->ui->fontComboBox_5->clear();
+    this->ui->fontComboBox_5->setFont(QFont("微软雅黑",9,-1,false));
+    QRegExp rxp_5("^([1-9][0-9]{0,10}|0\\.)\\.?[0-9]{0,4}$");
+    QValidator * validators_5 = new QRegExpValidator(rxp_5,0);
+    this->ui->fontComboBox_5->lineEdit()->setValidator(validators_5);
+    this->ui->fontComboBox_5->setCurrentText("1");
+
+    this->ui->fontComboBox_6->clear();
+    this->ui->fontComboBox_6->setFont(QFont("微软雅黑",9,-1,false));
+    QRegExp rxp_6("^[1-9][0-9]{0,10}$");
+    QValidator * validators_6 = new QRegExpValidator(rxp_6,0);
+    this->ui->fontComboBox_6->lineEdit()->setValidator(validators_6);
+    this->ui->fontComboBox_6->setCurrentText("1");
+
+    this->ui->fontComboBox_7->clear();
+    this->ui->fontComboBox_7->setFont(QFont("微软雅黑",9,-1,false));
+    QRegExp rxp_7("^[1-9][0-9]{0,10}$");
+    QValidator * validators_7 = new QRegExpValidator(rxp_7,0);
+    this->ui->fontComboBox_7->lineEdit()->setValidator(validators_7);
+    this->ui->fontComboBox_7->setCurrentText("1");
+
+    this->ui->fontComboBox_8->clear();
+    this->ui->fontComboBox_8->setFont(QFont("微软雅黑",9,-1,false));
+    QRegExp rxp_8("^\\w{1,4}\\d{3,4}\\-?(P|C)\\-?\\d+$");
+    QValidator * validators_8 = new QRegExpValidator(rxp_8,0);
+    list<string> symbol_list=wfunction::splitstring(symbols);
+    this->ui->fontComboBox_8->lineEdit()->setValidator(validators_8);
+    for(list<string>::iterator iter=symbol_list.begin();iter!=symbol_list.end();iter++)
+    {
+        this->ui->fontComboBox_8->addItem(QString::fromStdString(*iter));
+    }
 }
 void MainWindow::set_seperate_label()
 {
@@ -69,14 +107,14 @@ void MainWindow::set_order_send(const std::string & symbols)
 
     this->ui->fontComboBox_2->clear();
     this->ui->fontComboBox_2->setFont(QFont("微软雅黑",9,-1,false));
-    QRegExp rxp("^[1-9][0-9]{0,10}\\.?[1-9]{0,3}$");
+    QRegExp rxp("^([1-9][0-9]{0,10}|0\\.)\\.?[0-9]{0,4}$");
     QValidator * validatorp = new QRegExpValidator(rxp,0);
     this->ui->fontComboBox_2->lineEdit()->setValidator(validatorp);
     this->ui->fontComboBox_2->setCurrentText("3200");
 
     this->ui->fontComboBox_3->clear();
     this->ui->fontComboBox_3->setFont(QFont("微软雅黑",9,-1,false));
-    QRegExp rxs("^[1-9][0-9]{0,10}\\.?[1-9]{0,3}$");
+    QRegExp rxs("^[1-9][0-9]{0,10}$");
     QValidator * validators = new QRegExpValidator(rxs,0);
     this->ui->fontComboBox_3->lineEdit()->setValidator(validators);
     this->ui->fontComboBox_3->setCurrentText("1");
@@ -99,9 +137,6 @@ void MainWindow::set_symbols_display(const std::string & symbols)
     list<string> symbol_list=wfunction::splitstring(symbols);
     for(list<string>::iterator iter=symbol_list.begin();iter!=symbol_list.end();iter++)
     {
-//if we want to use two color on symbol and price
-//two qlabel is needed
-//a new class is needed
         QLabel * ql=new QLabel();
         this->ui->horizontalLayout->addWidget(ql);
         ql->setText(QString::fromStdString(*iter));

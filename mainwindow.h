@@ -27,7 +27,7 @@ public:
     void set_order_send(const std::string &);
     void set_seperate_label();
     void set_symbols_display(const std::string &);
-    void set_market_maker();
+    void set_market_maker(const std::string &);
 
     void show_string_quote(const std::string &);
     void show_string_trade(const std::string &);
