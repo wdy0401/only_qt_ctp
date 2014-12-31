@@ -38,12 +38,17 @@ void MainWindow::init()
 {
     set_symbols_display(simu_cfg.getparam("INSTRUMENT_ID"));
     set_order_send(simu_cfg.getparam("INSTRUMENT_ID"));
+    set_seperate_label();
 }
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
+void MainWindow::set_seperate_label()
+{
+    ui->label_17->setStyleSheet("background-color:rgb(200,200,200)");
+    ui->label_18->setStyleSheet("background-color:rgb(200,200,200)");
+}
 void MainWindow::set_order_send(const std::string & symbols)
 {
     this->ui->fontComboBox->clear();

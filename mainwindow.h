@@ -25,9 +25,11 @@ public:
 
     void init();
     void set_order_send(const std::string &);
+    void set_seperate_label();
+    void set_symbols_display(const std::string &);
+
     void show_string_quote(const std::string &);
     void show_string_trade(const std::string &);
-    void set_symbols_display(const std::string &);
     void symbol_price_display(const std::string & , double);
 
     void set_ctp_manager(ctp_manager * p){cm=p;}
