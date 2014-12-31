@@ -30,6 +30,10 @@ public:
     virtual void OnFrontDisconnected(int nReason);
     virtual void OnHeartBeatWarning(int nTimeLapse);
 
+    void ReqForQuoteInsert(CThostFtdcInputForQuoteField *pInputForQuote, int nRequestID);
+    void ReqQuoteInsert(CThostFtdcInputQuoteField *pInputQuote);
+    void ReqQuoteAction(CThostFtdcInputQuoteActionField *pInputQuoteAction);
+
     void ReqQryOrder(const std::string &);
     void ReqQryOrder(const std::string &,bool);
     void ReqQryInstrument(const std::string & );

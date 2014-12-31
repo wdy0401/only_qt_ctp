@@ -44,10 +44,17 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::set_market_maker()
+{
+
+}
 void MainWindow::set_seperate_label()
 {
+    //ui->label_16->setStyleSheet("background-color:rgb(200,200,200)");
     ui->label_17->setStyleSheet("background-color:rgb(200,200,200)");
     ui->label_18->setStyleSheet("background-color:rgb(200,200,200)");
+    //ui->label_19->setStyleSheet("background-color:rgb(200,200,200)");
 }
 void MainWindow::set_order_send(const std::string & symbols)
 {

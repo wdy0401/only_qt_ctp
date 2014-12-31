@@ -237,6 +237,48 @@ void ctp_trade::ReqOrderAction(CThostFtdcInputOrderActionField *pOrder)
     cerr << "ReqOrderAction : " << iResult << ((iResult == 0) ? ", success" : ", fail") << endl;
     cerr << "ReqOrderAction :  ID " << iRequestID << " InstrumentID: " << pOrder->InstrumentID << endl;
 }
+void ctp_trade::ReqForQuoteInsert(CThostFtdcInputForQuoteField *porder, int nRequestID)
+{
+    cerr << endl << "--->>> ReqForQuoteInsert" <<endl;
+    cerr<<"iRequeseID:\t "<<nRequestID<<endl;
+    int iResult = pUserApi->ReqForQuoteInsert(porder, nRequestID);
+    if(iResult==0)
+    {
+        cerr << endl << "--->>> req quote ask: " << iResult << " Success" << endl;
+    }
+    else
+    {
+        cerr << endl << "--->>> req quote ask: " << iResult << " Fail" << endl;
+    }
+}
+void ctp_trade::ReqQuoteInsert(CThostFtdcInputQuoteField *porder)
+{
+    cerr << endl << "--->>> ReqQuoteInsert" <<endl;
+    cerr<<"iRequeseID:\t "<<porder->RequestID<<endl;
+    int iResult = pUserApi->ReqQuoteInsert(porder, porder->RequestID);
+    if(iResult==0)
+    {
+        cerr << endl << "--->>> send quote: " << iResult << " Success" << endl;
+    }
+    else
+    {
+        cerr << endl << "--->>>  send quote: " << iResult << " Fail" << endl;
+    }
+}
+void ctp_trade::ReqQuoteAction(CThostFtdcInputQuoteActionField *porder)
+{
+    cerr << endl << "--->>> ReqQuoteAction" <<endl;
+    cerr<<"iRequeseID:\t "<<porder->RequestID<<endl;
+    int iResult = pUserApi->ReqQuoteAction(porder, porder->RequestID);
+    if(iResult==0)
+    {
+        cerr << endl << "--->>> change quote: " << iResult << " Success" << endl;
+    }
+    else
+    {
+        cerr << endl << "--->>>  change quote: " << iResult << " Fail" << endl;
+    }
+}
 char *ctp_trade::mk_trade_con_dir()
 {
         string exedir=simu_cfg.getparam("TRADE_CON_PATH");
