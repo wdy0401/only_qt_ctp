@@ -30,6 +30,7 @@ void ctp_order_manager::set_tactic(tactic * p)
     QObject::connect(this,&ctp_order_manager::rej,tc,&tactic::rej);
     QObject::connect(this,&ctp_order_manager::fill,tc,&tactic::fill);
     QObject::connect(this,&ctp_order_manager::send_quote,tc,&tactic::quote);
+    QObject::connect(this,&ctp_order_manager::send_book,tc,&tactic::book);
 }
 void ctp_order_manager::set_trade(ctp_trade * p)
 {
@@ -38,6 +39,10 @@ void ctp_order_manager::set_trade(ctp_trade * p)
 void ctp_order_manager::rec_quote(const string &symbol, const string &ba, long level, double price, long size)
 {
     emit send_quote(symbol,ba,level,price,size);
+}
+void ctp_order_manager::rec_book(const CThostFtdcDepthMarketDataField *pDepthMarketData)
+{
+    emit send_book(pDepthMarketData);
 }
 void ctp_order_manager::show_warning(const string & warninfo)
 {

@@ -39,6 +39,8 @@ public:
 public slots:
     void show_warning(const std::string &);
     void rec_quote(const std::string & symbol, const std::string & ba, long level, double price, long size);
+    void rec_book(const CThostFtdcDepthMarketDataField *pDepthMarketData);
+
     void OnRtnOrder(CThostFtdcOrderField *pOrder);
     void OnRtnTrade(CThostFtdcTradeField *pTrade);
     void OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin);
@@ -49,6 +51,7 @@ signals:
     void rej(const std::string & ordername,const std::string & type,const std::string & info);
     void fill(const std::string & ordername,const std::string & symbol,double price, long size);
     void send_quote(const std::string & symbol, const std::string & ba, long level, double price, long size);
+    void send_book(const CThostFtdcDepthMarketDataField *pDepthMarketData);
 
 private:
     std::map <std::string, std::list<long>> _ordername_iRequestID;

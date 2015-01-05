@@ -126,14 +126,20 @@ void ctp_quote::OnRspUnSubMarketData(CThostFtdcSpecificInstrumentField *pSpecifi
 }
 
 ///深度行情通知
-void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarketData)
+void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *p)
 {
+    CThostFtdcDepthMarketDataField * tmpp=new CThostFtdcDepthMarketDataField;
+    memcpy(tmpp,p,sizeof(CThostFtdcDepthMarketDataField));
+
     //tm must be set before any slots.
-    tm.settic(atof(wfunction::ctp_time_char_convert(pDepthMarketData->UpdateTime,sizeof(TThostFtdcTimeType))));
+    tm.settic(atof(wfunction::ctp_time_char_convert(p->UpdateTime,sizeof(TThostFtdcTimeType))));
 //    broadcast_quote(const std::string &symbol, const std::string &ba, long level, double price, long size);
-    pqfather->broadcast_marketdata(pDepthMarketData);
-    emit broadcast_quote(pDepthMarketData->InstrumentID,"BID",1,pDepthMarketData->BidPrice1,pDepthMarketData->BidVolume1);
-    emit broadcast_quote(pDepthMarketData->InstrumentID,"ASK",1,pDepthMarketData->AskPrice1,pDepthMarketData->AskVolume1);
+    pqfather->broadcast_marketdata(tmpp);
+    emit broadcast_quote(p->InstrumentID,"BID",1,p->BidPrice1,p->BidVolume1);
+    emit broadcast_quote(p->InstrumentID,"ASK",1,p->AskPrice1,p->AskVolume1);
+
+    emit broadcast_book(tmpp);
+    delete tmpp;
 }
 bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
 {

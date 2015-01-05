@@ -30,6 +30,7 @@ public:
 
 signals:
     void broadcast_quote(const std::string &symbol, const std::string &ba, long level, double price, long size);
+    void broadcast_book(const CThostFtdcDepthMarketDataField *pDepthMarketData);
 	
 private:
 	CThostFtdcReqUserLoginField * req;
