@@ -16,7 +16,7 @@ void tactic::set_ctp_order_manager(ctp_order_manager * p)
 }
 void tactic::book(const CThostFtdcDepthMarketDataField *pDepthMarketData)
 {
-    cerr <<endl << "Tactic Book" << endl;
+//    cerr <<endl << "Tactic Book" << endl;
 }
 void tactic::quote(const std::string & symbol, const std::string & ba, long level, double price, long quotesize)
 {

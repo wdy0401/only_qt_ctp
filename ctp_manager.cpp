@@ -95,6 +95,7 @@ void ctp_manager::run_tactic()
         om->set_tactic(tc);
         tc->init();
         tc->set_ctp_order_manager(om);
+        mw->show_string_trade("Start tactic");
     }
     else
     {

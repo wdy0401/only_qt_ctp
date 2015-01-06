@@ -227,6 +227,13 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
     fillstr= p->ExchangeID;
     fillstr+=p->OrderSysID;
 
+    static string mw_show;
+    mw_show="";
+    static string buy_sell="";
+    buy_sell=(p->Direction=='0'?"BUY":"SELL");
+    mw_show+=p->InstrumentID;
+    mw_show+="\t"+buy_sell + "\t" + wfunction::ftos(p->Price) + "\t" + wfunction::itos(p->Volume);
+
     std::map <std::string, std::string>::iterator iter=_fill_ordername.find(fillstr);
     if(iter==_fill_ordername.end())
     {
@@ -238,14 +245,17 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
              << "\tTraderID\t"<<p->TraderID
              << "\tInstrumentID\t"<<p->InstrumentID
              <<endl;
-        return;
+        mw_show+="\t"+"NOT_IN_LIST";
     }
-    emit fill(iter->second,p->InstrumentID,p->Price,p->Volume);
-    _ordername_order[iter->second]->set_uniq_trade(p);
-    cerr << "OrderRef\t" << p->OrderRef << endl;
-    cerr << "Fill size\t" << p->Volume<<endl;
-    cerr << "Fill price\t" << p->Price<<endl;
-    show_warning("Warning from OnRtnTrade");
+    else
+    {
+        emit fill(iter->second,p->InstrumentID,p->Price,p->Volume);
+        _ordername_order[iter->second]->set_uniq_trade(p);
+        cerr << "OrderRef\t" << p->OrderRef << endl;
+        cerr << "Fill size\t" << p->Volume<<endl;
+        cerr << "Fill price\t" << p->Price<<endl;
+    }
+    mw->show_string_trade(mw_show);
 }
 CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
 {

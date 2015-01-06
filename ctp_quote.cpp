@@ -128,18 +128,13 @@ void ctp_quote::OnRspUnSubMarketData(CThostFtdcSpecificInstrumentField *pSpecifi
 ///深度行情通知
 void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *p)
 {
-    CThostFtdcDepthMarketDataField * tmpp=new CThostFtdcDepthMarketDataField;
-    memcpy(tmpp,p,sizeof(CThostFtdcDepthMarketDataField));
-
     //tm must be set before any slots.
+    //测试可知 复制p 再传送 会有日期错误
     tm.settic(atof(wfunction::ctp_time_char_convert(p->UpdateTime,sizeof(TThostFtdcTimeType))));
-//    broadcast_quote(const std::string &symbol, const std::string &ba, long level, double price, long size);
-    pqfather->broadcast_marketdata(tmpp);
+    pqfather->broadcast_marketdata(p);
     emit broadcast_quote(p->InstrumentID,"BID",1,p->BidPrice1,p->BidVolume1);
     emit broadcast_quote(p->InstrumentID,"ASK",1,p->AskPrice1,p->AskVolume1);
-
-    emit broadcast_book(tmpp);
-    delete tmpp;
+    emit broadcast_book(p);
 }
 bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
 {
