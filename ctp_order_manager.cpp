@@ -245,7 +245,8 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
              << "\tTraderID\t"<<p->TraderID
              << "\tInstrumentID\t"<<p->InstrumentID
              <<endl;
-        mw_show+="\t"+"NOT_IN_LIST";
+        mw_show+="\t";
+        mw_show+=+"NOT_IN_LIST";
     }
     else
     {
