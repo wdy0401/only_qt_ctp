@@ -274,7 +274,7 @@
                </size>
               </property>
               <property name="text">
-               <string>开启策略</string>
+               <string>待定</string>
               </property>
              </widget>
             </item>
@@ -293,7 +293,7 @@
                </size>
               </property>
               <property name="text">
-               <string>删除排单</string>
+               <string>开启策略</string>
               </property>
              </widget>
             </item>
@@ -312,7 +312,7 @@
                </size>
               </property>
               <property name="text">
-               <string>改单</string>
+               <string>暂停策略</string>
               </property>
              </widget>
             </item>
@@ -331,7 +331,7 @@
                </size>
               </property>
               <property name="text">
-               <string>待定</string>
+               <string>继续策略</string>
               </property>
              </widget>
             </item>

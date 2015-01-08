@@ -5,6 +5,7 @@ using namespace std;
 
 void tactic::init()
 {
+    _pause=false;
     ordersize=0;
     ordersize_1=0;
     lasttradeprice=0;
@@ -20,7 +21,11 @@ void tactic::book(const CThostFtdcDepthMarketDataField *pDepthMarketData)
 }
 void tactic::quote(const std::string & symbol, const std::string & ba, long level, double price, long quotesize)
 {
-//    cerr <<"now ordersize\t"<<ordersize<< "\tnow price\t " <<price << "\tlast trade price\t" << lasttradeprice <<endl;
+    if(_pause==true)
+    {
+        return;
+    }
+    //    cerr <<"now ordersize\t"<<ordersize<< "\tnow price\t " <<price << "\tlast trade price\t" << lasttradeprice <<endl;
     if(symbol=="IF1501")
     {
         if(lasttradeprice==0)
@@ -126,7 +131,6 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
         }
     }
 }
-
 void tactic::ack(const std::string & ordername,const std::string & type,const std::string & info)
 {
     cerr<<endl<<"--->>> ack from tactic"<<endl;

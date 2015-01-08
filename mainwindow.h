@@ -37,9 +37,11 @@ public:
     void set_qa(QApplication * p){qa=p;}
 
 signals:
-    void on_pushButton_4_clicked();
     void on_pushButton_5_clicked();
     void on_pushButton_6_clicked();
+    void on_pushButton_16_clicked();
+
+
     void check_add_order(const std::string &,const std::string &,const std::string &,const std::string &,const std::string &);
 
 public slots:

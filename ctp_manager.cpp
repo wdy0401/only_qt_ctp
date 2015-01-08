@@ -14,7 +14,9 @@ void ctp_manager::init()
 {
     ctp_quote_running=false;
     ctp_trade_running=false;
-    QObject::connect(mw, &MainWindow::on_pushButton_4_clicked, this, &ctp_manager::run_tactic);
+    QObject::connect(mw, &MainWindow::on_pushButton_5_clicked, this, &ctp_manager::run_tactic);
+    QObject::connect(mw, &MainWindow::on_pushButton_6_clicked, this, &ctp_manager::pause_tactic);
+    QObject::connect(mw, &MainWindow::on_pushButton_16_clicked, this, &ctp_manager::resume_tactic);
 }
 bool ctp_manager::check_trade_init_para()
 {
@@ -87,6 +89,16 @@ void ctp_manager::start_ctp_trade()
         QMessageBox::information(mw, "INFO","Trade is running");
         mw->show_string_trade("Trade is running");
     }
+}
+void ctp_manager::resume_tactic()
+{
+    mw->show_string_trade("Tactic resumed");
+    tc->resume();
+}
+void ctp_manager::pause_tactic()
+{
+    mw->show_string_trade("Tactic paused");
+    tc->pause();
 }
 void ctp_manager::run_tactic()
 {

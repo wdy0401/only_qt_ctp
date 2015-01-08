@@ -14,6 +14,7 @@ class tactic: public QObject
 public:
     void set_ctp_order_manager(ctp_order_manager * p);
     void init();
+    void send_order();
 
 public slots:
     virtual void book(const CThostFtdcDepthMarketDataField *pDepthMarketData);
@@ -22,7 +23,10 @@ public slots:
     virtual void done(const std::string & ordername,const std::string & type,const std::string & info);
     virtual void rej(const std::string & ordername,const std::string & type,const std::string & info);
     virtual void fill(const std::string & ordername,const std::string symbol,double price, long size);
+    virtual void pause(){_pause=true;}
+    virtual void resume(){_pause=false;}
 private:
+    bool _pause;
     int ordersize;
     int ordersize_1;
     double lasttradeprice;
