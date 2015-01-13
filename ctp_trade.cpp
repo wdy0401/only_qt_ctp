@@ -315,7 +315,6 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
     cerr <<endl << "--->>> " << "OnRspUserLogin" << endl;
     if (bIsLast && !IsErrorRspInfo(pRspInfo))
     {
-        emit OnLogin(pRspUserLogin);
         //save para
         FRONT_ID = pRspUserLogin->FrontID;
         SESSION_ID = pRspUserLogin->SessionID;
@@ -324,6 +323,7 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         cerr<<"SESSION_ID init "<<SESSION_ID<<endl;
         cerr<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
         cerr<<"--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
+        emit OnLogin(pRspUserLogin);
         ReqSettlementInfoConfirm();
     }
 }

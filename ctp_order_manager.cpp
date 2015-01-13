@@ -82,6 +82,7 @@ void ctp_order_manager::OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin)
 {
     FRONT_ID = pRspUserLogin->FrontID;
     SESSION_ID = pRspUserLogin->SessionID;
+    cerr << endl<<"\nctp_order_manager Front_ID\t"<<FRONT_ID<<"\n"<<"Session ID\t" <<SESSION_ID<<endl;
     strcpy(this->MaxOrderRef,pRspUserLogin->MaxOrderRef);
     this->nowref=atoi(this->MaxOrderRef);
 }
