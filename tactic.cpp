@@ -146,7 +146,7 @@ void tactic::rej(const std::string & ordername,const std::string & type,const st
     cerr<<endl<<"--->>> rej from tactic"<<endl;
     cerr << "ordername " << ordername <<"\ttype\t"<<type<<"\tinfo\t"<<info<<endl;
 }
-void tactic::fill(const std::string & ordername,const std::string symbol,double price, long size)
+void tactic::fill(const std::string & ordername,const std::string & symbol,double price, long size)
 {
     cerr<<endl<<"--->>> fill from tactic"<<endl;
     cerr << "ordername " << ordername <<"\tsymbol\t"<<symbol <<"\tprice\t"<<price<<"\tsize\t"<<size<<endl;

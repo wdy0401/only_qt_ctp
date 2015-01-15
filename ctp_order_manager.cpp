@@ -224,13 +224,13 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
 void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
 {
     cerr << endl << "--->>> OnRtnTrade" <<endl;
-    static string fillstr;
+    string fillstr;
     fillstr= p->ExchangeID;
     fillstr+=p->OrderSysID;
 
-    static string mw_show;
+    string mw_show;
     mw_show="";
-    static string buy_sell="";
+    string buy_sell="";
     buy_sell=(p->Direction=='0'?"BUY":"SELL");
     mw_show+=p->InstrumentID;
     mw_show+="\t"+buy_sell + "\t" + wfunction::ftos(p->Price) + "\t" + wfunction::itos(p->Volume);
