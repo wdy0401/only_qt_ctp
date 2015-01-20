@@ -88,7 +88,7 @@ void ctp_order_manager::OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin)
 }
 void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
 {
-    static string fillstr;
+    string fillstr;
     cerr << endl << "--->>> OnRtnOrder" <<endl;
     if(p->FrontID!=this->FRONT_ID || p->SessionID!=this->SESSION_ID)
     {
@@ -110,52 +110,24 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
              <<endl;
         return;
     }
-//    /////////////////////////////////////////////////////////////////////////
-//    ///TFtdcOrderStatusType是一个报单状态类型
-//    /////////////////////////////////////////////////////////////////////////
-//    ///
-//    ///全部成交
-//    #define THOST_FTDC_OST_AllTraded '0'
-
-//    ///部分成交还在队列中
-//    #define THOST_FTDC_OST_PartTradedQueueing '1'
-
-//    ///部分成交不在队列中
-//    #define THOST_FTDC_OST_PartTradedNotQueueing '2'
-
-//    ///未成交还在队列中
-//    #define THOST_FTDC_OST_NoTradeQueueing '3'
-
-//    ///未成交不在队列中
-//    #define THOST_FTDC_OST_NoTradeNotQueueing '4'
-
-//    ///撤单
-//    #define THOST_FTDC_OST_Canceled '5'
-
-//    ///未知
-//    #define THOST_FTDC_OST_Unknown 'a'
-
-//    ///尚未触发
-//    #define THOST_FTDC_OST_NotTouched 'b'
-
-//    ///已触发
-//    #define THOST_FTDC_OST_Touched 'c'
-
-//    typedef char TThostFtdcOrderStatusType;
 
     ///全部成交
     if(p->OrderStatus == THOST_FTDC_OST_AllTraded)
     {
-        fillstr= p->ExchangeID;
-        fillstr+=p->OrderSysID;
+
+        fillstr= p->TraderID;
+        fillstr+=p->ExchangeID;
+        fillstr+=p->OrderLocalID;
         _fill_ordername[fillstr]=iter->second;
         emit done(iter->second,"FILL","ALL");
     }
     ///部分成交还在队列中
     else if(p->OrderStatus == THOST_FTDC_OST_PartTradedQueueing)
     {
-        fillstr= p->ExchangeID;
-        fillstr+=p->OrderSysID;
+
+        fillstr= p->TraderID;
+        fillstr+=p->ExchangeID;
+        fillstr+=p->OrderLocalID;
         _fill_ordername[fillstr]=iter->second;
         emit done(iter->second,"FILL","PART");
     }
@@ -167,8 +139,10 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
     ///未成交还在队列中
     else if(p->OrderStatus == THOST_FTDC_OST_NoTradeQueueing)
     {
-        fillstr= p->ExchangeID;
-        fillstr+=p->OrderSysID;
+
+        fillstr= p->TraderID;
+        fillstr+=p->ExchangeID;
+        fillstr+=p->OrderLocalID;
         _fill_ordername[fillstr]=iter->second;
         emit ack(iter->second,"SEND","EXG_ACK");
     }
@@ -192,6 +166,10 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
     ///未知 ctp已接受 还未发到交易所
     else if(p->OrderStatus == THOST_FTDC_OST_Unknown)
     {
+        fillstr= p->TraderID;
+        fillstr+=p->ExchangeID;
+        fillstr+=p->OrderLocalID;
+        _fill_ordername[fillstr]=iter->second;
         emit ack(iter->second,"SEND","CTP_ACK");
     }
     ///尚未触发
@@ -219,14 +197,18 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
     cerr << "OrderStatus\t" << p->OrderStatus << "\t";
     cerr << "iRequestID\t" << p->RequestID << "\t";
     cerr << "ExchangeID\t"<< p->ExchangeID <<"\t";
+    cerr << "TraderID\t"<< p->TraderID <<"\t";
+    cerr << "OrderLocalID\t"<< p->OrderLocalID <<"\t";
     cerr << "OrderSysID\t"<< p->OrderSysID <<endl;
 }
 void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
 {
     cerr << endl << "--->>> OnRtnTrade" <<endl;
     string fillstr;
-    fillstr= p->ExchangeID;
-    fillstr+=p->OrderSysID;
+
+    fillstr= p->TraderID;
+    fillstr+=p->ExchangeID;
+    fillstr+=p->OrderLocalID;
 
     string mw_show;
     mw_show="";

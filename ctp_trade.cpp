@@ -323,7 +323,9 @@ void ctp_trade::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThost
         cerr<<"SESSION_ID init "<<SESSION_ID<<endl;
         cerr<<"--->>>  MaxOrderRef "<<pRspUserLogin->MaxOrderRef<<endl;
         cerr<<"--->>> get exchange trading day = " << pUserApi->GetTradingDay() << endl;
-        emit OnLogin(pRspUserLogin);
+        CThostFtdcRspUserLoginField tp;
+        memcpy(&tp,pRspUserLogin,sizeof(CThostFtdcRspUserLoginField));
+        emit OnLogin(&tp);
         ReqSettlementInfoConfirm();
     }
 }

@@ -26,7 +26,7 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
         return;
     }
     //    cerr <<"now ordersize\t"<<ordersize<< "\tnow price\t " <<price << "\tlast trade price\t" << lasttradeprice <<endl;
-    if(symbol=="IF1501")
+    if(symbol=="IF1503")
     {
         if(lasttradeprice==0)
         {
@@ -78,7 +78,7 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
             }
         }
     }
-    if(symbol=="IF1503")
+    if(symbol=="IF1502")
     {
         if(lasttradeprice_1==0)
         {
@@ -90,13 +90,13 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
             {
                 om->new_order(symbol,"BUY","OPEN",price+PRICESTEP,ORDERSZ);
                 lasttradeprice_1=price;
-                ordersize_1--;
+                ordersize_1++;
             }
             if(price-lasttradeprice_1<-1*LIMITSTEP)
             {
                 om->new_order(symbol,"SELL","OPEN",price-PRICESTEP,ORDERSZ);
                 lasttradeprice_1=price;
-                ordersize_1++;
+                ordersize_1--;
             }
         }
         else if(ordersize_1>0)
