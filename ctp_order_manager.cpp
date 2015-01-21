@@ -88,6 +88,7 @@ void ctp_order_manager::OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin)
 }
 void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
 {
+    mutex.lock();
     string fillstr;
     cerr << endl << "--->>> OnRtnOrder" <<endl;
     if(p->FrontID!=this->FRONT_ID || p->SessionID!=this->SESSION_ID)
@@ -200,9 +201,12 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
     cerr << "TraderID\t"<< p->TraderID <<"\t";
     cerr << "OrderLocalID\t"<< p->OrderLocalID <<"\t";
     cerr << "OrderSysID\t"<< p->OrderSysID <<endl;
+
+    mutex.unlock();
 }
 void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
 {
+    mutex.lock();
     cerr << endl << "--->>> OnRtnTrade" <<endl;
     string fillstr;
 
@@ -240,6 +244,8 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
         cerr << "Fill price\t" << p->Price<<endl;
     }
     mw->show_string_trade(mw_show);
+
+    mutex.unlock();
 }
 CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
 {

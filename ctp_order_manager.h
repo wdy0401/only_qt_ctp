@@ -9,6 +9,7 @@
 #include<map>
 #include<string>
 
+#include<QMutex>
 #include<QObject>
 
 #include"../libs/ctp/ThostFtdcTraderApi.h"
@@ -73,6 +74,8 @@ private:
     MainWindow * mw;
     CThostFtdcInputOrderField * initorder(const std::string & InstrumentID, const std::string & side, const std::string & openclose, double price, long size);
     CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
+
+    QMutex mutex;
 };
 
 #endif
