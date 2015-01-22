@@ -88,9 +88,20 @@ void ctp_order_manager::OnLogin(CThostFtdcRspUserLoginField *pRspUserLogin)
 }
 void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
 {
-    mutex.lock();
+    //mutex.lock();
     string fillstr;
-    cerr << endl << "--->>> OnRtnOrder" <<endl;
+    cerr << endl << "--->>> OnRtnOrder  HEAD"
+    <<"\tNowRef\t"<<this->nowref
+    << "\tFrontID\t" << p->FrontID
+    << "\tSessionID\t" << p->SessionID
+    << "\tOrderRef\t" << p->OrderRef
+    << "\tOrderStatus\t" << p->OrderStatus
+    << "\tiRequestID\t" << p->RequestID
+    << "\tExchangeID\t"<< p->ExchangeID
+    << "\tTraderID\t"<< p->TraderID
+    << "\tOrderLocalID\t"<< p->OrderLocalID
+    << "\tOrderSysID\t"<< p->OrderSysID <<endl;
+
     if(p->FrontID!=this->FRONT_ID || p->SessionID!=this->SESSION_ID)
     {
         cerr << "Rtn from other ctp"<<endl;
@@ -190,24 +201,36 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
     _ordername_order[iter->second]->of->OrderStatus=p->OrderStatus;
     _ordername_order[iter->second]->set_uniq_order(p);
 
-    cerr << "--->>> OnRtnOrder\t";
-    cerr << "ordername\t" << iter->second<<"\t";
-    cerr << "FrontID\t" << p->FrontID << "\t";
-    cerr << "SessionID\t" << p->SessionID << "\t";
-    cerr << "OrderRef\t" << p->OrderRef << "\t";
-    cerr << "OrderStatus\t" << p->OrderStatus << "\t";
-    cerr << "iRequestID\t" << p->RequestID << "\t";
-    cerr << "ExchangeID\t"<< p->ExchangeID <<"\t";
-    cerr << "TraderID\t"<< p->TraderID <<"\t";
-    cerr << "OrderLocalID\t"<< p->OrderLocalID <<"\t";
-    cerr << "OrderSysID\t"<< p->OrderSysID <<endl;
 
-    mutex.unlock();
+    cerr << endl << "--->>> OnRtnOrder  END"
+    <<"\tNowRef\t"<<this->nowref
+    << "\tFrontID\t" << p->FrontID
+    << "\tSessionID\t" << p->SessionID
+    << "\tOrderRef\t" << p->OrderRef
+    << "\tOrderStatus\t" << p->OrderStatus
+    << "\tiRequestID\t" << p->RequestID
+    << "\tExchangeID\t"<< p->ExchangeID
+    << "\tTraderID\t"<< p->TraderID
+    << "\tOrderLocalID\t"<< p->OrderLocalID
+    << "\tOrderSysID\t"<< p->OrderSysID <<endl;
+
+//    mutex.unlock();
 }
 void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
 {
-    mutex.lock();
-    cerr << endl << "--->>> OnRtnTrade" <<endl;
+//    mutex.lock();
+    cerr << endl << "--->>> OnRtnTrade  HEAD"
+    <<"\tNowRef\t"<<this->nowref
+    << "\tBrokerID\t"<<p->BrokerID
+    << "\tBrokerOrderSeq\t"<<p->BrokerOrderSeq
+    << "\tExchangeID\t"<<p->ExchangeID
+    << "\tOrderSysID\t"<<p->OrderSysID
+    << "\tTraderID\t"<<p->TraderID
+    << "\tInstrumentID\t"<<p->InstrumentID;
+    cerr << "OrderRef\t" << p->OrderRef << endl;
+    cerr << "Fill size\t" << p->Volume<<endl;
+    cerr << "Fill price\t" << p->Price<<endl;
+
     string fillstr;
 
     fillstr= p->TraderID;
@@ -245,7 +268,18 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
     }
     mw->show_string_trade(mw_show);
 
-    mutex.unlock();
+    cerr << endl << "--->>> OnRtnTrade  END"
+    <<"\tNowRef\t"<<this->nowref
+    << "\tBrokerID\t"<<p->BrokerID
+    << "\tBrokerOrderSeq\t"<<p->BrokerOrderSeq
+    << "\tExchangeID\t"<<p->ExchangeID
+    << "\tOrderSysID\t"<<p->OrderSysID
+    << "\tTraderID\t"<<p->TraderID
+    << "\tInstrumentID\t"<<p->InstrumentID;
+    cerr << "OrderRef\t" << p->OrderRef << endl;
+    cerr << "Fill size\t" << p->Volume<<endl;
+    cerr << "Fill price\t" << p->Price<<endl;
+//    mutex.unlock();
 }
 CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
 {

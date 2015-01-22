@@ -465,7 +465,7 @@ void ctp_trade::OnRtnOrder(CThostFtdcOrderField *p)
     CThostFtdcOrderField * tmpp=new CThostFtdcOrderField;
     memcpy(tmpp,p,sizeof(CThostFtdcOrderField));
     emit this->send_rtn_order(tmpp);
-    delete tmpp;
+//    delete tmpp;
 }
 
 void ctp_trade::OnRtnTrade(CThostFtdcTradeField *p)
@@ -473,6 +473,6 @@ void ctp_trade::OnRtnTrade(CThostFtdcTradeField *p)
     CThostFtdcTradeField * tmpp=new CThostFtdcTradeField;
     memcpy(tmpp,p,sizeof(CThostFtdcTradeField));
     emit this->send_rtn_trade(tmpp);
-    delete tmpp;
+//    delete tmpp;
 }
 
