@@ -104,9 +104,9 @@ void ctp_order_manager::OnRtnOrder(CThostFtdcOrderField *p)
 
     if(p->FrontID!=this->FRONT_ID || p->SessionID!=this->SESSION_ID)
     {
-        cerr << "Rtn from other ctp"<<endl;
-        cerr << "Rtn FrontID " << p->FrontID<<"\tSessionID\t"<<p->SessionID<<endl;
-        cerr << "This FrontID " << this->FRONT_ID<<"\tSessionID\t"<<this->SESSION_ID<<endl;
+        cerr << "Rtn from other ctp"
+        << "\tRtn FrontID " << p->FrontID<<"\tSessionID\t"<<p->SessionID
+        << "\tThis FrontID " << this->FRONT_ID<<"\tSessionID\t"<<this->SESSION_ID<<endl;
         return;
     }
     std::map <long, std::string>::iterator iter=_iRequestID_ordername.find(p->RequestID);
@@ -220,16 +220,16 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
 {
 //    mutex.lock();
     cerr << endl << "--->>> OnRtnTrade  HEAD"
-    <<"\tNowRef\t"<<this->nowref
-    << "\tBrokerID\t"<<p->BrokerID
-    << "\tBrokerOrderSeq\t"<<p->BrokerOrderSeq
-    << "\tExchangeID\t"<<p->ExchangeID
-    << "\tOrderSysID\t"<<p->OrderSysID
-    << "\tTraderID\t"<<p->TraderID
-    << "\tInstrumentID\t"<<p->InstrumentID;
-    cerr << "OrderRef\t" << p->OrderRef << endl;
-    cerr << "Fill size\t" << p->Volume<<endl;
-    cerr << "Fill price\t" << p->Price<<endl;
+         <<"\tNowRef\t"<<this->nowref
+         << "\tBrokerID\t"<<p->BrokerID
+         << "\tBrokerOrderSeq\t"<<p->BrokerOrderSeq
+         << "\tExchangeID\t"<<p->ExchangeID
+         << "\tOrderSysID\t"<<p->OrderSysID
+         << "\tTraderID\t"<<p->TraderID
+         << "\tInstrumentID\t"<<p->InstrumentID
+         << "\tOrderRef\t" << p->OrderRef
+         << "\tFill size\t" << p->Volume
+         << "\tFill price\t" << p->Price<<endl;
 
     string fillstr;
 
@@ -262,9 +262,9 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
     {
         emit fill(iter->second,p->InstrumentID,p->Price,p->Volume);
         _ordername_order[iter->second]->set_uniq_trade(p);
-        cerr << "OrderRef\t" << p->OrderRef << endl;
-        cerr << "Fill size\t" << p->Volume<<endl;
-        cerr << "Fill price\t" << p->Price<<endl;
+        cerr << endl << "FILL OrderRef\t" << p->OrderRef
+        << "\tFill size\t" << p->Volume
+        << "Fill price\t" << p->Price<<endl;
     }
     mw->show_string_trade(mw_show);
 
@@ -275,10 +275,10 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
     << "\tExchangeID\t"<<p->ExchangeID
     << "\tOrderSysID\t"<<p->OrderSysID
     << "\tTraderID\t"<<p->TraderID
-    << "\tInstrumentID\t"<<p->InstrumentID;
-    cerr << "OrderRef\t" << p->OrderRef << endl;
-    cerr << "Fill size\t" << p->Volume<<endl;
-    cerr << "Fill price\t" << p->Price<<endl;
+    << "\tInstrumentID\t"<<p->InstrumentID
+    << "\tOrderRef\t" << p->OrderRef
+    << "\tFill size\t" << p->Volume
+    << "\tFill price\t" << p->Price<<endl;
 //    mutex.unlock();
 }
 CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & InstrumentID, const string & side, const string & openclose, double price, long size)
@@ -473,21 +473,20 @@ void ctp_order_manager::cancel_order(const string & ordername)
     }
     else
     {
-        cerr << "\torder deleting\t" << "order name " << ordername <<endl;
         dlorder->RequestID = trade->add_iRequestID();
         dlorder->ActionFlag = THOST_FTDC_AF_Delete;
 
-        cerr << "FrontID\t" << dlorder->FrontID << "\t";
-        cerr << "SessionID\t" << dlorder->SessionID << "\t";
-        cerr << "OrderRef\t" << dlorder->OrderRef << "\t";
-        cerr << "ExchangeID\t" << dlorder->ExchangeID << "\t";
-        cerr << "OrderSysID\t" << dlorder->OrderSysID << "\t";
-        cerr << "BrokerID\t" << dlorder->BrokerID << "\t";
-        cerr << "UserID\t" << dlorder->UserID << "\t";
-        cerr << "InvestorID\t" << dlorder->InvestorID << "\t";
-        cerr << "InstrumentID\t" << dlorder->InstrumentID << "\t";
-        cerr << "OrderStatus\t" <<_ordername_order[ordername]->of->OrderStatus << endl;
-
+        cerr << "\torder deleting\t" << "order name " << ordername
+        << "\tFrontID\t" << dlorder->FrontID
+        << "\tSessionID\t" << dlorder->SessionID
+        << "\tOrderRef\t" << dlorder->OrderRef
+        << "\tExchangeID\t" << dlorder->ExchangeID
+        << "\tOrderSysID\t" << dlorder->OrderSysID
+        << "\tBrokerID\t" << dlorder->BrokerID
+        << "\tUserID\t" << dlorder->UserID
+        << "\tInvestorID\t" << dlorder->InvestorID
+        << "\tInstrumentID\t" << dlorder->InstrumentID
+        << "\tOrderStatus\t" <<_ordername_order[ordername]->of->OrderStatus << endl;
 
         emit ack(ordername,"CANCEL","LOCAL_ACK");
         trade->ReqOrderAction(dlorder);
