@@ -55,8 +55,8 @@ int main(int argc, char *argv[])
 
     //set para
     simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
-    simu_log.setfile("d:/record/"+wfunction::get_now_second()+".txt");
-    ctp_quote_log.setfile("d:/record/quote_"+wfunction::get_now_second()+".csv");
+    simu_log.set_file("d:/record/"+wfunction::get_now_second()+".txt");
+    ctp_quote_log.set_file("d:/record/quote_"+wfunction::get_now_second()+".csv");
 
     //set cm ordermanager and tactic
 
