@@ -1,6 +1,6 @@
 #include "tactic.h"
-#include"ctp_order_manager.h"
 #include<iostream>
+#include<QDebug>
 using namespace std;
 
 void tactic::init()
@@ -11,21 +11,22 @@ void tactic::init()
     lasttradeprice=0;
     lasttradeprice_1=0;
 }
-void tactic::set_ctp_order_manager(ctp_order_manager * p)
-{
-    om=p;
-}
-void tactic::book(const CThostFtdcDepthMarketDataField *pDepthMarketData)
-{
-//    cerr <<endl << "Tactic Book" << endl;
-}
+void tactic::book(const CThostFtdcDepthMarketDataField *p){if(p!=nullptr){;}}
+//{
+////    qDebug() <<endl << "Tactic Book" << endl;
+//}
 void tactic::quote(const std::string & symbol, const std::string & ba, long level, double price, long quotesize)
 {
     if(_pause==true)
     {
         return;
     }
+    if(ba.size()>0 && level>0 && price>0 && quotesize>0){}
+#ifdef SIMU
+    if(1)
+#else
     if(symbol=="IF1503")
+#endif
     {
         if(lasttradeprice==0)
         {
@@ -130,23 +131,24 @@ void tactic::quote(const std::string & symbol, const std::string & ba, long leve
         }
     }
 }
+
 void tactic::ack(const std::string & ordername,const std::string & type,const std::string & info)
 {
-    cerr<<endl<<"--->>> ack from tactic\t"
-    << "ordername " << ordername <<"\ttype\t"<<type<<"\tinfo\t"<<info<<endl;
+    qDebug()<<endl<<"--->>> ack from tactic"<<endl;
+    qDebug() << "ordername " << ordername.c_str() <<"\ttype\t"<<type.c_str()<<"\tinfo\t"<<info.c_str()<<endl;
 }
 void tactic::done(const std::string & ordername,const std::string & type,const std::string & info)
 {
-    cerr<<endl<<"--->>> done from tactic\t"
-    << "ordername " << ordername <<"\ttype\t"<<type<<"\tinfo\t"<<info<<endl;
+    qDebug()<<endl<<"--->>> done from tactic"<<endl;
+    qDebug() << "ordername " << ordername.c_str() <<"\ttype\t"<<type.c_str()<<"\tinfo\t"<<info.c_str()<<endl;
 }
 void tactic::rej(const std::string & ordername,const std::string & type,const std::string & info)
 {
-    cerr<<endl<<"--->>> rej from tactic\t"
-    << "ordername " << ordername <<"\ttype\t"<<type<<"\tinfo\t"<<info<<endl;
+    qDebug()<<endl<<"--->>> rej from tactic"<<endl;
+    qDebug() << "ordername " << ordername.c_str() <<"\ttype\t"<<type.c_str()<<"\tinfo\t"<<info.c_str()<<endl;
 }
-void tactic::fill(const std::string & ordername,const std::string & symbol,double price, long size)
+void tactic::fill(const std::string & ordername,const std::string & symbol,const std::string & buysell,double price, long size)
 {
-    cerr<<endl<<"--->>> fill from tactic\t"
-    << "ordername " << ordername <<"\tsymbol\t"<<symbol <<"\tprice\t"<<price<<"\tsize\t"<<size<<endl;
+    qDebug()<<endl<<"--->>> fill from tactic"<<endl;
+    qDebug() << "ordername " << ordername.c_str() <<"\tsymbol\t"<<symbol.c_str() << "\tbuysell\t"<< buysell.c_str() <<"\tprice\t"<<price<<"\tsize\t"<<size<<endl;
 }
