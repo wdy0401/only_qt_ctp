@@ -50,7 +50,7 @@ signals:
     void ack(const std::string & ordername,const std::string & type,const std::string & info);
     void done(const std::string & ordername,const std::string & type,const std::string & info);
     void rej(const std::string & ordername,const std::string & type,const std::string & info);
-    void fill(const std::string & ordername,const std::string & symbol,const std::string & buysell,double price, long size);
+    void fill(const std::string & ordername,const std::string & symbol,double price, long size);
     void send_quote(const std::string & symbol, const std::string & ba, long level, double price, long size);
     void send_book(const CThostFtdcDepthMarketDataField *pDepthMarketData);
 
