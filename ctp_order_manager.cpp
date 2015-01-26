@@ -260,7 +260,7 @@ void ctp_order_manager::OnRtnTrade(CThostFtdcTradeField *p)
     }
     else
     {
-        emit fill(iter->second,p->InstrumentID,p->Price,p->Volume);
+        emit fill(iter->second,p->InstrumentID,buy_sell,p->Price,p->Volume);
         _ordername_order[iter->second]->set_uniq_trade(p);
         cerr << endl << "FILL OrderRef\t" << p->OrderRef
         << "\tFill size\t" << p->Volume
