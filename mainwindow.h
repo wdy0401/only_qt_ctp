@@ -8,7 +8,7 @@
 
 #include<string>
 #include<map>
-#include"../ctp/ThostFtdcMdApi.h"
+#include"../libs/ctp/ThostFtdcMdApi.h"
 class ctp_manager;
 
 namespace Ui {

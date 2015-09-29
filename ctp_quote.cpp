@@ -135,6 +135,7 @@ void ctp_quote::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *p)
     emit broadcast_book(p);
     emit broadcast_quote(p->InstrumentID,"BID",1,p->BidPrice1,p->BidVolume1);
     emit broadcast_quote(p->InstrumentID,"ASK",1,p->AskPrice1,p->AskVolume1);
+    //cout << p->InstrumentID << "ASK"<<1<<p->AskPrice1<<p->AskVolume1;
 
 }
 bool ctp_quote::IsErrorRspInfo(CThostFtdcRspInfoField *pRspInfo)
