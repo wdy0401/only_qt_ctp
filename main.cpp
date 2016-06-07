@@ -31,7 +31,7 @@
 using namespace std;
 
 wtimer tm;
-cfg simu_cfg;
+cfg cfg_info;
 log_info simu_log;//ctp log
 log_info loginfo;//gpp_qt log
 ctp_log ctp_quote_log;//qoute log
@@ -51,10 +51,10 @@ int main(int argc, char *argv[])
 
 
     //load simu para
-    simu_cfg.setcfgfile("c:/cfg/simu_trade.cfg");
+    cfg_info.setcfgfile("c:/cfg/simu_trade.cfg");
 
     //set para
-    simu_bars_manage.addbarlist(simu_cfg.getparam("INSTRUMENT_ID"));
+    simu_bars_manage.addbarlist(cfg_info.get_para("INSTRUMENT_ID"));
     simu_log.set_file("d:/record/"+wfunction::get_now_second()+".txt");
     ctp_quote_log.set_file("d:/record/quote_"+wfunction::get_now_second()+".csv");
 

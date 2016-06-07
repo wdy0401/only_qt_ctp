@@ -25,7 +25,7 @@ using namespace std;
 
 extern wtimer tm;
 extern log_info simu_log;
-extern cfg simu_cfg;
+extern cfg cfg_info;
 extern bars_manage simu_bars_manage;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -36,9 +36,9 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 void MainWindow::init()
 {
-    set_symbols_display(simu_cfg.getparam("INSTRUMENT_ID"));
-    set_order_send(simu_cfg.getparam("INSTRUMENT_ID"));
-    set_market_maker(simu_cfg.getparam("MARKET_MAKER_ID"));
+    set_symbols_display(cfg_info.get_para("INSTRUMENT_ID"));
+    set_order_send(cfg_info.get_para("INSTRUMENT_ID"));
+    set_market_maker(cfg_info.get_para("MARKET_MAKER_ID"));
     set_seperate_label();
 }
 MainWindow::~MainWindow()

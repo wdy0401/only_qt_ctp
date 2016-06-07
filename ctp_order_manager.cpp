@@ -12,7 +12,7 @@
 
 #include"../../libs/ctp/ThostFtdcTraderApi.h"
 #include"tactic.h"
-extern cfg simu_cfg;
+extern cfg cfg_info;
 
 using namespace std;
 
@@ -69,8 +69,8 @@ std::string ctp_order_manager::new_order(const std::string InstrumentID,const st
     }
     ctp_order * ctporder=new ctp_order(porder,this);
 
-    strncpy(ctporder->of->BrokerID,const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()),sizeof(ctporder->of->BrokerID));
-    strncpy(ctporder->of->UserID,const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()),sizeof(ctporder->of->UserID));
+    strncpy(ctporder->of->BrokerID,const_cast<char*>(cfg_info.get_para("BROKER_ID").c_str()),sizeof(ctporder->of->BrokerID));
+    strncpy(ctporder->of->UserID,const_cast<char*>(cfg_info.get_para("INVESTOR_ID").c_str()),sizeof(ctporder->of->UserID));
 
     _ordername_order[ordername]=ctporder;
     _iRequestID_ordername[porder->RequestID]=ordername;
@@ -289,16 +289,16 @@ CThostFtdcInputOrderField * ctp_order_manager::initorder(const string & Instrume
     memset(oireq, 0, sizeof(CThostFtdcInputOrderField));
 
     ///经纪公司代码
-    strncpy(oireq->BrokerID, const_cast<char*>(simu_cfg.getparam("BROKER_ID").c_str()), sizeof(oireq->BrokerID));
+    strncpy(oireq->BrokerID, const_cast<char*>(cfg_info.get_para("BROKER_ID").c_str()), sizeof(oireq->BrokerID));
     ///投资者代码
-    strncpy(oireq->InvestorID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(oireq->InvestorID));
+    strncpy(oireq->InvestorID, const_cast<char*>(cfg_info.get_para("INVESTOR_ID").c_str()), sizeof(oireq->InvestorID));
     ///合约代码
     strncpy(oireq->InstrumentID, const_cast<char*>(InstrumentID.c_str()), sizeof(oireq->InstrumentID));
     ///报单引用
     add_OrderRef();
     strncpy(oireq->OrderRef,this->NowOrderRef, sizeof(TThostFtdcOrderRefType));
     ///用户代码
-    strncpy(oireq->UserID, const_cast<char*>(simu_cfg.getparam("INVESTOR_ID").c_str()), sizeof(oireq->UserID));
+    strncpy(oireq->UserID, const_cast<char*>(cfg_info.get_para("INVESTOR_ID").c_str()), sizeof(oireq->UserID));
     ///报单价格条件
     oireq->OrderPriceType = THOST_FTDC_OPT_LimitPrice;
     ///买卖方向
