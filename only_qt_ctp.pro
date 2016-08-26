@@ -24,7 +24,6 @@ SOURCES += main.cpp\
     ../gpp_qt/bar/bars_manage.cpp \
     ../gpp_qt/cfg/cfg.cpp \
     ../gpp_qt/wfunction/wfunction.cpp \
-    ../gpp_qt/wtimer/wtimer.cpp \
 	../gpp_qt/log_info/log_info.cpp \
 	ctp_trade_qthread.cpp\
     ctp_trade.cpp \
@@ -33,7 +32,8 @@ SOURCES += main.cpp\
     ctp_order_manager.cpp \
     tactic.cpp \
     ctp_manager.cpp \
-    need_to_do.cpp
+    need_to_do.cpp \
+    ../gpp_qt/cmd_line/cmd_line.cpp
 
 HEADERS  += mainwindow.h \
     ctp/ThostFtdcMdApi.h \
@@ -56,7 +56,8 @@ HEADERS  += mainwindow.h \
     ctp_order_manager.h \
     tactic.h \
     ctp_manager.h \
-    need_to_do.h
+    need_to_do.h \
+    ../gpp_qt/cmd_line/cmd_line.h
 
 FORMS    += mainwindow.ui
 

@@ -20,7 +20,7 @@ void ctp_manager::init()
 }
 bool ctp_manager::check_trade_init_para()
 {
-    if(simu_cfg.getparam("TRADE_FRONT_ADDR")=="")
+    if(simu_cfg.get_para("TRADE_FRONT_ADDR")=="")
     {
         return false;
     }
@@ -28,7 +28,7 @@ bool ctp_manager::check_trade_init_para()
 }
 bool ctp_manager::check_quote_init_para()
 {
-    if(simu_cfg.getparam("QUOTE_FRONT_ADDR")=="")
+    if(simu_cfg.get_para("QUOTE_FRONT_ADDR")=="")
     {
         return false;
     }

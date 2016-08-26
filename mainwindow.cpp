@@ -36,9 +36,9 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 void MainWindow::init()
 {
-    set_symbols_display(simu_cfg.getparam("INSTRUMENT_ID"));
-    set_order_send(simu_cfg.getparam("INSTRUMENT_ID"));
-    set_market_maker(simu_cfg.getparam("MARKET_MAKER_ID"));
+    set_symbols_display(simu_cfg.get_para("INSTRUMENT_ID"));
+    set_order_send(simu_cfg.get_para("INSTRUMENT_ID"));
+    set_market_maker(simu_cfg.get_para("MARKET_MAKER_ID"));
     set_seperate_label();
 }
 MainWindow::~MainWindow()
