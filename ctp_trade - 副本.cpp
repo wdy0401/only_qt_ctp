@@ -2,7 +2,7 @@
 #include"gpp_qt/wfunction/wfunction.h"
 #include"gpp_qt/cfg/cfg.h"
 
-extern cfg simu_cfg;
+extern cfg cfg_info;
 
 static bool offer=false;
 static bool cancel = false;

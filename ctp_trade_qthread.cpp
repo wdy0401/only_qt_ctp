@@ -9,7 +9,7 @@
 using namespace std;
 
 
-extern cfg simu_cfg;
+extern cfg cfg_info;
 
 void ctp_trade_qthread::run()
 {
@@ -30,7 +30,7 @@ void ctp_trade_qthread::init()
 }
 bool ctp_trade_qthread::check_init_para()
 {
-    if(simu_cfg.get_para("TRADE_FRONT_ADDR")=="")
+    if(cfg_info.get_para("TRADE_FRONT_ADDR")=="")
     {
         QMessageBox::information(mw, "ERROR", "TRADE_FRONT_ADDR not exist !");
         this->exit();

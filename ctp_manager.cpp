@@ -7,7 +7,7 @@
 
 #include "mainwindow.h"
 
-extern cfg simu_cfg;
+extern cfg cfg_info;
 extern ctp_log ctp_quote_log;
 
 void ctp_manager::init()
@@ -20,7 +20,7 @@ void ctp_manager::init()
 }
 bool ctp_manager::check_trade_init_para()
 {
-    if(simu_cfg.get_para("TRADE_FRONT_ADDR")=="")
+    if(cfg_info.get_para("TRADE_FRONT_ADDR")=="")
     {
         return false;
     }
@@ -28,7 +28,7 @@ bool ctp_manager::check_trade_init_para()
 }
 bool ctp_manager::check_quote_init_para()
 {
-    if(simu_cfg.get_para("QUOTE_FRONT_ADDR")=="")
+    if(cfg_info.get_para("QUOTE_FRONT_ADDR")=="")
     {
         return false;
     }

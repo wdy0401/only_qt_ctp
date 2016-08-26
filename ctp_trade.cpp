@@ -9,7 +9,7 @@
 #include"../gpp_qt/wfunction/wfunction.h"
 #include"../gpp_qt/cfg/cfg.h"
 
-extern cfg simu_cfg;
+extern cfg cfg_info;
 
 using namespace std;
 
@@ -22,12 +22,12 @@ void ctp_trade::init()
 {
     iRequestID=0;
     cout<<"init trade"<<endl;
-    maxdelaytime=atoi(simu_cfg.get_para("MAX_QUERY_DELAY").c_str());
+    maxdelaytime=atoi(cfg_info.get_para("MAX_QUERY_DELAY").c_str());
     pUserApi = CThostFtdcTraderApi::CreateFtdcTraderApi();
     pUserApi->RegisterSpi((CThostFtdcTraderSpi*)this);
     pUserApi->SubscribePublicTopic(THOST_TERT_QUICK);
     pUserApi->SubscribePrivateTopic(THOST_TERT_QUICK);
-    pUserApi->RegisterFront(const_cast<char*>(simu_cfg.get_para("TRADE_FRONT_ADDR").c_str()));// connect
+    pUserApi->RegisterFront(const_cast<char*>(cfg_info.get_para("TRADE_FRONT_ADDR").c_str()));// connect
     pUserApi->Init();
     pUserApi->Join();
 }
@@ -35,9 +35,9 @@ void ctp_trade::ReqUserLogin()
 {
     CThostFtdcReqUserLoginField ulreq;
     memset(&ulreq, 0, sizeof(ulreq));
-    strncpy(ulreq.BrokerID,const_cast<char*>(simu_cfg.get_para("BROKER_ID").c_str()),sizeof(ulreq.BrokerID));
-    strncpy(ulreq.UserID,const_cast<char*>(simu_cfg.get_para("INVESTOR_ID").c_str()),sizeof(ulreq.UserID));
-    strncpy(ulreq.Password,const_cast<char*>(simu_cfg.get_para("PASSWORD").c_str()),sizeof(ulreq.Password));
+    strncpy(ulreq.BrokerID,const_cast<char*>(cfg_info.get_para("BROKER_ID").c_str()),sizeof(ulreq.BrokerID));
+    strncpy(ulreq.UserID,const_cast<char*>(cfg_info.get_para("INVESTOR_ID").c_str()),sizeof(ulreq.UserID));
+    strncpy(ulreq.Password,const_cast<char*>(cfg_info.get_para("PASSWORD").c_str()),sizeof(ulreq.Password));
     int iResult = pUserApi->ReqUserLogin(&ulreq, ++iRequestID);
     cerr << "--->>> Sending login request: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
@@ -45,8 +45,8 @@ void ctp_trade::ReqSettlementInfoConfirm()
 {
     CThostFtdcSettlementInfoConfirmField screq;
     memset(&screq, 0, sizeof(screq));
-    strncpy(screq.BrokerID, const_cast<char*>(simu_cfg.get_para("BROKER_ID").c_str()), sizeof(screq.BrokerID));
-    strncpy(screq.InvestorID, const_cast<char*>(simu_cfg.get_para("INVESTOR_ID").c_str()), sizeof(screq.InvestorID));
+    strncpy(screq.BrokerID, const_cast<char*>(cfg_info.get_para("BROKER_ID").c_str()), sizeof(screq.BrokerID));
+    strncpy(screq.InvestorID, const_cast<char*>(cfg_info.get_para("INVESTOR_ID").c_str()), sizeof(screq.InvestorID));
     int iResult = pUserApi->ReqSettlementInfoConfirm(&screq, ++iRequestID);
     cerr << endl << "--->>> Confirm settlement: " << iResult << ((iResult == 0) ? ",Successed" : ",Fail") << endl;
 }
@@ -58,8 +58,8 @@ void ctp_trade::ReqQryOrder(const string & instrument_id,bool fast)
 {
     CThostFtdcQryOrderField ofreq;
     memset(&ofreq, 0, sizeof(ofreq));
-    strncpy(ofreq.BrokerID,const_cast<char*>(simu_cfg.get_para("BROKER_ID").c_str()),sizeof(ofreq.BrokerID));
-    strncpy(ofreq.InvestorID,const_cast<char*>(simu_cfg.get_para("INVESTOR_ID").c_str()),sizeof(ofreq.InvestorID));
+    strncpy(ofreq.BrokerID,const_cast<char*>(cfg_info.get_para("BROKER_ID").c_str()),sizeof(ofreq.BrokerID));
+    strncpy(ofreq.InvestorID,const_cast<char*>(cfg_info.get_para("INVESTOR_ID").c_str()),sizeof(ofreq.InvestorID));
     strncpy(ofreq.InstrumentID,const_cast<char*>(instrument_id.c_str()),sizeof(ofreq.InstrumentID));
     int delaytime=0;
     while (true)
@@ -140,8 +140,8 @@ void ctp_trade::ReqQryTradingAccount(bool fast)
 {
     CThostFtdcQryTradingAccountField tareq;
     memset(&tareq, 0, sizeof(tareq));
-    strncpy(tareq.BrokerID,const_cast<char*>(simu_cfg.get_para("BROKER_ID").c_str()),sizeof(tareq.BrokerID));
-    strncpy(tareq.InvestorID,const_cast<char*>(simu_cfg.get_para("INVESTOR_ID").c_str()),sizeof(tareq.InvestorID));
+    strncpy(tareq.BrokerID,const_cast<char*>(cfg_info.get_para("BROKER_ID").c_str()),sizeof(tareq.BrokerID));
+    strncpy(tareq.InvestorID,const_cast<char*>(cfg_info.get_para("INVESTOR_ID").c_str()),sizeof(tareq.InvestorID));
     int delaytime=0;
     while (true)
     {
@@ -182,8 +182,8 @@ void ctp_trade::ReqQryInvestorPosition(const string & instrument_id,bool fast)
     memset(&ipreq, 0, sizeof(ipreq));
 
     strncpy(ipreq.InstrumentID,const_cast<char*>(instrument_id.c_str()),sizeof(ipreq.InstrumentID));
-    strncpy(ipreq.BrokerID,const_cast<char*>(simu_cfg.get_para("BROKER_ID").c_str()),sizeof(ipreq.BrokerID));
-    strncpy(ipreq.InvestorID,const_cast<char*>(simu_cfg.get_para("INVESTOR_ID").c_str()),sizeof(ipreq.InvestorID));
+    strncpy(ipreq.BrokerID,const_cast<char*>(cfg_info.get_para("BROKER_ID").c_str()),sizeof(ipreq.BrokerID));
+    strncpy(ipreq.InvestorID,const_cast<char*>(cfg_info.get_para("INVESTOR_ID").c_str()),sizeof(ipreq.InvestorID));
     int delaytime=0;
     while (true)
     {
@@ -281,7 +281,7 @@ void ctp_trade::ReqQuoteAction(CThostFtdcInputQuoteActionField *porder)
 }
 char *ctp_trade::mk_trade_con_dir()
 {
-        string exedir=simu_cfg.get_para("TRADE_CON_PATH");
+        string exedir=cfg_info.get_para("TRADE_CON_PATH");
         if(exedir.size()>0)
         {
             wfunction::wmkdir(exedir);
