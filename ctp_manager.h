@@ -38,6 +38,7 @@ public slots:
     void run_tactic();
     void pause_tactic();
     void resume_tactic();
+    void check_pos();
 
 private:
     bool ctp_quote_running;

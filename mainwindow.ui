@@ -274,7 +274,7 @@
                </size>
               </property>
               <property name="text">
-               <string>待定</string>
+               <string>检查持仓</string>
               </property>
              </widget>
             </item>

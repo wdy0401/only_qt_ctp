@@ -116,3 +116,7 @@ void ctp_manager::run_tactic()
     }
 }
 
+void ctp_manager::check_pos()
+{
+
+}

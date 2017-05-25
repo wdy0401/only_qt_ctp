@@ -17,7 +17,8 @@ public:
 
 public slots:
     void check_add_order(const std::string &,const std::string &,const std::string &,const std::string &,const std::string &);
-
+    //void check_position(const std::string &);
+    void check_position();
 signals:protected:
     void run();
 

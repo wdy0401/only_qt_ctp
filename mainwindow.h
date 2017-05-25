@@ -40,6 +40,7 @@ signals:
     void on_pushButton_5_clicked();
     void on_pushButton_6_clicked();
     void on_pushButton_16_clicked();
+    void check_position();
 
 
     void check_add_order(const std::string &,const std::string &,const std::string &,const std::string &,const std::string &);
@@ -52,8 +53,7 @@ private slots:
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
-
-
+    void on_pushButton_4_clicked();
 
 private:
     Ui::MainWindow *ui;

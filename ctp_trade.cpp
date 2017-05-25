@@ -228,8 +228,6 @@ void ctp_trade::ReqOrderInsert(CThostFtdcInputOrderField * porder)
         cerr << endl << "--->>> order insert: " << iResult << " Fail" << endl;
     }
 }
-
-
 void ctp_trade::ReqOrderAction(CThostFtdcInputOrderActionField *pOrder)
 {
     cerr << endl << "--->>> ReqOrderAction" <<endl;
@@ -373,6 +371,15 @@ void ctp_trade::OnRspQryInvestorPosition(CThostFtdcInvestorPositionField *pInves
 {
 	//尚无此需求
 	cerr << "--->>> " << "OnRspQryInvestorPosition" << endl;
+    {
+        cerr <<"InstrumentID\n"<<pInvestorPosition->InstrumentID<<endl;
+        cerr <<"BrokerID\n"<<pInvestorPosition->BrokerID<<endl;
+        cerr <<"InvestorID\n"<<pInvestorPosition->InvestorID<<endl;
+        cerr <<"Position\n"<<pInvestorPosition->Position<<endl;
+        cerr <<"TodayPosition\n"<<pInvestorPosition->TodayPosition<<endl;
+        cerr <<"PosiDirection\n"<<pInvestorPosition->PosiDirection<<endl;
+
+    }
 	if (bIsLast)
 	{
 		IsErrorRspInfo(pRspInfo);

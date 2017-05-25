@@ -21,12 +21,15 @@ void ctp_trade_qthread::init()
     order_manager->set_trade(trade);
 
     QObject::connect(mw, &MainWindow::check_add_order, this, &ctp_trade_qthread::check_add_order);
+    QObject::connect(mw, &MainWindow::check_position, this, &ctp_trade_qthread::check_position);
     QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_quote);
 
     QObject::connect(trade,&ctp_trade::show_warning,order_manager,&ctp_order_manager::show_warning);
     QObject::connect(trade,&ctp_trade::send_rtn_order,order_manager,&ctp_order_manager::OnRtnOrder);
     QObject::connect(trade,&ctp_trade::send_rtn_trade,order_manager,&ctp_order_manager::OnRtnTrade);
     QObject::connect(trade,&ctp_trade::OnLogin,order_manager,&ctp_order_manager::OnLogin);
+
+    //mainwindow到check_position
 }
 bool ctp_trade_qthread::check_init_para()
 {
@@ -66,4 +69,11 @@ void ctp_trade_qthread::check_add_order(const std::string & ID,const std::string
         string oc=openclose=="开新仓"?"OPEN":openclose=="平今"?"CLOSET":"CLOSE";
         order_manager->new_order(ID, sd, oc, QString::fromStdString(price).toDouble(), QString::fromStdString(size).toInt());
 	}
+}
+
+//void ctp_trade_qthread::check_position(const std::string & ctr)
+void ctp_trade_qthread::check_position()
+{
+    //trade->ReqQryInvestorPosition(ctr);
+    trade->ReqQryInvestorPosition("IF1707");
 }

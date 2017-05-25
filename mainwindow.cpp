@@ -238,3 +238,9 @@ void MainWindow::on_pushButton_3_clicked()
 }
 
 
+
+void MainWindow::on_pushButton_4_clicked()//检查持仓状况
+{
+    this->show_string_trade("check position");
+    emit check_position();
+}
