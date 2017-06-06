@@ -76,6 +76,10 @@ private:
     CThostFtdcInputOrderActionField * initorderchange(const std::string & ordername);
 
     QMutex mutex;
+
+    std::map<std::string,int> ctr_pos; //ctr position  now
+    std::map<std::string,int> ctr_pos_to; //ctr position
+    std::map<std::string,int> ctr_pos_dif; //ctr position
 };
 
 #endif

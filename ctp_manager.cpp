@@ -42,12 +42,14 @@ void ctp_manager::start_ctp_quote()
         {
             ctp_quote_qthread  * cqq;
             cqq = new ctp_quote_qthread;
-            QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, mw, &MainWindow::show_quote_1);
-            QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, mw, &MainWindow::show_quote_label);
-            QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, &ctp_quote_log, &ctp_log::writeinfo);
             mw->show_string_quote("Start quote");
             ctp_quote_running = true;
             cqq->set_ctp_order_manager(get_ctp_order_mamager());
+
+            QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, mw, &MainWindow::show_quote_1);
+            QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, mw, &MainWindow::show_quote_label);
+            QObject::connect(cqq, &ctp_quote_qthread::broadcast_marketdata, &ctp_quote_log, &ctp_log::writeinfo);
+
             cqq->init();
             cqq->start();
         }
@@ -74,7 +76,11 @@ void ctp_manager::start_ctp_trade()
             mw->show_string_trade("Start trade");
             ctp_trade_running = true;
             ctq->set_ctp_order_manager(get_ctp_order_mamager());
-            ctq->set_mainwindow(get_mainwindow());
+            ctq->set_mainwindow(mw);
+
+            QObject::connect(mw, &MainWindow::check_add_order, ctq, &ctp_trade_qthread::check_add_order);
+            QObject::connect(mw, &MainWindow::check_position, ctq, &ctp_trade_qthread::check_position);
+
             ctq->init();
             ctq->start();
         }

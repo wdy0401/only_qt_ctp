@@ -77,9 +77,7 @@ private:
     std::map<std::string, std::string> ordername_orderid; //user set id -> uniqid
     std::map<std::string, CThostFtdcOrderField*> orderid_op; //uniqid -> orderfield
     std::map<long, std::string> rid_orderid; //requestid -> uniqid
-    std::map<std::string,int> ctr_pos; //ctr position  now
-    std::map<std::string,int> ctr_pos_to; //ctr position
-    std::map<std::string,int> ctr_pos_dif; //ctr position
+
 
 };
 #endif // CTP_TRADE_H

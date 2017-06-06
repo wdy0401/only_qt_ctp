@@ -20,8 +20,6 @@ void ctp_trade_qthread::init()
     trade = new ctp_trade;
     order_manager->set_trade(trade);
 
-    QObject::connect(mw, &MainWindow::check_add_order, this, &ctp_trade_qthread::check_add_order);
-    QObject::connect(mw, &MainWindow::check_position, this, &ctp_trade_qthread::check_position);
     QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_quote);
     //在onrsp里面链接下面的槽
     //QObject::connect(trade,&ctp_trade::show_warning,mw,&MainWindow::show_string_trade);
@@ -76,7 +74,5 @@ void ctp_trade_qthread::check_add_order(const std::string & ID,const std::string
 //void ctp_trade_qthread::check_position(const std::string & ctr)
 void ctp_trade_qthread::check_position()
 {
-    //trade->ReqQryInvestorPosition(ctr);
-
-    trade->ReqQryInvestorPosition("IF1707");
+    trade->ReqQryInvestorPosition("");
 }
